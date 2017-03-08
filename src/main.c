@@ -1,36 +1,28 @@
+/*
+ * main.c
+ *
+ *  Created on: 1 mars 2017
+ *      Author: Jerem
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
-#define NB_ROW 2
-#define NB_SEED_INIT 4
+#include "const.h"
 
-void init() {
+const short NB_HOLES;
+
+void boardInit(short holes) {
     short player;
-    short nbHole;
     printf("Quel joueur commence en premier? (bas(0), haut(1))");
     scanf("%i", &player);
     printf("Combien de trou par rangees?");
-    scanf("%i", &nbHole);
-    short board[NB_ROW][nbHole] = NB_SEED_INIT;
+    scanf("%i", &NB_HOLES);
+    short board[NB_ROW][NB_HOLES] = NB_SEED_INIT;
 }
 
-void distribute(short *board[][], short init, short dest) {
-    int i;
+int main(void) {
+	NB_HOLES = 5;
 
-    /*for(i = init; i < *board[init], i++) {
-
-    }*/
-}
-
-void change(short *board[][], short init, short dest) {
-    *board[dest] = *board[init];
-    remove(&board, init);
-}
-
-void remove(short *board[][], short hole) {
-    //*board[init] =
-}
-
-int main() {
-    init();
+    boardInit(NB_HOLES);
     return 0;
 }
