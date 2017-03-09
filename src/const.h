@@ -9,6 +9,7 @@
 #define SRC_CONST_H_
 
 #define NB_ROW 2
+#define NB_HOLES 6
 #define NB_SEED_INIT 4
 
 #endif

@@ -9,9 +9,15 @@
 #include <stdlib.h>
 #include "const.h"
 
-void distribute(short *board[][], short row, short init) {
+short removeSeeds(short board[][NB_HOLES], short row, short hole) {
+	short seed_nbr = board[row][hole];
+    board[row][hole] = 0;
+    return seed_nbr;
+}
+
+void distributeSeeds(short board[][NB_HOLES], short row, short init) {
 	short tmp_row = row;
-	short seed_nbr = remove(board, tmp_row, init);
+	short seed_nbr = removeSeeds(board, tmp_row, init);
     int i = init;
 
     while(i < seed_nbr + init) {
@@ -29,10 +35,4 @@ void distribute(short *board[][], short row, short init) {
     		board[tmp_row][i]++;
     	}
     }
-}
-
-short remove(short *board[][], short row, short hole) {
-	short seed_nbr = board[row][hole];
-    board[row][hole] = 0;
-    return seed_nbr;
 }

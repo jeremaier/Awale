@@ -8,20 +8,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "const.h"
+#include "main.h"
 
-const short NB_HOLES = 5;
+short board[NB_ROW][NB_HOLES];
 
-void boardInit(short holes) {
+void boardInit() {
     short player;
+
+    for(int i = 0; i < NB_ROW; i++)
+    	for(int j = 0; j < NB_HOLES; j++)
+    		board[i][j] = NB_SEED_INIT;
+
     printf("Quel joueur commence en premier? (bas(0), haut(1))");
-    scanf("%d", &player);
-    printf("Combien de trou par rangees?");
-    scanf("%d", &NB_HOLES);
-    short board[NB_ROW][NB_HOLES] = {NB_SEED_INIT};
+    scanf("%hd", &player);
 }
 
 int main(void) {
-
-    boardInit(NB_HOLES);
+    boardInit();
     return 0;
 }

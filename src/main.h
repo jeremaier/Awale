@@ -5,12 +5,12 @@
  *      Author: Jerem
  */
 
-#ifndef MAIN_H_INCLUDED
-#define MAIN_H_INCLUDED
+#ifndef SRC_MAIN_H_
+#define SRC_MAIN_H_
 
 /**
  * Initialisation du plateau de jeu avec selection du joueur et le nombre de graines par trou
  */
-void boardInit(short);
+void boardInit();
 
 #endif

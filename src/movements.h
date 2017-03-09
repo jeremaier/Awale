@@ -9,14 +9,14 @@
 #define SRC_MOVEMENTS_H_
 
 /**
+ * Supprime les graines du trou selectionné et retourne le même nombre de graines
+ */
+short removeSeeds(short[][], short, short);
+
+/**
  * Distribution des graines prises dans un trou dans les trous successifs
  * de facon inverse des aiguilles d'une montre
  */
-void distribute(short*, short, short);
-
-/**
- * Supprime les graines du trou selectionné et retourne le même nombre de graines
- */
-short remove(short*, short, short);
+void distributeSeeds(short[][], short, short);
 
 #endif
