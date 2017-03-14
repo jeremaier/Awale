@@ -3,3 +3,28 @@
 	<stdio.h>
 	<stdlib.h>
 
+1489535629 source:c:\users\ob\documents\studies\tncy\1a\semestre_2\c\projet\awale\src\main.c
+	<stdio.h>
+	<stdlib.h>
+	"const.h"
+	"main.h"
+	"tests.h"
+
+1489530879 c:\users\ob\documents\studies\tncy\1a\semestre_2\c\projet\awale\src\const.h
+
+1489530879 c:\users\ob\documents\studies\tncy\1a\semestre_2\c\projet\awale\src\main.h
+
+1489535906 c:\users\ob\documents\studies\tncy\1a\semestre_2\c\projet\awale\src\tests.h
+	<stdio.h>
+	<stdlib.h>
+	"const.h"
+	"main.h"
+
+1489530879 source:c:\users\ob\documents\studies\tncy\1a\semestre_2\c\projet\awale\src\movements.c
+	<stdio.h>
+	<stdlib.h>
+	"const.h"
+
+1489535602 source:c:\users\ob\documents\studies\tncy\1a\semestre_2\c\projet\awale\src\tests.c
+	"tests.h"
+

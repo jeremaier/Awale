@@ -31,9 +31,19 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="src/const.h" />
+		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/main.h" />
+		<Unit filename="src/movements.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/movements.h" />
+		<Unit filename="src/tests.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/tests.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
