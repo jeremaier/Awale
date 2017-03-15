@@ -25,25 +25,14 @@ void boardInit() {
     	for(j = 0; j < NB_HOLES; j++)
     		board[i][j] = NB_SEED_INIT;
 
-    // pour gerer les erreurs d'entree
-    do {
-        printf("Quel joueur commence en premier? [bas(1),haut(0)]\n"); // pk pas l'inverser ? cf. index matrix
-        scanf("%hd", &player); // %hd used for a short int
-    } while (player != 0 && player != 1);
+    // on ne gere pas les erreurs d'entrees car ce sera des boutons
+    printf("Quel joueur commence en premier ? haut(0), bas(1)\n");
+    scanf("%hd", &player); // %hd used for a short int
 }
 
 int main(void) {
-    //boardInit();
+    boardInit();
     // =========== TESTS ==========
-    int matrice[NB_ROW][NB_HOLES];
-    int i, j;
-    int n=0;
-    for (i=0; i<NB_ROW; i++) {
-        for (j=0; j<NB_HOLES; j++) {
-            matrice[i][j] = n;
-            n++;
-        }
-    }
-    testBoardInit(matrice);
+    //testBoardInit(board);
     return 0;
 }

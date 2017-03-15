@@ -6,7 +6,7 @@
  */
 #include "tests.h"
 
-void testBoardInit(int matrice[][]) {
+void testBoardInit(short matrice[NB_ROW][NB_HOLES]) {
     printf("=== testBoardInit begin ===\n");
     int i, j;
      for(i = 0; i < NB_ROW; i++) {
@@ -16,11 +16,4 @@ void testBoardInit(int matrice[][]) {
         printf("\n");
      }
     printf("=== testBoardInit end ===\n");
-}
-
-void lecture_tab (int* tab, int taille) {
-    int i;
-    for (i=0; i<taille; i++) {
-        printf("%d\n", tab[i]);
-    }
 }

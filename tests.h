@@ -11,5 +11,5 @@
 #include "const.h"
 #include "main.h"
 
-void testBoardInit(int matrice[][]); // int**
+void testBoardInit(short matrice[NB_ROW][NB_HOLES]); // int**
 void lecture_tab (int* tab, int taille);
