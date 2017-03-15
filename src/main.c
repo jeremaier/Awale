@@ -19,20 +19,20 @@ short board[NB_ROW][NB_HOLES];
 void boardInit() {
     short player;
 
-    //error: 'for' loop initial declarations are only allowed in C99 or C11 mode|
+    //error: 'for' loop initial declarations are only allowed in C99 or C11 mode
     int i; int j;
     for(i = 0; i < NB_ROW; i++)
     	for(j = 0; j < NB_HOLES; j++)
     		board[i][j] = NB_SEED_INIT;
 
     // on ne gere pas les erreurs d'entrees car ce sera des boutons
-    printf("Quel joueur commence en premier ? haut(0), bas(1)\n");
+    printf("Quel joueur commence en premier ? (0/1)\n");
     scanf("%hd", &player); // %hd used for a short int
 }
 
 int main(void) {
     boardInit();
     // =========== TESTS ==========
-    //testBoardInit(board);
+    testBoardInit(board);
     return 0;
 }

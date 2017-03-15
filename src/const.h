@@ -12,4 +12,4 @@
 #define NB_HOLES 6
 #define NB_SEED_INIT 4
 
-#endif
+#endif // SRC_CONST_H_
