@@ -6,7 +6,7 @@
  */
 #include "tests.h"
 
-void testBoardInit(int* matrice[NB_HOLES][NB_ROW]) {
+void testBoardInit(int matrice[][]) {
     printf("=== testBoardInit begin ===\n");
     int i, j;
      for(i = 0; i < NB_ROW; i++) {

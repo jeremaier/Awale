@@ -27,7 +27,7 @@ void boardInit() {
 
     // pour gerer les erreurs d'entree
     do {
-        printf("Quel joueur commence en premier? [bas(0),haut(1)]\n"); // pk pas l'inverser ? cf. index matrix
+        printf("Quel joueur commence en premier? [bas(1),haut(0)]\n"); // pk pas l'inverser ? cf. index matrix
         scanf("%hd", &player); // %hd used for a short int
     } while (player != 0 && player != 1);
 }
