@@ -8,6 +8,11 @@
 #ifndef SRC_CONST_H_
 #define SRC_CONST_H_
 
+/** CONCERNANT LES PARAMETRES SDL : **/
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+#define SCREEN_BPP 32
+
 /** CONCERNANT LES PARAMETRES DU JEU : **/
 
 #define NB_ROW 2

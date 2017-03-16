@@ -5,6 +5,7 @@
  *      Author: Jerem
  */
 
+ #include "../essaiPerso.h"
  #include <stdio.h>
  #include <stdlib.h>
  #include "const.h"
@@ -12,8 +13,7 @@
  #include "write.h"
  #include "read.h"
  #include "tests.h"
-
- #include "../essaiPerso.h"
+ #include "SDL2/SDL.h"
 
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
@@ -33,8 +33,26 @@ void boardInit() {
     scanf("%hd", &player); // % hd used for a short int
 }
 
-int main(void) {
+int main(int argc, char** argv) {
     //boardInit();
+
+    SDL_Surface *screen;
+    if( SDL_Init(SDL_INIT_VIDEO) == -1) {
+        printf("Can't init SDL:  %s\n", SDL_GetError());
+        return EXIT_FAILURE;
+    }
+
+    atexit(SDL_Quit);
+    screen = SDL_SetVideoMode(640, 480, 16, SDL_SWSURFACE);
+
+    if(screen == NULL) {
+        printf( "Can't set video mode: %s\n", SDL_GetError());
+        return EXIT_FAILURE;
+    }
+
+    SDL_Delay(3000);
+
+    return EXIT_SUCCESS;
 
     // =========== TESTS ==========
 
@@ -43,4 +61,3 @@ int main(void) {
     //save(chemin, &game);
 
     return 0;
-}
