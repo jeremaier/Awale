@@ -1,5 +1,0 @@
-awale.cbp
-awale.depend
-awale.layout
-bin/
-obj/
