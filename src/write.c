@@ -35,12 +35,6 @@
     }
  }
 
- void affiche(char* chaine) {
-    int i;
-    for (i=0; i<2; i++)
-        printf("%c", chaine[i]);
- }
-
  void save (char* directory[NAME_FILE_SIZE], Game* game) {
 
     FILE* file = NULL;

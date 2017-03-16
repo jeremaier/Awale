@@ -13,7 +13,7 @@
  #include "write.h"
  #include "read.h"
  #include "tests.h"
- #include "SDL2/SDL.h"
+ //#include "SDL2/SDL.h"
 
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
