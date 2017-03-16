@@ -16,25 +16,23 @@
 
 #define NAME_PLAYER_SIZE 10
 
-typedef struct game game;
-struct game {
+struct Game {
     int gameNumber;
-    char* joueur1[NAME_PLAYER_SIZE];
-    char* joueur2[NAME_PLAYER_SIZE];
+    char joueur1[NAME_PLAYER_SIZE];
+    char joueur2[NAME_PLAYER_SIZE];
     int gain1;
     int gain2;
-    char** board_config;
+    char board_config[NB_ROW][NB_HOLES];
     float timeSpended;
     short currentPlayer;
 };
+typedef struct Game Game;
 
 /** CONCERNANT LA GESTION DES FICHIERS : **/
 
 #define NAME_FILE_SIZE 10
 #define LINE_SIZE 100
 
-//#define SAVED "saved.txt"
-#define SCORE "score.txt"
-#define LIST_GAME "listGames.txt"
+typedef enum Files Files;
 
 #endif // SRC_CONST_H_

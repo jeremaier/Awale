@@ -13,6 +13,8 @@
  #include "read.h"
  #include "tests.h"
 
+ #include "../essaiPerso.h"
+
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
 
@@ -36,20 +38,9 @@ int main(void) {
 
     // =========== TESTS ==========
 
-    /*
+    Game game = {42, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, 36.5, 0};
     char chemin[NAME_FILE_SIZE] = "saved.txt";
-
-    char c1[LINE_SIZE] = "bonjour1\n";
-    char c2[LINE_SIZE] = "bonjour2\n";
-    char c3[LINE_SIZE] = "bonjour3\n";
-    /*write_new_ligne(chemin, c1);
-    write_new_ligne(chemin, c2);
-    write_new_ligne(chemin, c3);
-    //initalise(chemin);
-    //readlines(chemin);
-    //read_specific(chemin, 3);
-    //testBoardInit(board);
-    */
+    //save(chemin, &game);
 
     return 0;
 }
