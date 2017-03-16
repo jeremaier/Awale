@@ -5,12 +5,13 @@
  *      Author: Jerem
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "const.h"
-#include "main.h"
-
-#include "tests.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include "const.h"
+ #include "main.h"
+ #include "write.h"
+ #include "read.h"
+ #include "tests.h"
 
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
@@ -27,12 +28,24 @@ void boardInit() {
 
     // on ne gere pas les erreurs d'entrees car ce sera des boutons
     printf("Quel joueur commence en premier ? (0/1)\n");
-    scanf("%hd", &player); // %hd used for a short int
+    scanf("%hd", &player); // % hd used for a short int
 }
 
 int main(void) {
-    boardInit();
+    //boardInit();
+
     // =========== TESTS ==========
-    testBoardInit(board);
+
+    char chemin[NAME_FILE_SIZE] = "test.txt";
+
+    char c1[LINE_SIZE] = "bonjour1\n";
+    char c2[LINE_SIZE] = "bonjour2\n";
+    char c3[LINE_SIZE] = "bonjour3\n";
+    //write_new_ligne(chemin, c1);
+    //write_new_ligne(chemin, c2);
+    //write_new_ligne(chemin, c3);
+    //readlines(chemin);
+    read_specific(chemin, 1);
+    //testBoardInit(board);
     return 0;
 }
