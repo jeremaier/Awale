@@ -33,7 +33,7 @@ struct game {
 #define NAME_FILE_SIZE 10
 #define LINE_SIZE 100
 
-#define SAVED "saved.txt"
+//#define SAVED "saved.txt"
 #define SCORE "score.txt"
 #define LIST_GAME "listGames.txt"
 

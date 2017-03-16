@@ -35,16 +35,5 @@
     }
  }
 
- void save(SAVED) {
-    FILE* file = NULL;
-    file = fopen(SAVED, "w");
 
-    if (file != NULL) {
-
-        fclose(file);
-    }
-    else {
-        prinf("Impossible d'ecrire dans le fichier");
-    }
- }
 

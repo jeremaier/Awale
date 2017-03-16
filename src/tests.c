@@ -16,3 +16,4 @@ void testBoardInit(short matrice[NB_ROW][NB_HOLES]) {
         printf("\n");
      } printf("=== testBoardInit end ===\n");
 }
+
