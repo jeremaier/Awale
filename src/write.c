@@ -7,6 +7,20 @@
 
  #include "write.h"
 
+  void initalize (char* directory[NAME_FILE_SIZE]) { // demander confirmation (do, while)
+    FILE* file = NULL;
+    file = fopen(directory, "w");
+
+    if (file != NULL) {
+        fseek(file, 0, SEEK_SET); // on place le curseur au debut
+        fputs("", file); // on ecrit la chaine de caractere vide
+        fclose(file);
+    }
+    else {
+        printf("Impossible d'ecrire dans le fichier");
+    }
+ }
+
  void write_new_ligne (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]) {
 
     FILE* file = NULL;
@@ -21,16 +35,16 @@
     }
  }
 
- void initalise (char* directory[NAME_FILE_SIZE]) { // demander confirmation (do, while)
+ void save(SAVED) {
     FILE* file = NULL;
-    file = fopen(directory, "w");
+    file = fopen(SAVED, "w");
 
     if (file != NULL) {
-        fseek(file, 0, SEEK_SET); // on place le curseur au debut
-        fputs("", file); // on ecrit la chaine de caractere vide
+
         fclose(file);
     }
     else {
-        printf("Impossible d'ecrire dans le fichier");
+        prinf("Impossible d'ecrire dans le fichier");
     }
  }
+

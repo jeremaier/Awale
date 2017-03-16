@@ -17,5 +17,6 @@
 
  void initialize (char* directory[NAME_FILE_SIZE]); // efface le contenu du fichier specitfie
  void write_new_ligne (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]); // rajoute une ligne a la fin du fichier
+ void save (char* SAVED);
 
  #endif // WRITE_H

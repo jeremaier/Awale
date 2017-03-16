@@ -36,17 +36,20 @@ int main(void) {
 
     // =========== TESTS ==========
 
-    char chemin[NAME_FILE_SIZE] = "test.txt";
+    /*
+    char chemin[NAME_FILE_SIZE] = "saved.txt";
 
     char c1[LINE_SIZE] = "bonjour1\n";
     char c2[LINE_SIZE] = "bonjour2\n";
     char c3[LINE_SIZE] = "bonjour3\n";
     /*write_new_ligne(chemin, c1);
     write_new_ligne(chemin, c2);
-    write_new_ligne(chemin, c3);*/
+    write_new_ligne(chemin, c3);
     //initalise(chemin);
     //readlines(chemin);
-    read_specific(chemin, 3);
+    //read_specific(chemin, 3);
     //testBoardInit(board);
+    */
+
     return 0;
 }
