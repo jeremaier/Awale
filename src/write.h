@@ -11,6 +11,7 @@
  #include <stdlib.h>
  #include <stdio.h>
  #include "const.h"
+ #include <time.h>
 
  // premiere ligne du fichier reservée aux informations : joueur1, joueur2, grain1, grain2, time (score.txt)
  // board, gain1, gain2 (play_config.txt)

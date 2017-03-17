@@ -42,9 +42,16 @@
 
     if (file != NULL) {
 
-        fprintf(file, "%d\n", game -> gameNumber); // ecrit un int dans le fichier
-        fprintf(file, "%s %s\n", game -> joueur1, game -> joueur2);
-        fprintf(file, "%d %d\n", game -> gain1, game -> gain2);
+        // on recupere la date et heure
+        time_t secondes;
+        struct tm instant;
+        time(&secondes);
+        instant=*localtime(&secondes);
+        fprintf(file, "date : %d/%d/%d ; %d:%d:%d\n", instant.tm_mday+1, instant.tm_mon+1, instant.tm_year+1, instant.tm_hour, instant.tm_min, instant.tm_sec);
+
+        fprintf(file, "n° game : %d\n", game -> gameNumber); // ecrit un int dans le fichier
+        fprintf(file, "names : %s %s\n", game -> joueur1, game -> joueur2);
+        fprintf(file, "profits : %d %d\n", game -> gain1, game -> gain2);
 
         int i, j;
         for (i=0; i<NB_ROW; i++) {
@@ -52,8 +59,8 @@
                 fprintf(file, "%d", game -> board_config[i][j]);
         }
 
-        fprintf(file, "\n%f\n", game -> timeSpended);
-        fprintf(file, "%hd\n", game -> currentPlayer);
+        fprintf(file, "elapsed time : \n%f\n", game -> timeSpended);
+        fprintf(file, "current player : %hd\n", game -> currentPlayer);
         fclose(file);
     }
     else {
