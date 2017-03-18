@@ -35,7 +35,7 @@
     }
  }
 
- void time_elapsed (FILE* file, struct tm *tpsReference) {
+ void time_elapsed (FILE* file, struct tm *tpsReference) { // remplace difftime(time_t t1, time_t t2)
 
     time_t secondes; // recupere le temps actuel
     struct tm instant;
@@ -46,7 +46,7 @@
     instant.tm_min -= instant.tm_min;
     instant.tm_sec -= (*tpsReference).tm_sec;
 
-    fprintf(file, "temps ecoule : %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
+    fprintf(file, "TIME ELAPSED: %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
 }
 
  void save (char* directory[NAME_FILE_SIZE], Game* game, struct tm *tpsReference) {
@@ -61,19 +61,20 @@
         time(&secondes);
         instant=*localtime(&secondes);
 
-        fprintf(file, "date : %d/%d/%d %d:%d:%d\n", instant.tm_mday+1, instant.tm_mon+1, instant.tm_year+1900, instant.tm_hour, instant.tm_min, instant.tm_sec);
-        time_elapsed(file, tpsReference);
-        fprintf(file, "n° game : %d\n", game -> gameNumber); // ecrit un int dans le fichier
-        fprintf(file, "names : %s %s\n", game -> joueur1, game -> joueur2);
-        fprintf(file, "profits : %d %d\n", game -> gain1, game -> gain2);
+        fprintf(file, "DATE: %d/%d/%d %d:%d:%d\n", instant.tm_mday+1, instant.tm_mon+1, instant.tm_year+1900, instant.tm_hour, instant.tm_min, instant.tm_sec);
+        fprintf(file, "GAME NUMBER: %d\n", game -> gameNumber); // ecrit un int dans le fichier
+        fprintf(file, "PLAYERS' NAME: %s %s\n", game -> joueur1, game -> joueur2);
+        fprintf(file, "PLAYERS' PROFIT: %d %d\n", game -> gain1, game -> gain2);
 
+        fprintf(file, "BOARD CONFIGURATION:\n");
         int i, j;
         for (i=0; i<NB_ROW; i++) {
             for (j=0; j<NB_HOLES; j++)
                 fprintf(file, "%d\n", game -> board_config[i][j]);
         }
 
-        fprintf(file, "current player : %hd\n", game -> currentPlayer);
+        time_elapsed(file, tpsReference);
+        fprintf(file, "CURRENT PLAYER: %hd\n", game -> currentPlayer);
         fclose(file);
     }
     else {

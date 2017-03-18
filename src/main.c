@@ -64,15 +64,15 @@ int main(int argc, char** argv) {
     char chemin[NAME_FILE_SIZE] = "saved.txt";
 
     time_t secondes;
-    struct tm tempsDeReference; // recupere t1
+    struct tm creationGame; // recupere la date de creation
     time(&secondes);
-    tempsDeReference=*localtime(&secondes);
+    creationGame=*localtime(&secondes);
 
-    Game game = {42, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &tempsDeReference, 0};
+    Game game = {1, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0};
 
     _sleep(3000);
 
-    save(chemin, &game, &tempsDeReference);
+    save(chemin, &game, &creationGame);
 
     return 0;
 }

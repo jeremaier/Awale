@@ -1,8 +1,8 @@
-date : 19/3/2017 17:7:28
-temps ecoule : 0:0:3
-n° game : 42
-names : olive tom
-profits : 5 3
+DATE: 19/3/2017 17:44:52
+GAME NUMBER: 1
+PLAYERS' NAME: olive tom
+PLAYERS' PROFIT: 5 3
+BOARD CONFIGURATION:
 4
 4
 4
@@ -15,4 +15,5 @@ profits : 5 3
 4
 4
 4
-current player : 0
+TIME ELAPSED: 0:0:3
+CURRENT PLAYER: 0

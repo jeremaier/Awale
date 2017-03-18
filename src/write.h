@@ -13,12 +13,16 @@
  #include "const.h"
  #include <time.h>
 
- // premiere ligne du fichier reservée aux informations : joueur1, joueur2, grain1, grain2, time (score.txt)
- // board, gain1, gain2 (play_config.txt)
+ // efface le contenu du fichier specitfie
+ void initialize (char* directory[NAME_FILE_SIZE]);
 
- void initialize (char* directory[NAME_FILE_SIZE]); // efface le contenu du fichier specitfie
- void write_new_ligne (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]); // rajoute une ligne a la fin du fichier
- void save (char* directory[NAME_FILE_SIZE], Game* game, struct tm *tpsReference); // sauve les donnees d'une partie dans save.txt
+ // rajoute la ligne chaine a la fin du fichier specifie
+ void write_new_ligne (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]);
+
+ // ecrit dans file le temps passe a jouer (date de debut stockee dans tpsReference)
  void time_elapsed(FILE* file, struct tm *tpsReference);
+
+ // enregistre dans save.txt toutes les donnees relative a une partie
+ void save (char* directory[NAME_FILE_SIZE], Game* game, struct tm *tpsReference); // sauve les donnees d'une partie dans save.txt
 
  #endif // WRITE_H
