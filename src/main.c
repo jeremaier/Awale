@@ -15,6 +15,7 @@
  #include "tests.h"
  #include <unistd.h> // utilser la fonction _sleep(temps_ms);
  //#include <SDL/SDL.h> il faut supprimer cet include pour afficher des printf sur la sortie standard
+ #include "game.h"
 
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
@@ -35,6 +36,7 @@ void boardInit() {
 }
 
 int main(int argc, char** argv) {
+
     //boardInit();
     /*
     SDL_Surface *screen;
@@ -61,18 +63,14 @@ int main(int argc, char** argv) {
 
     // =========== TESTS ==========
 
-    char chemin[NAME_FILE_SIZE] = "saved.txt";
+    //testSave();
 
-    time_t secondes;
-    struct tm creationGame; // recupere la date de creation
-    time(&secondes);
-    creationGame=*localtime(&secondes);
+    char chemin[NAME_FILE_SIZE] = "listGames.txt";
+    initialize(chemin);
 
-    Game game = {1, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0};
-
-    _sleep(3000);
-
-    save(chemin, &game, &creationGame);
+    char line[LINE_SIZE] = "bonjour a toi";
+    write_new_line(chemin, line);
+    readlines(chemin);
 
     return 0;
 }

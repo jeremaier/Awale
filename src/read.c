@@ -12,7 +12,7 @@ void readlines (char* directory[NAME_FILE_SIZE]) {
     FILE* file = NULL;
     char line[LINE_SIZE] = "";
 
-    file = fopen(directory, "r"); // lecture seule pour plus de secu
+    file = fopen(directory, "r"); // lecture seule pour plus de securite
 
     if (file != NULL) {
         while (fgets(line, LINE_SIZE, file) != NULL) {

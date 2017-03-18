@@ -7,7 +7,7 @@
 
  #include "write.h"
 
-  void initalize (char* directory[NAME_FILE_SIZE]) { // demander confirmation (do, while)
+  void initialize (char* directory[NAME_FILE_SIZE]) { // vide le fichier directory
     FILE* file = NULL;
     file = fopen(directory, "w");
 
@@ -21,7 +21,7 @@
     }
  }
 
- void write_new_ligne (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]) {
+ void write_new_line (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]) {
 
     FILE* file = NULL;
     file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier
