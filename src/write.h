@@ -19,5 +19,6 @@
  void initialize (char* directory[NAME_FILE_SIZE]); // efface le contenu du fichier specitfie
  void write_new_ligne (char* directory[NAME_FILE_SIZE], char* chaine[LINE_SIZE]); // rajoute une ligne a la fin du fichier
  void save (char* directory[NAME_FILE_SIZE], Game* game); // sauve les donnees d'une partie dans save.txt
+ void timeSpent(char* res[8], char string[8]); // renvoit la durée ecoulée en chaine de caractere
 
  #endif // WRITE_H

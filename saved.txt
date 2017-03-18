@@ -1,7 +1,18 @@
-date : 18/3/118 ; 17:48:43
+date : 19/3/2017 13:0:24
 n° game : 42
 names : olive tom
 profits : 5 3
-444444444444elapsed time : 
-36.500000
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
+elapsed time : 36.500000
 current player : 0

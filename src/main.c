@@ -13,7 +13,8 @@
  #include "write.h"
  #include "read.h"
  #include "tests.h"
- #include <SDL/SDL.h>
+ #include <unistd.h> // utilser la fonction sleep(temps_ms);
+ //#include <SDL/SDL.h> il faut supprimer cet include pour afficher des printf sur la sortie standard
 
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
@@ -51,6 +52,7 @@ int main(int argc, char** argv) {
     }
 
     SDL_Delay(3000);
+    FreeSurface ?
 
     return EXIT_SUCCESS;
     */
@@ -59,9 +61,27 @@ int main(int argc, char** argv) {
 
     // =========== TESTS ==========
 
-    Game game = {42, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, 36.5, 0};
+    /*Game game = {42, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, 36.5, 0};
     char chemin[NAME_FILE_SIZE] = "saved.txt";
     save(chemin, &game);
+    */
+
+
+    time_t secondes;
+
+    struct tm tempsDeReference; // recupere t1
+    time(&secondes);
+    tempsDeReference=*localtime(&secondes);
+
+    printf("hello\n");
+    _sleep(3000); // pause de 3s
+    printf("coucou\n");
+
+    struct tm instant; // recupere t2
+    instant=*localtime(&secondes);
+
+    test(&tempsDeReference, &instant);
+    printf(instant.tm_sec);
 
     return 0;
 }
