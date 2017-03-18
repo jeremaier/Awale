@@ -1,4 +1,5 @@
-date : 19/3/2017 13:0:24
+date : 19/3/2017 17:7:28
+temps ecoule : 0:0:3
 n° game : 42
 names : olive tom
 profits : 5 3
@@ -14,5 +15,4 @@ profits : 5 3
 4
 4
 4
-elapsed time : 36.500000
 current player : 0

@@ -28,7 +28,7 @@ struct Game {
     short gain1;
     short gain2;
     short board_config[NB_ROW][NB_HOLES];
-    double timeSpended;
+    struct tm *time_elapsed;
     short currentPlayer;
 };
 typedef struct Game Game;

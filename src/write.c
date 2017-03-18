@@ -35,20 +35,34 @@
     }
  }
 
- void save (char* directory[NAME_FILE_SIZE], Game* game) {
+ void time_elapsed (FILE* file, struct tm *tpsReference) {
+
+    time_t secondes; // recupere le temps actuel
+    struct tm instant;
+    time(&secondes);
+    instant=*localtime(&secondes);
+
+    instant.tm_hour -= (*tpsReference).tm_hour; // calcul de la duree de jeu
+    instant.tm_min -= instant.tm_min;
+    instant.tm_sec -= (*tpsReference).tm_sec;
+
+    fprintf(file, "temps ecoule : %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
+}
+
+ void save (char* directory[NAME_FILE_SIZE], Game* game, struct tm *tpsReference) {
 
     FILE* file = NULL;
     file = fopen(directory, "w"); // append, pour lire ou ecrire a la fin d'un fichier
 
     if (file != NULL) {
 
-        // on recupere la date et heure
-        time_t secondes;
+        time_t secondes; // recupere la date et heure de la sauvergarde (execution de save())
         struct tm instant;
         time(&secondes);
         instant=*localtime(&secondes);
-        fprintf(file, "date : %d/%d/%d %d:%d:%d\n", instant.tm_mday+1, instant.tm_mon+1, instant.tm_year+1900, instant.tm_hour, instant.tm_min, instant.tm_sec);
 
+        fprintf(file, "date : %d/%d/%d %d:%d:%d\n", instant.tm_mday+1, instant.tm_mon+1, instant.tm_year+1900, instant.tm_hour, instant.tm_min, instant.tm_sec);
+        time_elapsed(file, tpsReference);
         fprintf(file, "n° game : %d\n", game -> gameNumber); // ecrit un int dans le fichier
         fprintf(file, "names : %s %s\n", game -> joueur1, game -> joueur2);
         fprintf(file, "profits : %d %d\n", game -> gain1, game -> gain2);
@@ -59,7 +73,6 @@
                 fprintf(file, "%d\n", game -> board_config[i][j]);
         }
 
-        fprintf(file, "elapsed time : %f\n", game -> timeSpended);
         fprintf(file, "current player : %hd\n", game -> currentPlayer);
         fclose(file);
     }
