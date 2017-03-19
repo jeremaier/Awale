@@ -5,17 +5,17 @@
  *      Author: Jerem
  */
 
- #include "../essaiPerso.h"
- #include <stdio.h>
- #include <stdlib.h>
- #include "const.h"
- #include "main.h"
- #include "write.h"
- #include "read.h"
- #include "tests.h"
- #include <unistd.h> // utilser la fonction _sleep(temps_ms);
- //#include <SDL/SDL.h> il faut supprimer cet include pour afficher des printf sur la sortie standard
- #include "game.h"
+//#include "../essaiPerso.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> // utilser la fonction _sleep(temps_ms);
+#include "const.h"
+#include "write.h"
+#include "read.h"
+#include "tests.h"
+//#include <SDL/SDL.h> // il faut supprimer cet include pour afficher des printf sur la sortie standard
+#include "game.h"
+#include "main.h"
 
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];

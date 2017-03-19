@@ -8,15 +8,6 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "const.h"
-#include <unistd.h>
-#include "time.h"
-
 // Affiche le plateau de jeu stocke sous forme matricielle
 void testBoardInit(short matrice[NB_ROW][NB_HOLES]);
 

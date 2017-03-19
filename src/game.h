@@ -8,13 +8,9 @@
 #ifndef GAME_H
 #define GAME_H
 
- #include <stdlib.h>
- #include <stdio.h>
- #include "const.h"
-
 // pour connaitre le numero de la partie a creer on regarde le nombre de partie creee dans listGames.txt ie nb de lignes ecrites
 // 1 partie par ligne
-int whichNumber(char* directory[NAME_FILE_SIZE]);
+int whichNumber(char*);
 
 #endif // GAME_H
 

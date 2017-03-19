@@ -9,6 +9,7 @@
 #define SRC_CONST_H_
 
 /** CONCERNANT LES PARAMETRES SDL : **/
+
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define SCREEN_BPP 32
@@ -35,7 +36,7 @@ typedef struct Game Game;
 
 /** CONCERNANT LA GESTION DES FICHIERS : **/
 
-#define NAME_FILE_SIZE 10
+#define NAME_FILE_SIZE 15
 #define LINE_SIZE 100
 
 #endif // SRC_CONST_H_
