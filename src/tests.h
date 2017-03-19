@@ -1,7 +1,7 @@
 /*
- * main.c
- *
- *  Created on: 14 mars 2017
+ * test.h
+ * Classe de test pour tester certaines methodes !
+ * Created on: 14 mars 2017
  *      Author: Olivier
  */
 
@@ -21,6 +21,11 @@ void testSave();
 /**
 * Test la sauvegarde dans listGames.txt
 */
-void testSaveGame();
+void testSaveInList();
+
+/**
+* Permet d'afficher le contenu de Game game en console
+*/
+void gameToString(Game* game, struct tm*);
 
 #endif // TESTS_H

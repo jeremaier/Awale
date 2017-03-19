@@ -24,6 +24,11 @@ void write_new_line(char*, char*);
 void time_elapsed(FILE* file, struct tm *tpsReference);
 
 /**
+* Pour faire un print et non ecrire dans un fichier
+*/
+void timeElapsedToString (struct tm *tpsReference);
+
+/**
  * Enregistre dans directory (= save.txt) toutes les donnees relative a une partie
  */
 void save(char*, Game*, struct tm *tpsReference);
@@ -32,6 +37,6 @@ void save(char*, Game*, struct tm *tpsReference);
 * Enregistre les resultats d'une partie finie dans listGames.txt (reprise impossible) a la suite des precedentes
 * A appeller des qu'une partie est terminee
 */
-void saveGame (char *directory, Game*, struct tm *tpsReference);
+void saveInList (char *directory, Game*, struct tm *tpsReference);
 
 #endif // WRITE_H

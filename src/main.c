@@ -23,6 +23,9 @@
 
 int main(int argc, char** argv) {
 
+    // au demarrage proposer une interface sdl ou console (pb include SDL empeche le lancement console,
+    //il faudra gerer avec les variables pre processeur)
+
     /*
     SDL_Surface *screen;
     if( SDL_Init(SDL_INIT_VIDEO) == -1) {

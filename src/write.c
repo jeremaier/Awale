@@ -42,10 +42,24 @@ void time_elapsed(FILE* file, struct tm *tpsReference) { // remplace difftime(ti
 	instant = *localtime(&secondes);
 
 	instant.tm_hour -= (*tpsReference).tm_hour; // calcul de la duree de jeu
-	instant.tm_min -= instant.tm_min;
+	instant.tm_min -= (*tpsReference).tm_min;
 	instant.tm_sec -= (*tpsReference).tm_sec;
 
 	fprintf(file, "%d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
+}
+
+void timeElapsedToString (struct tm *tpsReference) { // remplace difftime(time_t t1, time_t t2)
+
+	time_t secondes; // recupere le temps actuel
+	struct tm instant;
+	time(&secondes);
+	instant = *localtime(&secondes);
+
+	instant.tm_hour -= (*tpsReference).tm_hour; // calcul de la duree de jeu
+	instant.tm_min -= (*tpsReference).tm_min;
+	instant.tm_sec -= (*tpsReference).tm_sec;
+
+	printf(" time elapsed: %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
 }
 
 void save(char* directory, Game* game, struct tm *tpsReference) {
@@ -81,7 +95,7 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 }
 
 // ctime() pour afficher un time_t en char
-void saveGame(char* directory, Game* game, struct tm *tpsReference) {
+void saveInList(char* directory, Game* game, struct tm *tpsReference) {
 
 	FILE* file = NULL;
 	file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier

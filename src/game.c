@@ -12,6 +12,7 @@
 #include "game.h"
 #include "ask.h"
 #include "time.h"
+#include "write.h"
 
 int whichNumber(char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
 
@@ -67,43 +68,55 @@ void init_game(Game *game, struct tm *timer) {
 
 void play() {
 
-    // on cree la struct game
-    Game game;
+    char answer = ' ';
 
-    // on initialise son tableau de jeu avec NB_SEED_INIT
-    boardInit(game.board_config);
+        do {
 
-    // test1, affichage du plateau
-    /*
-    int i, j;
-	for(i = 0; i < NB_ROW; i++) {
-		for(j = 0; j < NB_HOLES; j++)
-			printf("%hd ", game.board_config[i][j]);
+            // on cree la struct game
+            Game game;
 
-		printf("\n");
-	}*/
+            // on initialise son tableau de jeu avec NB_SEED_INIT
+            boardInit(game.board_config);
 
-	// on demande le nom des joueurs et on complete la struct Game:
-    askName(game.joueur1);
+            /** test1, affichage du plateau
+            int i, j;
+            for(i = 0; i < NB_ROW; i++) {
+                for(j = 0; j < NB_HOLES; j++)
+                    printf("%hd ", game.board_config[i][j]);
 
-    //game.joueur1 = "Olivier"; //askName(); //askName doit renvoyer un pointeur vers une chaine de caractere de taille SIZE_NAME_PLAYER
-    //game.joueur2 = askName();
+                printf("\n");
+            }*/
 
-    // on recupere les infos temporelles de sa creation
-    time_t secondes;
-    struct tm creationGame;
-    time(&secondes);
-    creationGame = *localtime(&secondes);
+            // on demande le nom des joueurs et on complete la struct Game:
+            askName(game.joueur1);
+            askName(game.joueur2);
 
-    // on initialise la struct Game
-    init_game(&game, &creationGame);
+            // on recupere les infos temporelles de sa creation
+            time_t secondes;
+            struct tm creationGame;
+            time(&secondes);
+            creationGame = *localtime(&secondes);
 
-    // test2, affichage de Game game
-    printf("game number: %d\n", game.gameNumber);
-    printf("name player1: %s\n", game.joueur1);
-    printf("gain1: %d\n", game.gain1);
-    printf("current player: %d\n", game.currentPlayer);
+            // on initialise la struct Game
+            init_game(&game, &creationGame);
 
+            /** test2, affichage de Game game: */
+            gameToString(&game, &creationGame);
+
+            /** test3, sauvegarde de la structure creee dans saved.txt*/
+            char file_saved[NAME_FILE_SIZE] = "saved.txt";
+            save(file_saved, &game, &creationGame);
+
+            /** test4, ajout de la partie a la list des parties finies (listGames.txt) */
+            char file_list[NAME_FILE_SIZE] = "listGames.txt";
+            saveInList(file_list, &game, &creationGame);
+
+            // pour rejouer
+            printf("\n PLAY AGAIN? (y/n)\n");
+            do {
+                scanf("%c", &answer);
+            } while (answer != 'y' && answer != 'n');
+        } while (answer == 'y');
 }
 
 /*void jouer() {}

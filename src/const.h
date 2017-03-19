@@ -24,7 +24,7 @@
 
 struct Game {
     short gameNumber; // le numero de la partie [1, 10]
-    char joueur1[NAME_PLAYER_SIZE]; // nom joueur1 entre 0 et NAME_PLAYERS_SIZE caracteres
+    char joueur1[NAME_PLAYER_SIZE]; // nom joueur1 entre 1 (scanf exige au min une entree) et NAME_PLAYERS_SIZE-1 caracteres (cf askName)
     char joueur2[NAME_PLAYER_SIZE];
     short gain1; // nbre de graines collectees par le joueur 1
     short gain2;

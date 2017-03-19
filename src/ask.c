@@ -25,7 +25,7 @@ int askCurrent() {
 
 void askName(char joueur[NAME_PLAYER_SIZE]) { // prend game.joueur1 en parametre (string, donc pointeur)
 
-    char input[NAME_PLAYER_SIZE];
+    char input[NAME_PLAYER_SIZE-1];
 
     do {
         printf("Entree le nom du joueur:\n");
@@ -33,5 +33,11 @@ void askName(char joueur[NAME_PLAYER_SIZE]) { // prend game.joueur1 en parametre
     } while (strlen(input) > NAME_PLAYER_SIZE);
     //printf("Le nom choisit est: %s\n", input);
 
-    joueur = input;
+    // on copie la valeur input dans joueur:
+    int i;
+    for (i=0; i<strlen(input); i++)
+        joueur[i] = input[i];
+
+    // pour eviter de garder des traces de nom precedent s'ils sont plus long que les nouveaux
+    joueur[strlen(input)] = '\0';
 }

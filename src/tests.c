@@ -11,6 +11,7 @@
 #include <time.h>
 #include "const.h"
 #include "tests.h"
+#include <string.h>
 
 void testBoardInit(short matrice[][NB_HOLES]) {
 	printf("=== testBoardInit begin ===\n");
@@ -46,7 +47,7 @@ void testSave() {
     save(chemin, &game, &creationGame);
 }
 
-void testSaveGame() {
+void testSaveInList() {
 
     char chemin[NAME_FILE_SIZE] = "listGames.txt";
 
@@ -62,5 +63,18 @@ void testSaveGame() {
     // on fait une pause de 3000ms
     _sleep(3000);
 
-    saveGame(chemin, &game, &creationGame);
+    saveInList(chemin, &game, &creationGame);
+}
+
+void gameToString(Game* game, struct tm* creation) {
+
+    printf(" === BEGIN AFFICHAGE GAME ===\n");
+    printf(" game number: %d\n", game -> gameNumber);
+    printf(" name player1: %s\n", game -> joueur1);
+    printf(" name player2: %s\n", game -> joueur2);
+    printf(" gain1: %d\n", game -> gain1);
+    printf(" gain2: %d\n", game -> gain2);
+    printf(" current player: %d\n", game ->currentPlayer);
+    timeElapsedToString(creation);
+    printf(" === END AFFICHAGE GAME ===\n");
 }
