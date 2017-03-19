@@ -25,7 +25,8 @@ void boardInit() {
     short player;
 
     //error: 'for' loop initial declarations are only allowed in C99 or C11 mode
-    int i; int j;
+    int i, j;
+
     for(i = 0; i < NB_ROW; i++)
     	for(j = 0; j < NB_HOLES; j++)
     		board[i][j] = NB_SEED_INIT;
@@ -36,7 +37,6 @@ void boardInit() {
 }
 
 int main(int argc, char** argv) {
-
     //boardInit();
     /*
     SDL_Surface *screen;

@@ -8,10 +8,14 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-// Affiche le plateau de jeu stocke sous forme matricielle
-void testBoardInit(short matrice[NB_ROW][NB_HOLES]);
+/**
+ * Affiche le plateau de jeu stocke sous forme matricielle
+ */
+void testBoardInit(short[][NB_HOLES]);
 
-// Permet de tester la sauvegarde des parametres d'une partie dans le fichier "save.txt"
+/**
+ * Permet de tester la sauvegarde des parametres d'une partie dans le fichier "save.txt"
+ */
 void testSave();
 
 #endif // TESTS_H

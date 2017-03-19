@@ -8,7 +8,14 @@
 #ifndef READ_H
 #define READ_H
 
-void readlines (char*); // Pour lire toutes les lignes d'un fichier
-void read_specific (char*, int); //Pour lire la ieme ligne
+/**
+ * Pour lire toutes les lignes d'un fichier
+ */
+void readlines (char*);
+
+/**
+ * Pour lire la ieme ligne
+ */
+void read_specific (char*, int);
 
 #endif // READ_H

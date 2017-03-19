@@ -11,17 +11,16 @@
 #include "movements.h"
 
 short removeSeeds(short board[][NB_HOLES], short row, short hole) {
-	short seed_nbr = board[row][hole];
+	short const seed_nbr = board[row][hole];
     board[row][hole] = 0;
     return seed_nbr;
 }
 
 void distributeSeeds(short board[][NB_HOLES], short row, short init) {
 	short tmp_row = row;
-	short seed_nbr = removeSeeds(board, tmp_row, init);
     int i = init;
 
-    while(i < seed_nbr + init) {
+    while(i < removeSeeds(board, tmp_row, init) + init) {
     	if(row == 0 && NB_HOLES - i <= 1) {
     		i++;
     		board[tmp_row][i]++;

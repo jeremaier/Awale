@@ -8,8 +8,11 @@
 #ifndef GAME_H
 #define GAME_H
 
-// pour connaitre le numero de la partie a creer on regarde le nombre de partie creee dans listGames.txt ie nb de lignes ecrites
-// 1 partie par ligne
+/**
+ * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee
+ * dans listGames.txt ie nb de lignes ecrites
+ */
+
 int whichNumber(char*);
 
 #endif // GAME_H

@@ -7,26 +7,26 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "const.h"
 #include "game.h"
 
 int whichNumber(char* directory) {
     FILE* file = NULL;
     file = fopen(directory, "r");
 
-    char line[LINE_SIZE] = "";
+    int const lineNbrPerSave = 19;
+    int line;
     int cpt = 0;
 
-    if (file != NULL) {
-        while (fgets(line, LINE_SIZE, file) != NULL) {
-            fgets(line, LINE_SIZE, file);
-            cpt++;
+    if(file != NULL) {
+        while((line = fgetc(file)) != EOF) {
+        	if(line == '\n')
+        		cpt++;
         }
 
         fclose(file);
     }
     else printf("Impossible de lire le fichier");
 
-    return cpt;
+    return cpt / lineNbrPerSave;
 }
 

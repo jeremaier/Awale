@@ -8,16 +8,24 @@
 #ifndef WRITE_H
 #define WRITE_H
 
-// efface le contenu du fichier specitfie
+/**
+ * Efface le contenu du fichier
+ */
 void initialize(char*);
 
-// rajoute la ligne chaine a la fin du fichier specifie
+/**
+ * Rajoute une ligne definie a la fin du fichier
+ */
 void write_new_line(char*, char*);
 
-// ecrit dans file le temps passe a jouer (date de debut stockee dans tpsReference)
+/**
+ * Ecrit le temps passe a jouer dans le fichier (date de debut stockee dans tpsReference)
+ */
 void time_elapsed(FILE*, struct tm *tpsReference);
 
-// enregistre dans directory (= save.txt) toutes les donnees relative a une partie
-void save(char*, Game*, struct tm *tpsReference); // sauve les donnees d'une partie dans save.txt
+/**
+ * Enregistre dans directory (= save.txt) toutes les donnees relative a une partie
+ */
+void save(char*, Game*, struct tm *tpsReference);
 
 #endif // WRITE_H

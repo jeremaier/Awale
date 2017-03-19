@@ -12,15 +12,18 @@
 #include "const.h"
 #include "tests.h"
 
-void testBoardInit(short matrice[NB_ROW][NB_HOLES]) {
-    printf("=== testBoardInit begin ===\n");
-    int i, j;
-     for(i = 0; i < NB_ROW; i++) {
-    	for(j = 0; j < NB_HOLES; j++) {
-    		printf("%hd ", matrice[i][j]);
-        }
-        printf("\n");
-     } printf("=== testBoardInit end ===\n");
+void testBoardInit(short matrice[][NB_HOLES]) {
+	printf("=== testBoardInit begin ===\n");
+	int i, j;
+
+	for(i = 0; i < NB_ROW; i++) {
+		for(j = 0; j < NB_HOLES; j++)
+			printf("%hd ", matrice[i][j]);
+
+		printf("\n");
+	}
+
+	printf("=== testBoardInit end ===\n");
 }
 
 void testSave() {
@@ -31,7 +34,7 @@ void testSave() {
     time_t secondes;
     struct tm creationGame;
     time(&secondes);
-    creationGame=*localtime(&secondes);
+    creationGame = *localtime(&secondes);
 
     // on cree un nouveau jeu (configurations)
     Game game = {1, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0};
