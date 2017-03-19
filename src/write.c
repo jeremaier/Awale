@@ -73,12 +73,19 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 		time(&secondes);
 		instant = *localtime(&secondes);
 
+        /*
 		fprintf(file, "DATE: %d/%d/%d %d:%d:%d\n", instant.tm_mday + 1, instant.tm_mon + 1, instant.tm_year + 1900, instant.tm_hour, instant.tm_min, instant.tm_sec);
 		fprintf(file, "GAME NUMBER: %d\n", game -> gameNumber); // ecrit un int dans le fichier
 		fprintf(file, "PLAYERS' NAME: %s %s\n", game -> joueur1, game -> joueur2);
 		fprintf(file, "PLAYERS' PROFIT: %d %d\n", game -> gain1, game -> gain2);
 
 		fprintf(file, "BOARD CONFIGURATION:\n");
+		*/
+
+		fprintf(file, "%d/%d/%d %d:%d:%d\n", instant.tm_mday + 1, instant.tm_mon + 1, instant.tm_year + 1900, instant.tm_hour, instant.tm_min, instant.tm_sec);
+		fprintf(file, "%d\n", game -> gameNumber); // ecrit un int dans le fichier
+		fprintf(file, "%s %s\n", game -> joueur1, game -> joueur2);
+		fprintf(file, "%d %d\n", game -> gain1, game -> gain2);
 		int i, j;
 
 		for(i = 0; i < NB_ROW; i++) {
@@ -86,9 +93,14 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 				fprintf(file, "%d\n", game -> board_config[i][j]);
 		}
 
+		/*
 		fprintf(file, "TIME ELAPSED: ");
+		*/
 		time_elapsed(file, tpsReference);
-		fprintf(file, "CURRENT PLAYER: %hd\n", game -> currentPlayer);
+
+		fprintf(file, "%hd\n", game -> currentPlayer);
+		//fprintf(file, "CURRENT PLAYER: %hd\n", game -> currentPlayer);
+
 		fclose(file);
 	}
 	else printf("Impossible d'ecrire dans le fichier\n");
@@ -118,3 +130,4 @@ void saveInList(char* directory, Game* game, struct tm *tpsReference) {
 	}
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
+

@@ -24,7 +24,7 @@ void write_new_line(char*, char*);
 void time_elapsed(FILE* file, struct tm *tpsReference);
 
 /**
-* Pour faire un print et non ecrire dans un fichier
+* Pour faire un print et non ecrire dans un fichier avec fprintf (redit time_elapsed())
 */
 void timeElapsedToString (struct tm *tpsReference);
 

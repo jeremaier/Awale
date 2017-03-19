@@ -18,4 +18,9 @@ void readlines (char*);
  */
 void read_specific (char*, int);
 
+/**
+* 1 si le fichier est vide, 0 sinon
+*/
+int isEmpty (char chemin[NAME_FILE_SIZE]);
+
 #endif // READ_H

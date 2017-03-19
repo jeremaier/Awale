@@ -24,11 +24,25 @@ void boardInit(short[][NB_HOLES]);
 */
 void init_game(Game *game, struct tm *timer);
 
+/**
+* Charge la struct game avec les donnees de la partie stockee dans saved.txt
+*/
+void loard_game(Game *game);
+
+/**
+*
+*/
+void playNewGame_c();
+
+/**
+*
+*/
+void playSavedGame_c();
 
 /**
 * Pour lancer une initialisation de strcut game
 */
-//void play():
+void play_ConsoleMode();
 
 #endif // GAME_H
 

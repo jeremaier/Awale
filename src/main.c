@@ -54,7 +54,8 @@ int main(int argc, char** argv) {
     //testSave();
     //testSaveGame();
 
-    play();
+    //playNewGame_c();
+    //play_ConsoleMode();
 
     return 0;
 }

@@ -41,3 +41,20 @@ void read_specific(char* directory, int i) {
     else printf("Impossible de lire le fichier\n");
 }
 
+int isEmpty(char chemin[NAME_FILE_SIZE]) {
+
+    FILE* file = NULL;
+    file = fopen(chemin, "r");
+
+    char line = ' ';
+
+    if (file != NULL) {
+        line = fgetc(file);
+        fclose(file);
+    }
+    else {
+        printf("Impossible de lire le fichier\n");
+    }
+
+    return line == EOF;
+}
