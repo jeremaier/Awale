@@ -10,23 +10,27 @@
 #include "game.h"
 
 int whichNumber(char* directory) {
+
     FILE* file = NULL;
     file = fopen(directory, "r");
 
-    int const lineNbrPerSave = 19;
     int line;
-    int cpt = 0;
+    int cpt = 1; // si le fichier est vide, aucune partie n'a ete instanciee, on ecrit donc la numero 1
 
     if(file != NULL) {
-        while((line = fgetc(file)) != EOF) {
-        	if(line == '\n')
-        		cpt++;
+
+        line = fgetc(file);
+
+        while(line != EOF) {
+            if (line == '\n') {
+                cpt++;
+            } line = fgetc(file);
         }
 
         fclose(file);
     }
-    else printf("Impossible de lire le fichier");
+    else printf("Impossible de lire le fichier\n");
 
-    return cpt / lineNbrPerSave;
+    return cpt;
 }
 

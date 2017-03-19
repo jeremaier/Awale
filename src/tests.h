@@ -18,4 +18,5 @@ void testBoardInit(short[][NB_HOLES]);
  */
 void testSave();
 
+void testSaveGame();
 #endif // TESTS_H

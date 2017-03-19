@@ -19,10 +19,9 @@ void readlines(char* directory) {
     if (file != NULL) {
         while (fgets(line, LINE_SIZE, file) != NULL)
             printf("%s", line); // le \n devra etre contenu dans la ligne a ajouter
-
         fclose(file);
     }
-    else printf("Impossible de lire le fichier");
+    else printf("Impossible de lire le fichier\n");
 }
 
 void read_specific(char* directory, int i) {
@@ -39,6 +38,6 @@ void read_specific(char* directory, int i) {
         printf("%s", line);
         fclose(file);
     }
-    else printf("Impossible de lire le fichier");
+    else printf("Impossible de lire le fichier\n");
 }
 

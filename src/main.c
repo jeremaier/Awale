@@ -17,6 +17,7 @@
 #include "game.h"
 #include "main.h"
 
+
 // short au lieu de int car faibles unitees
 short board[NB_ROW][NB_HOLES];
 
@@ -64,13 +65,7 @@ int main(int argc, char** argv) {
     // =========== TESTS ==========
 
     //testSave();
-
-    char chemin[NAME_FILE_SIZE] = "listGames.txt";
-    initialize(chemin);
-
-    char line[LINE_SIZE] = "bonjour a toi";
-    write_new_line(chemin, line);
-    readlines(chemin);
+    testSaveGame();
 
     return 0;
 }
