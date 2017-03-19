@@ -19,9 +19,10 @@
 
 #include "ask.h"
 #include <string.h>
+#include <time.h>
 
 int main(int argc, char** argv) {
-    //boardInit();
+
     /*
     SDL_Surface *screen;
     if( SDL_Init(SDL_INIT_VIDEO) == -1) {
@@ -49,6 +50,8 @@ int main(int argc, char** argv) {
 
     //testSave();
     //testSaveGame();
+
+    play();
 
     return 0;
 }

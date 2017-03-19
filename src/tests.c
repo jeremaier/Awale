@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> // fct sleep
+#include <unistd.h> // pour utiliser la fonction _sleep(temps en ms)
 #include <time.h>
 #include "const.h"
 #include "tests.h"
@@ -63,8 +63,4 @@ void testSaveGame() {
     _sleep(3000);
 
     saveGame(chemin, &game, &creationGame);
-}
-
-void gameToString(Game* g) {
-    printf("Game number %d: \n", (*g).gameNumber);
 }

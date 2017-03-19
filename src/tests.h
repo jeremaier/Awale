@@ -23,8 +23,4 @@ void testSave();
 */
 void testSaveGame();
 
-/**
-* Affiche le contenu de la struct Game en parametre
-*/
-void gameToString(Game*);
 #endif // TESTS_H

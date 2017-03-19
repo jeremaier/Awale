@@ -14,8 +14,10 @@
  int askCurrent();
 
  /**
- * Demande le nom du joueur et le renvoit en chaine de caracteres
+ * Demande le nom du joueur et modifie le nom dans la structure game
+ * Ne peut renvoyer directement la chaine de caractere (elle ne serait generee que dans le corps de la fonction
+ * et non en dehors. Donc on pourrait renvoyer un pointeur vers cette chaine !
  */
- char* askName();
+ void askName(char* joueur);
 
  #endif // ASK_H

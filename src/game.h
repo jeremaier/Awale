@@ -22,7 +22,7 @@ void boardInit(short[][NB_HOLES]);
 /**
  * Initialise la struct game (a partir de rien ou d'une sauvegarde)
 */
-//void init_game(Game *game, struct tm *timer);
+void init_game(Game *game, struct tm *timer);
 
 
 /**

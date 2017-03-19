@@ -11,7 +11,7 @@
  #include "const.h"
  #include "string.h"
 
- int askCurrent() {
+int askCurrent() {
 
     int ans = 0;
 
@@ -23,7 +23,7 @@
     return ans;
  }
 
-char* askName() {
+void askName(char joueur[NAME_PLAYER_SIZE]) { // prend game.joueur1 en parametre (string, donc pointeur)
 
     char input[NAME_PLAYER_SIZE];
 
@@ -33,6 +33,5 @@ char* askName() {
     } while (strlen(input) > NAME_PLAYER_SIZE);
     //printf("Le nom choisit est: %s\n", input);
 
-    char* cp = input; // on retourne un pointeur vers la chaine input cree
-    return cp;
+    joueur = input;
 }

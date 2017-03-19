@@ -13,7 +13,7 @@
 #include "ask.h"
 #include "time.h"
 
-int whichNumber(char* directory) {
+int whichNumber(char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
 
     FILE* file = NULL;
     file = fopen(directory, "r");
@@ -46,23 +46,20 @@ void boardInit(short board[][NB_HOLES]) {
     		board[i][j] = NB_SEED_INIT;
 }
 
-void init_game(short* board, Game *game, struct tm *timer) {
+void init_game(Game *game, struct tm *timer) {
 
     char file_saved[NAME_FILE_SIZE] = "saved.txt";
     char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
-    int numberGame = whichNumber(file_list);
+    int number = whichNumber(file_list);
 
     // on ne gere pas le cas de la sauvergarde pour le moment (apres) :
-    (*game).gameNumber = numberGame;/*
-    (*game).joueur1 = askName(); //askName doit renvoyer une chaine de caractere de taille SIZE_NAME_PLAYER (do while)
-    (*game).joueur2 = askName();
-    (*game).gain1 = 0;
-    (*game).gain2 = 0;
-    (*game).currentPlayer = askCurrent(); // renvoit 1 ou 2 pour savoir a qui de jouer en premier
-    (*game).board_config = board;
-    (*game).creationGame = timer;*/
+    game -> gameNumber = number;
+    game -> gain1 = 0;
+    game -> gain2 = 0;
+    game -> currentPlayer = askCurrent(); // renvoit 1 ou 2 pour savoir a qui de jouer en premier
+    game -> creationGame = timer;
 
     // whichNumber == numeroDeLaPartieDansSaved, alors c'est une sauvergarde
 
@@ -70,23 +67,27 @@ void init_game(short* board, Game *game, struct tm *timer) {
 
 void play() {
 
-    // on cree le plateau de jeu
-    short board[NB_ROW][NB_HOLES];
+    // on cree la struct game
+    Game game;
 
-    // on l'initalise avec NB_SEED_INIT
-    boardInit(board);
+    // on initialise son tableau de jeu avec NB_SEED_INIT
+    boardInit(game.board_config);
 
     // test1, affichage du plateau
+    /*
     int i, j;
 	for(i = 0; i < NB_ROW; i++) {
 		for(j = 0; j < NB_HOLES; j++)
-			printf("%hd ", board[i][j]);
+			printf("%hd ", game.board_config[i][j]);
 
 		printf("\n");
-	}
+	}*/
 
-    // on cree la struct game
-    Game game;
+	// on demande le nom des joueurs et on complete la struct Game:
+    askName(game.joueur1);
+
+    //game.joueur1 = "Olivier"; //askName(); //askName doit renvoyer un pointeur vers une chaine de caractere de taille SIZE_NAME_PLAYER
+    //game.joueur2 = askName();
 
     // on recupere les infos temporelles de sa creation
     time_t secondes;
@@ -95,10 +96,14 @@ void play() {
     creationGame = *localtime(&secondes);
 
     // on initialise la struct Game
-    //init_game(board, game, creationGame);
+    init_game(&game, &creationGame);
 
     // test2, affichage de Game game
-    printf("%d\n", game.gameNumber);
+    printf("game number: %d\n", game.gameNumber);
+    printf("name player1: %s\n", game.joueur1);
+    printf("gain1: %d\n", game.gain1);
+    printf("current player: %d\n", game.currentPlayer);
+
 }
 
 /*void jouer() {}

@@ -28,7 +28,7 @@ struct Game {
     char joueur2[NAME_PLAYER_SIZE];
     short gain1; // nbre de graines collectees par le joueur 1
     short gain2;
-    short board_config[NB_ROW][NB_HOLES]; // l'etat des trous
+    short board_config[NB_ROW][NB_HOLES]; // l'etat du plateau de jeu
     struct tm *creationGame; // date et heure de creation du jeu, ou de la derniere sauvegarde si on reprend une partie sauvegarde
     short currentPlayer; // joueur qui a la main
 };
