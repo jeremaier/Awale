@@ -72,11 +72,21 @@ void loard_game(Game *game) { // lecture dans saved.txt et initialisation de gam
 
     if (file != NULL) {
 
-        char line[LINE_SIZE] = " ";
+        char line[LINE_SIZE] = "";
         fgets(line, LINE_SIZE, file); // on passe la premiere ligne
 
         // atoi -> string to int
-        game -> gameNumber = atoi(fgetc(file));
+        game -> gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
+
+        // on recupere les noms : (passer par une fonction auxilliare comme askName
+        char names[2];
+        fscanf(file, "%s %s", &names[0], &names[1]);
+
+        printf("%s et %s\n", names[0], names[1]);
+        /*
+        game -> joueur1 = names[0];
+        game -> joueur2 = names[1];
+        */
         /*game -> gain1 =
         game -> gain2 =
         game -> currentPlayer =
@@ -131,10 +141,14 @@ void playSavedGame_c() {
     //on charge les donnees enregistree dans saved.txt
     loard_game(&game);
 
-    printf("%d\n", game.gameNumber);
+    // a supprimer, c'est juste pour tester gameToString
+    time_t secondes;
+    struct tm creationGame;
+    time(&secondes);
+    creationGame = *localtime(&secondes);
 
     /** test2, affichage de Game game:*/
-    //gameToString(&game, &creationGame);
+    gameToString(&game, &creationGame);
 }
 
 void play_ConsoleMode() {
