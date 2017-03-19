@@ -64,3 +64,7 @@ void testSaveGame() {
 
     saveGame(chemin, &game, &creationGame);
 }
+
+void gameToString(Game* g) {
+    printf("Game number %d: \n", g.gameNumber);
+}

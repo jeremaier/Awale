@@ -18,5 +18,13 @@ void testBoardInit(short[][NB_HOLES]);
  */
 void testSave();
 
+/**
+* Test la sauvegarde dans listGames.txt
+*/
 void testSaveGame();
+
+/**
+* Affiche le contenu de la struct Game en parametre
+*/
+void gameToString(Game*);
 #endif // TESTS_H
