@@ -17,7 +17,7 @@ int whichNumber(char*);
 /**
  * Initialisation du plateau de jeu avec selection du joueur et le nombre de graines par trou
  */
-void boardInit();
+void boardInit(short[][NB_HOLES]);
 
 /**
  * Initialise la struct game (a partir de rien ou d'une sauvegarde)

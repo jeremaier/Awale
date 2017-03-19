@@ -7,8 +7,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "const.h"
 #include "game.h"
 #include "ask.h"
+#include "time.h"
 
 int whichNumber(char* directory) {
 
@@ -35,11 +38,9 @@ int whichNumber(char* directory) {
     return cpt;
 }
 
-void boardInit() {
-    short player;
+void boardInit(short board[][NB_HOLES]) {
 
     int i, j;
-
     for(i = 0; i < NB_ROW; i++)
     	for(j = 0; j < NB_HOLES; j++)
     		board[i][j] = NB_SEED_INIT;
@@ -54,14 +55,14 @@ void init_game(short* board, Game *game, struct tm *timer) {
     int numberGame = whichNumber(file_list);
 
     // on ne gere pas le cas de la sauvergarde pour le moment (apres) :
-    (*game).gameNumber = numberGame;
+    (*game).gameNumber = numberGame;/*
     (*game).joueur1 = askName(); //askName doit renvoyer une chaine de caractere de taille SIZE_NAME_PLAYER (do while)
     (*game).joueur2 = askName();
     (*game).gain1 = 0;
     (*game).gain2 = 0;
     (*game).currentPlayer = askCurrent(); // renvoit 1 ou 2 pour savoir a qui de jouer en premier
     (*game).board_config = board;
-    (*game).creationGame = timer;
+    (*game).creationGame = timer;*/
 
     // whichNumber == numeroDeLaPartieDansSaved, alors c'est une sauvergarde
 
@@ -73,13 +74,13 @@ void play() {
     short board[NB_ROW][NB_HOLES];
 
     // on l'initalise avec NB_SEED_INIT
-    boardInit();
+    boardInit(board);
 
     // test1, affichage du plateau
     int i, j;
 	for(i = 0; i < NB_ROW; i++) {
 		for(j = 0; j < NB_HOLES; j++)
-			printf("%hd ", matrice[i][j]);
+			printf("%hd ", board[i][j]);
 
 		printf("\n");
 	}
@@ -94,9 +95,10 @@ void play() {
     creationGame = *localtime(&secondes);
 
     // on initialise la struct Game
-    init_game(board ,game, creationGame);
+    //init_game(board, game, creationGame);
 
     // test2, affichage de Game game
+    printf("%d\n", game.gameNumber);
 }
 
 /*void jouer() {}

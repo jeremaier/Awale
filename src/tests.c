@@ -66,5 +66,5 @@ void testSaveGame() {
 }
 
 void gameToString(Game* g) {
-    printf("Game number %d: \n", g.gameNumber);
+    printf("Game number %d: \n", (*g).gameNumber);
 }
