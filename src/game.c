@@ -144,33 +144,84 @@ void play_ConsoleMode() {
             loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
             //nextStep(); // permet de jouer les coups (maj struct game)
 
-            affichage(&game);
+            printf("\n ========================== THE GAME BEGINS =========================\n\n");
+
+            affichage(&game); // on affiche le jeu
 
             char DoYouSave = ' ';
 
-            printf("Do you want to save the game ? (y/n)\n");
-            scanf("%c\n", &DoYouSave);
+            printf("\n Do you want to save the game ? (y/n)\n");
+            scanf("\n%c", &DoYouSave);
 
-            if (DoYouSave == 'y')
+            if (DoYouSave == 'y') {
                 save(file_saved, &game, &dateCreation);
+                printf(" The game has been saved with success !\n");
+            }
         }
 
         else {
 
             char answer = ' ';
 
-            printf("Voulez-vous charger la partie existante ? (o/n)\n");
-            scanf("%c\n", &answer);
+            printf(" Voulez-vous charger la partie existante ? (o/n)\n");
+            scanf("%c", &answer);
 
             if (answer == 'o') {
-                playSavedGame_c(); // on initialise avec la partie enregistee dans saved.txt
+
+                // on recupere les infos temporelles de sa creation
+                time_t secondes;
+                struct tm dateReprise;
+                time(&secondes);
+                dateReprise = *localtime(&secondes);
+
+                // on charge la strcuture avec les informations enregistrees dans saved.txt
+                //loard_saved_game(&game);
+
+                printf("\n ========================== THE GAME BEGINS =========================\n\n");
+
+                 // on affiche
+                affichage(&game);
+
+                char DoYouSave = ' ';
+
+                printf(" Do you want to save the game ? (y/n)\n");
+                scanf("%c\n", &DoYouSave);
+
+                if (DoYouSave == 'y') {
+                    save(file_saved, &game, &dateReprise);
+                    printf(" The game has been saved with success !\n");
+                }
             }
-            else {
-                playNewGame_c(); // on initialise une nouvelle partie
+
+            else { // on initialise une nouvelle partie
+
+                // on recupere les infos temporelles de sa creation
+                time_t secondes;
+                struct tm dateCreation;
+                time(&secondes);
+                dateCreation = *localtime(&secondes);
+
+                loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
+                //nextStep(); // permet de jouer les coups (maj struct game)
+
+                printf("\n ========================== THE GAME BEGINS =========================\n\n");
+
+                affichage(&game); // on affiche le jeu
+
+                char DoYouSave = ' ';
+
+                printf("\n Do you want to save the game ? (y/n)\n");
+                scanf("%c\n", &DoYouSave);
+
+                if (DoYouSave == 'y') {
+                    save(file_saved, &game, &dateCreation);
+                    printf(" The game has been saved with success !\n");
+                }
+
             }
         }
-        printf(" Do you want to play again ? (y/n)\n");
-        scanf("%c\n", &playAgain);
+            printf(" Do you want to play again ? (y/n)\n");
+            scanf("%c\n", &playAgain);
     } while (playAgain == 'y');
 }
 

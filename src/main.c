@@ -56,19 +56,10 @@ int main(int argc, char** argv) {
 
     //playNewGame_c();
        //playSavedGame_c();
-    //play_ConsoleMode();
 
-    /*
-    time_t secondes;
-    struct tm dateCreation;
-    time(&secondes);
-    dateCreation = *localtime(&secondes);
+    play_ConsoleMode();
 
-    Game game = {1, "Olive", "Tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &dateCreation, 0, {0,1,0}};
-    //gameToString(&game, &dateCreation);
-    affichage(&game);
-    affichage(&game);
-    */
+    //testSave();
 
     return 0;
 }

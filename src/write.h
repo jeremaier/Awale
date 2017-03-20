@@ -32,7 +32,7 @@ void timeElapsedToString (struct tm *tpsReference);
 /**
  * Enregistre dans directory (= save.txt) toutes les donnees relative a une partie
  */
-void save(char*, Game*, struct tm *tpsReference);
+void save(char* directory, Game*, struct tm *tpsReference);
 
 /**
 * Enregistre les resultats d'une partie finie dans listGames.txt (reprise impossible) a la suite des precedentes
