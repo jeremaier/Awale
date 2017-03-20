@@ -164,7 +164,7 @@ void play_ConsoleMode() {
             char answer = ' ';
 
             printf(" Voulez-vous charger la partie existante ? (o/n)\n");
-            scanf("%c", &answer);
+            scanf("\n%c", &answer);
 
             if (answer == 'o') {
 
@@ -175,7 +175,7 @@ void play_ConsoleMode() {
                 dateReprise = *localtime(&secondes);
 
                 // on charge la strcuture avec les informations enregistrees dans saved.txt
-                //loard_saved_game(&game);
+                loard_saved_game(&game);
 
                 printf("\n ========================== THE GAME BEGINS =========================\n\n");
 
@@ -211,7 +211,7 @@ void play_ConsoleMode() {
                 char DoYouSave = ' ';
 
                 printf("\n Do you want to save the game ? (y/n)\n");
-                scanf("%c\n", &DoYouSave);
+                scanf("\n%c", &DoYouSave);
 
                 if (DoYouSave == 'y') {
                     save(file_saved, &game, &dateCreation);
@@ -221,7 +221,7 @@ void play_ConsoleMode() {
             }
         }
             printf(" Do you want to play again ? (y/n)\n");
-            scanf("%c\n", &playAgain);
+            scanf("\n%c", &playAgain);
     } while (playAgain == 'y');
 }
 
