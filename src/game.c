@@ -61,6 +61,10 @@ void loard_blank_game(Game *game, struct tm *timer) {
     game -> currentPlayer = askCurrent(); // renvoit 1 ou 2 pour savoir a qui de jouer en premier
     game -> creationGame = timer;
 
+    (game -> timeSpent)[0] = 0;
+    (game -> timeSpent)[1] = 0;
+    (game -> timeSpent)[2] = 0;
+
     // initialisation du tableau
     int i,j;
     for (i=0; i<NB_ROW; i++)
@@ -94,8 +98,8 @@ void playNewGame_c() {
     save(file_save, &game, &creationGame);
 
     /**test3, ecriture dans listGames.txt*/
-    //char file_list[NAME_FILE_SIZE] = "listGames.txt";
-    //saveInList(file_list, &game, &creationGame);
+    char file_list[NAME_FILE_SIZE] = "listGames.txt";
+    saveInList(file_list, &game, &creationGame);
 }
 
 void playSavedGame_c() {
@@ -106,7 +110,6 @@ void playSavedGame_c() {
     //on charge les donnees enregistree dans saved.txt
     loard_saved_game(&game);
 
-    // a supprimer, c'est juste pour tester gameToString
     time_t secondes;
     struct tm creationGame;
     time(&secondes);
@@ -123,7 +126,7 @@ void play_ConsoleMode() {
     // si le fichier de sauvegarde est vide, on ne peut que créer une nouvelle partie car pas en memoire
     if (isEmpty(file_saved)) {
         playNewGame_c(); // on lance un nouveau jeu en mode console (_c)
-    }/*
+    }
     else {
 
         char answer = ' ';
@@ -136,7 +139,7 @@ void play_ConsoleMode() {
         }
         else {
             playNewGame_c(); // on initialise une nouvelle partie
-        }*/
+        }
 
     }
 

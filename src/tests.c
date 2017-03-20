@@ -38,7 +38,7 @@ void testSave() {
     creationGame = *localtime(&secondes);
 
     // on cree un nouveau jeu (configurations)
-    Game game = {1, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0};
+    Game game = {1, "Olive", "Tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0, {0,1,0}};
 
     // on fait une pause de 3000ms
     _sleep(3000);
@@ -58,7 +58,7 @@ void testSaveInList() {
     creationGame = *localtime(&secondes);
 
     // on cree un nouveau jeu (configurations)
-    Game game = {1, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0};
+    Game game = {1, "olive", "tom", 5, 3, {{4,4,4,4,4,4},{4,4,4,4,4,4}}, &creationGame, 0, {1,16,7}};
 
     // on fait une pause de 3000ms
     _sleep(3000);

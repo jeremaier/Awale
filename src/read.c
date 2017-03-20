@@ -130,7 +130,8 @@ void loard_saved_game(Game *game) { // lecture dans saved.txt et initialisation 
         (game -> timeSpent)[2] = times[2];
 
         // on recupere le current player
-        game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file));
+        fseek(file, -1, SEEK_END); // on place le curseur 1 caractere avant la fin du fichier
+        game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file)); // str to int
 
         fclose(file);
     }

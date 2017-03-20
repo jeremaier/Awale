@@ -52,10 +52,10 @@ int main(int argc, char** argv) {
     // =========== TESTS ==========
 
     //testSave();
-    //testSaveGame();
+    //testSaveInList();
 
-    //playNewGame_c();
-    playSavedGame_c();
+    playNewGame_c();
+       //playSavedGame_c();
     //play_ConsoleMode();
 
     return 0;
