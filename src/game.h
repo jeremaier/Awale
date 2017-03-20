@@ -26,16 +26,17 @@ void init_game(Game *game, struct tm *timer);
 
 /**
 * Charge la struct game avec les donnees de la partie stockee dans saved.txt
+* Le repere temporel de la sauvegarde devient celui du jeu charge a partie de saved.txt
 */
 void loard_game(Game *game);
 
 /**
-*
+* Pour lancer une nouvelle partie
 */
 void playNewGame_c();
 
 /**
-*
+* Pour jouer a un jeu sauvergarde
 */
 void playSavedGame_c();
 

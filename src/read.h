@@ -23,4 +23,10 @@ void read_specific (char*, int);
 */
 int isEmpty (char chemin[NAME_FILE_SIZE]);
 
+/**
+* Lit les noms dans le fichier deja ouvert et modifie game.joueur
+* file car on evite d'ouvrir 2 fois le fichier (cf. loard_game)
+*/
+void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLAYER_SIZE]);
+
 #endif // READ_H

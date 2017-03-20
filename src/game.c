@@ -13,6 +13,7 @@
 #include "ask.h"
 #include "time.h"
 #include "write.h"
+#include "read.h"
 
 int whichNumber(char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
 
@@ -62,7 +63,7 @@ void init_game(Game *game, struct tm *timer) {
     game -> creationGame = timer;
 }
 
-// a ecrire dans read ?
+// a ecrire dans read
 void loard_game(Game *game) { // lecture dans saved.txt et initialisation de game
 
     char file_saved[NAME_FILE_SIZE] = "saved.txt";
@@ -72,25 +73,43 @@ void loard_game(Game *game) { // lecture dans saved.txt et initialisation de gam
 
     if (file != NULL) {
 
+        //game -> creationGame = ? on recupere la date de la sauvegarde
+
         char line[LINE_SIZE] = "";
         fgets(line, LINE_SIZE, file); // on passe la premiere ligne
 
         // atoi -> string to int
         game -> gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
 
-        // on recupere les noms : (passer par une fonction auxilliare comme askName
-        char names[2];
-        fscanf(file, "%s %s", &names[0], &names[1]);
+        // on recupere les noms et on modifie directement la valeur game.joueur1/2
+        readNames(file, game -> joueur1, game -> joueur2);
 
-        printf("%s et %s\n", names[0], names[1]);
-        /*
-        game -> joueur1 = names[0];
-        game -> joueur2 = names[1];
-        */
-        /*game -> gain1 =
-        game -> gain2 =
-        game -> currentPlayer =
-        game -> creationGame =*/
+        // on recupere les gains de chaques joueurs
+        int profits[2] = {0};
+        fscanf(file, "%d %d", &profits[0], &profits[1]);
+
+        // et on les stocks dans la structure game
+        game -> gain1 = profits[0];
+        game -> gain2 = profits[1];
+
+        // on recupere le tableau
+        int i,j;
+        for (i=0; i<NB_ROW; i++) {
+            for (j=0; j<NB_HOLES; j++) {
+
+                // on recupere le contenu d'une cellule (board[i][j])
+                int ceil[1] = {0};
+                fscanf(file, "%d", &ceil[0]);
+
+                // on la stocke dans la structure game
+                (game -> board_config)[i][j] = ceil[0];
+            }
+        }
+
+        // on recupere le temps ecoule ?
+
+        // on recupere le current player
+        game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file));
 
         fclose(file);
     }

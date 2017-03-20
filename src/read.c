@@ -58,3 +58,22 @@ int isEmpty(char chemin[NAME_FILE_SIZE]) {
 
     return line == EOF;
 }
+
+void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLAYER_SIZE]) {
+
+    char names[2][NAME_FILE_SIZE];
+    fscanf(file, "%s %s", names[0], names[1]);
+
+    // on copie la valeur recuperee dans joueur 1 puis 2 :
+    int i;
+    for (i=0; i<strlen(names[0]); i++)
+        joueur1[i] = names[0][i];
+
+    for (i=0; i<strlen(names[1]); i++)
+        joueur2[i] = names[1][i];
+
+    // pour eviter de garder des traces de nom precedent s'ils sont plus long que les nouveaux
+    joueur1[strlen(names[0])] = '\0';
+    joueur2[strlen(names[1])] = '\0';
+
+}
