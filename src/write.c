@@ -36,6 +36,7 @@ void write_new_line(char* directory, char* chaine) {
 }
 
 void time_elapsed(FILE* file, struct tm *tpsReference) { // remplace difftime(time_t t1, time_t t2)
+
 	time_t secondes; // recupere le temps actuel
 	struct tm instant;
 	time(&secondes);
@@ -68,6 +69,7 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 	file = fopen(directory, "w"); // append, pour lire ou ecrire a la fin d'un fichier
 
 	if(file != NULL) {
+
 		time_t secondes; // recupere la date et heure de la sauvergarde (execution de save())
 		struct tm instant;
 		time(&secondes);
@@ -86,6 +88,7 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 		fprintf(file, "%d\n", game -> gameNumber); // ecrit un int dans le fichier
 		fprintf(file, "%s %s\n", game -> joueur1, game -> joueur2);
 		fprintf(file, "%d %d\n", game -> gain1, game -> gain2);
+
 		int i, j;
 
 		for(i = 0; i < NB_ROW; i++) {
@@ -96,7 +99,7 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 		/*
 		fprintf(file, "TIME ELAPSED: ");
 		*/
-		time_elapsed(file, tpsReference);
+		time_elapsed(file, tpsReference); // ecrit le temps ecoule
 
 		fprintf(file, "%hd\n", game -> currentPlayer);
 		//fprintf(file, "CURRENT PLAYER: %hd\n", game -> currentPlayer);

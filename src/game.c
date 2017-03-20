@@ -106,7 +106,11 @@ void loard_game(Game *game) { // lecture dans saved.txt et initialisation de gam
             }
         }
 
-        // on recupere le temps ecoule ?
+        // on recupere le temps ecoule
+        int times[3] = {0}; // va stocker hrs, min, sec ecoulees dans times[0], [1] et [2]
+        fscanf(file, "%d:%d:%d", &times[0], &times[1], &times[2]); // ":" comme delimiteurs
+
+
 
         // on recupere le current player
         game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file));
