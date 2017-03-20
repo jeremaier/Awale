@@ -48,12 +48,14 @@ void boardInit(short board[][NB_HOLES]) {
     		board[i][j] = NB_SEED_INIT;
 }
 
-void loard_blank_game(Game *game, struct tm *timer) {
-
-    char file_list[NAME_FILE_SIZE] = "listGames.txt";
+void loard_blank_game(FILE* file_list, Game *game, struct tm *timer) {
 
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
     int number = whichNumber(file_list);
+
+    // on demande le nom des joueurs et on complete la struct Game:
+    askName(game -> joueur1);
+    askName(game -> joueur2);
 
     game -> gameNumber = number;
     game -> gain1 = 0;
@@ -73,7 +75,7 @@ void loard_blank_game(Game *game, struct tm *timer) {
 }
 
 void playNewGame_c() {
-
+    /*
     // on cree la struct game
     Game game;
 
@@ -88,18 +90,18 @@ void playNewGame_c() {
     creationGame = *localtime(&secondes);
 
     // on initialise la struct Game
-    loard_blank_game(&game, &creationGame);
+    //loard_blank_game(&game, &creationGame);
 
-    /** test1, affichage de Game game: */
-    gameToString(&game, &creationGame);
+    /** test1, affichage de Game game:
+    gameToString(&game, &creationGame);*/
 
-    /**test2, sauvegarde dans saved.txt*/
+    /**test2, sauvegarde dans saved.txt
     char file_save[NAME_FILE_SIZE] = "saved.txt";
-    save(file_save, &game, &creationGame);
+    save(file_save, &game, &creationGame);*/
 
-    /**test3, ecriture dans listGames.txt*/
+    /**test3, ecriture dans listGames.txt
     char file_list[NAME_FILE_SIZE] = "listGames.txt";
-    saveInList(file_list, &game, &creationGame);
+    saveInList(file_list, &game, &creationGame);*/
 }
 
 void playSavedGame_c() {
@@ -121,27 +123,55 @@ void playSavedGame_c() {
 
 void play_ConsoleMode() {
 
-    char file_saved[NAME_FILE_SIZE] = "saved.txt";
+    char playAgain = ' ';
 
-    // si le fichier de sauvegarde est vide, on ne peut que créer une nouvelle partie car pas en memoire
-    if (isEmpty(file_saved)) {
-        playNewGame_c(); // on lance un nouveau jeu en mode console (_c)
-    }
-    else {
+    do {
 
-        char answer = ' ';
+        Game game;
 
-        printf("Voulez-vous charger la partie existante ? (o/n)\n");
-        scanf("%c", &answer);
+        char file_saved[NAME_FILE_SIZE] = "saved.txt";
+        char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
-        if (answer == 'o') {
-            playSavedGame_c(); // on initialise avec la partie enregistee dans saved.txt
+        // si le fichier de sauvegarde est vide, on ne peut que créer une nouvelle partie car pas en memoire
+        if (isEmpty(file_saved)) {
+
+            // on recupere les infos temporelles de sa creation
+            time_t secondes;
+            struct tm dateCreation;
+            time(&secondes);
+            dateCreation = *localtime(&secondes);
+
+            loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
+            //nextStep(); // permet de jouer les coups (maj struct game)
+
+            affichage(&game);
+
+            char DoYouSave = ' ';
+
+            printf("Do you want to save the game ? (y/n)\n");
+            scanf("%c\n", &DoYouSave);
+
+            if (DoYouSave == 'y')
+                save(file_saved, &game, &dateCreation);
         }
+
         else {
-            playNewGame_c(); // on initialise une nouvelle partie
-        }
 
-    }
+            char answer = ' ';
+
+            printf("Voulez-vous charger la partie existante ? (o/n)\n");
+            scanf("%c\n", &answer);
+
+            if (answer == 'o') {
+                playSavedGame_c(); // on initialise avec la partie enregistee dans saved.txt
+            }
+            else {
+                playNewGame_c(); // on initialise une nouvelle partie
+            }
+        }
+        printf(" Do you want to play again ? (y/n)\n");
+        scanf("%c\n", &playAgain);
+    } while (playAgain == 'y');
 }
 
 /*void jouer() {}

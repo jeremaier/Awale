@@ -22,7 +22,7 @@ void boardInit(short[][NB_HOLES]);
 /**
  * Initialise la struct game lors d'une nouvelle partie
 */
-void loard_blank_game(Game *game, struct tm *timer);
+void loard_blank_game(FILE* file_list, Game *game, struct tm *timer);
 
 /**
 * Pour lancer une nouvelle partie

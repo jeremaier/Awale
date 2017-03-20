@@ -40,4 +40,9 @@ void save(char*, Game*, struct tm *tpsReference);
 */
 void saveInList (char *directory, Game*, struct tm *tpsReference);
 
+/**
+* Affiche une belle partie en mode console
+*/
+void affichage(Game *game);
+
 #endif // WRITE_H

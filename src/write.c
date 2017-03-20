@@ -130,3 +130,16 @@ void saveInList(char* directory, Game* game, struct tm *tpsReference) {
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
+void affichage(Game *game) {
+
+    int i,j;
+    for (i=0; i<NB_ROW; i++) {
+        for (j=0; j<NB_HOLES; j++) {
+            printf(" %d ", (game -> board_config)[i][j]);
+        } if (i==0) { printf("      |      current player: %d\n", game -> currentPlayer); }
+            else {
+                    printf("      |      %s's profit: %d,    %s's profit: %d\n", game -> joueur1, game -> gain1, game -> joueur2, game -> gain2);
+                    printf("                        |\n");
+            }
+    }
+}
