@@ -131,7 +131,7 @@ void play_ConsoleMode() {
 
         char answer = ' ';
 
-        printf("Voulez-vous charger une partie existante ? (o/n)\n");
+        printf("Voulez-vous charger la partie existante ? (o/n)\n");
         scanf("%c", &answer);
 
         if (answer == 'o') {
@@ -142,6 +142,7 @@ void play_ConsoleMode() {
         }
 
     }
+}
 
 /*void jouer() {}
 
