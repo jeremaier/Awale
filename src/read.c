@@ -77,3 +77,65 @@ void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLA
     joueur2[strlen(names[1])] = '\0';
 
 }
+
+void loard_saved_game(Game *game) { // lecture dans saved.txt et initialisation de game
+
+    char file_saved[NAME_FILE_SIZE] = "saved.txt";
+
+    FILE* file = NULL;
+    file = fopen(file_saved, "r");
+
+    if (file != NULL) {
+
+        //game -> creationGame = ? on recupere la date de la sauvegarde
+
+        char line[LINE_SIZE] = "";
+        fgets(line, LINE_SIZE, file); // on passe la premiere ligne
+
+        // atoi -> string to int
+        game -> gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
+
+        // on recupere les noms et on modifie directement la valeur game.joueur1/2
+        readNames(file, game -> joueur1, game -> joueur2);
+
+        // on recupere les gains de chaques joueurs
+        int profits[2] = {0};
+        fscanf(file, "%d %d", &profits[0], &profits[1]);
+
+        // et on les stocks dans la structure game
+        game -> gain1 = profits[0];
+        game -> gain2 = profits[1];
+
+        // on recupere le tableau
+        int i,j;
+        for (i=0; i<NB_ROW; i++) {
+            for (j=0; j<NB_HOLES; j++) {
+
+                // on recupere le contenu d'une cellule (board[i][j])
+                int ceil[1] = {0};
+                fscanf(file, "%d", &ceil[0]);
+
+                // on la stocke dans la structure game
+                (game -> board_config)[i][j] = ceil[0];
+            }
+        }
+
+        // on recupere le temps ecoule
+        int times[3] = {0}; // va stocker hrs, min, sec ecoulees dans times[0], [1] et [2]
+        fscanf(file, "%d:%d:%d", &times[0], &times[1], &times[2]); // ":" comme delimiteurs
+
+        // maj de timeSpent a jouer
+        (game -> timeSpent)[0] = times[0];
+        (game -> timeSpent)[1] = times[1];
+        (game -> timeSpent)[2] = times[2];
+
+        // on recupere le current player
+        game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file));
+
+        fclose(file);
+    }
+    else {
+        printf("Impossible de lire le fichier\n");
+    }
+
+}

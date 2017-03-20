@@ -35,16 +35,16 @@ void write_new_line(char* directory, char* chaine) {
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
-void time_elapsed(FILE* file, struct tm *tpsReference) { // remplace difftime(time_t t1, time_t t2)
+void time_elapsed(FILE* file, struct tm *tpsReference, int additionnal[3]) { // remplace difftime(time_t t1, time_t t2)
 
 	time_t secondes; // recupere le temps actuel
 	struct tm instant;
 	time(&secondes);
 	instant = *localtime(&secondes);
 
-	instant.tm_hour -= (*tpsReference).tm_hour; // calcul de la duree de jeu
-	instant.tm_min -= (*tpsReference).tm_min;
-	instant.tm_sec -= (*tpsReference).tm_sec;
+	instant.tm_hour -= (*tpsReference).tm_hour - additionnal[0]; // calcul de la duree de jeu
+	instant.tm_min -= (*tpsReference).tm_min - additionnal[1];
+	instant.tm_sec -= (*tpsReference).tm_sec - additionnal[2];
 
 	fprintf(file, "%d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
 }
@@ -90,16 +90,12 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 		fprintf(file, "%d %d\n", game -> gain1, game -> gain2);
 
 		int i, j;
-
-		for(i = 0; i < NB_ROW; i++) {
+		for(i = 0; i < NB_ROW; i++)
 			for(j = 0; j < NB_HOLES; j++)
 				fprintf(file, "%d\n", game -> board_config[i][j]);
-		}
 
-		/*
-		fprintf(file, "TIME ELAPSED: ");
-		*/
-		time_elapsed(file, tpsReference); // ecrit le temps ecoule
+		//fprintf(file, "TIME ELAPSED: ");
+		time_elapsed(file, tpsReference, game -> timeSpent); // ecrit le temps ecoule
 
 		fprintf(file, "%hd\n", game -> currentPlayer);
 		//fprintf(file, "CURRENT PLAYER: %hd\n", game -> currentPlayer);
@@ -127,7 +123,7 @@ void saveInList(char* directory, Game* game, struct tm *tpsReference) {
           instant.tm_mon + 1, instant.tm_year + 1900, instant.tm_hour, instant.tm_min, instant.tm_sec, game -> gameNumber,
           game -> joueur1, game -> gain1, game -> joueur2, game -> gain2);
 
-		time_elapsed(file, tpsReference);
+		time_elapsed(file, tpsReference, game -> timeSpent);
 
 		fclose(file);
 	}

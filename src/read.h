@@ -29,4 +29,10 @@ int isEmpty (char chemin[NAME_FILE_SIZE]);
 */
 void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLAYER_SIZE]);
 
+/**
+* Charge la struct game avec les donnees de la partie stockee dans saved.txt
+* Le temps passe a jouer sera celui deja passse (enregistre dans saved.txt) + le temps passe a jouer jusqu'a une nouvelle action
+*/
+void loard_saved_game(Game *game);
+
 #endif // READ_H

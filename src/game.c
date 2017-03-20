@@ -48,88 +48,30 @@ void boardInit(short board[][NB_HOLES]) {
     		board[i][j] = NB_SEED_INIT;
 }
 
-void init_game(Game *game, struct tm *timer) {
+void loard_blank_game(Game *game, struct tm *timer) {
 
     char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
     int number = whichNumber(file_list);
 
-    // on ne gere pas le cas de la sauvergarde pour le moment (apres) :
     game -> gameNumber = number;
     game -> gain1 = 0;
     game -> gain2 = 0;
     game -> currentPlayer = askCurrent(); // renvoit 1 ou 2 pour savoir a qui de jouer en premier
     game -> creationGame = timer;
-}
 
-// a ecrire dans read
-void loard_game(Game *game) { // lecture dans saved.txt et initialisation de game
-
-    char file_saved[NAME_FILE_SIZE] = "saved.txt";
-
-    FILE* file = NULL;
-    file = fopen(file_saved, "r");
-
-    if (file != NULL) {
-
-        //game -> creationGame = ? on recupere la date de la sauvegarde
-
-        char line[LINE_SIZE] = "";
-        fgets(line, LINE_SIZE, file); // on passe la premiere ligne
-
-        // atoi -> string to int
-        game -> gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
-
-        // on recupere les noms et on modifie directement la valeur game.joueur1/2
-        readNames(file, game -> joueur1, game -> joueur2);
-
-        // on recupere les gains de chaques joueurs
-        int profits[2] = {0};
-        fscanf(file, "%d %d", &profits[0], &profits[1]);
-
-        // et on les stocks dans la structure game
-        game -> gain1 = profits[0];
-        game -> gain2 = profits[1];
-
-        // on recupere le tableau
-        int i,j;
-        for (i=0; i<NB_ROW; i++) {
-            for (j=0; j<NB_HOLES; j++) {
-
-                // on recupere le contenu d'une cellule (board[i][j])
-                int ceil[1] = {0};
-                fscanf(file, "%d", &ceil[0]);
-
-                // on la stocke dans la structure game
-                (game -> board_config)[i][j] = ceil[0];
-            }
-        }
-
-        // on recupere le temps ecoule
-        int times[3] = {0}; // va stocker hrs, min, sec ecoulees dans times[0], [1] et [2]
-        fscanf(file, "%d:%d:%d", &times[0], &times[1], &times[2]); // ":" comme delimiteurs
-
-
-
-        // on recupere le current player
-        game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file));
-
-        fclose(file);
-    }
-    else {
-        printf("Impossible de lire le fichier\n");
-    }
-
+    // initialisation du tableau
+    int i,j;
+    for (i=0; i<NB_ROW; i++)
+        for (j=0; j<NB_HOLES; j++)
+            (game -> board_config)[i][j] = NB_SEED_INIT;
 }
 
 void playNewGame_c() {
 
     // on cree la struct game
     Game game;
-
-    // on initialise son tableau de jeu avec NB_SEED_INIT
-    boardInit(game.board_config);
 
     // on demande le nom des joueurs et on complete la struct Game:
     askName(game.joueur1);
@@ -142,7 +84,7 @@ void playNewGame_c() {
     creationGame = *localtime(&secondes);
 
     // on initialise la struct Game
-    init_game(&game, &creationGame);
+    loard_blank_game(&game, &creationGame);
 
     /** test1, affichage de Game game: */
     gameToString(&game, &creationGame);
@@ -162,7 +104,7 @@ void playSavedGame_c() {
     Game game;
 
     //on charge les donnees enregistree dans saved.txt
-    loard_game(&game);
+    loard_saved_game(&game);
 
     // a supprimer, c'est juste pour tester gameToString
     time_t secondes;

@@ -81,7 +81,8 @@ void gameToString(Game* game, struct tm* creation) {
             printf(" %d ", (game->board_config)[i][j]);
         } printf("\n");
     }
-    printf(" current player: %d\n", game ->currentPlayer);
-    timeElapsedToString(creation);
+    printf(" current player: %d\n", game -> currentPlayer);
+    //timeElapsedToString(creation);
+    printf(" time spent : %d:%d:%d\n", (game -> timeSpent)[0], (game -> timeSpent)[1], (game -> timeSpent)[2]);
     printf(" === END AFFICHAGE GAME ===\n");
 }

@@ -20,15 +20,9 @@ int whichNumber(char*);
 void boardInit(short[][NB_HOLES]);
 
 /**
- * Initialise la struct game (a partir de rien ou d'une sauvegarde)
+ * Initialise la struct game lors d'une nouvelle partie
 */
-void init_game(Game *game, struct tm *timer);
-
-/**
-* Charge la struct game avec les donnees de la partie stockee dans saved.txt
-* Le repere temporel de la sauvegarde devient celui du jeu charge a partie de saved.txt
-*/
-void loard_game(Game *game);
+void loard_blank_game(Game *game, struct tm *timer);
 
 /**
 * Pour lancer une nouvelle partie
@@ -41,7 +35,7 @@ void playNewGame_c();
 void playSavedGame_c();
 
 /**
-* Pour lancer une initialisation de strcut game
+* Pour jouer en mode console (pas de SDL)
 */
 void play_ConsoleMode();
 

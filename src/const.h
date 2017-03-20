@@ -31,6 +31,7 @@ struct Game {
     short board_config[NB_ROW][NB_HOLES]; // l'etat du plateau de jeu
     struct tm *creationGame; // date et heure de creation du jeu, ou de la derniere sauvegarde si on reprend une partie sauvegarde
     short currentPlayer; // joueur qui a la main
+    int timeSpent[3]; // le temps deja passer à jouer (utile dans le cas d'une sauvergarde) hrs min sec
 };
 typedef struct Game Game;
 
