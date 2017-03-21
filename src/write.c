@@ -85,7 +85,7 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 			for(j = 0; j < NB_HOLES; j++)
 				fprintf(file, "%d\n", game -> board_config[i][j]);
 
-		//time_elapsed(file, tpsReference, game -> timeSpent); // ecrit le temps ecoule
+		time_elapsed(file, tpsReference, game -> timeSpent); // ecrit le temps ecoule
 
 		fprintf(file, "%hd\n", game -> currentPlayer);
 
@@ -95,6 +95,7 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 }
 
 // ctime() pour afficher un time_t en char
+
 void saveInList(char* directory, Game* game, struct tm *tpsReference) {
 
 	FILE* file = NULL;
@@ -102,7 +103,7 @@ void saveInList(char* directory, Game* game, struct tm *tpsReference) {
 
 	if(file != NULL) {
 
-        // recupere la date et heure de la sauvergarde (execution de save())
+        // recupere la date et heure de la sauvergarde (execution de saveInList())
 		time_t secondes;
 		struct tm instant;
 		time(&secondes);
@@ -125,7 +126,11 @@ void affichage(Game *game) {
     for (i=0; i<NB_ROW; i++) {
         for (j=0; j<NB_HOLES; j++) {
             printf(" %d ", (game -> board_config)[i][j]);
-        } if (i==0) { printf("      |      current player: %d\n", game -> currentPlayer); }
+        } if (i==0) {
+            if (game -> currentPlayer == 0)
+                printf("      |      current player: %s (row %d)\n", game -> joueur1, game -> currentPlayer+1);
+            else printf("      |      current player: %s (row %d)\n", game -> joueur2, game -> currentPlayer+1);
+            }
             else {
                     printf("      |      %s's profit: %d,    %s's profit: %d\n", game -> joueur1, game -> gain1, game -> joueur2, game -> gain2);
             }

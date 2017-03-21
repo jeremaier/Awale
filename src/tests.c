@@ -86,3 +86,50 @@ void gameToString(Game* game, struct tm* creation) {
     printf(" time spent : %d:%d:%d\n", (game -> timeSpent)[0], (game -> timeSpent)[1], (game -> timeSpent)[2]);
     printf(" === END AFFICHAGE GAME ===\n");
 }
+
+void playNewGame_c() {
+
+    // on cree la struct game
+    Game game;
+
+    // on demande le nom des joueurs et on complete la struct Game:
+    //askName(game.joueur1);
+    //askName(game.joueur2);
+
+    // on recupere les infos temporelles de sa creation
+    time_t secondes;
+    struct tm creationGame;
+    time(&secondes);
+    creationGame = *localtime(&secondes);
+
+    // on initialise la struct Game
+    char file_list[NAME_FILE_SIZE] = "listGames.txt";
+    loard_blank_game(file_list, &game, &creationGame);
+
+    /** test1, affichage de Game game:*/
+    gameToString(&game, &creationGame);
+
+    /**test2, sauvegarde dans saved.txt*/
+    char file_save[NAME_FILE_SIZE] = "saved.txt";
+    save(file_save, &game, &creationGame);
+
+    /**test3, ecriture dans listGames.txt*/
+    saveInList(file_list, &game, &creationGame);
+}
+
+void playSavedGame_c() {
+
+    // on cree une struct game
+    Game game;
+
+    //on charge les donnees enregistree dans saved.txt
+    loard_saved_game(&game);
+
+    time_t secondes;
+    struct tm creationGame;
+    time(&secondes);
+    creationGame = *localtime(&secondes);
+
+    /** test2, affichage de Game game:*/
+    gameToString(&game, &creationGame);
+}

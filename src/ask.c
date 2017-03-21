@@ -20,15 +20,15 @@ int askCurrent() {
         scanf("%d", &ans);
     } while (ans != 1 && ans != 2);
     //printf("The current player is %d\n", ans);
-    return ans;
+    return ans-1; // -1 pour compatibilitee avec affichage(Game* game)
  }
 
-void askName(char joueur[NAME_PLAYER_SIZE]) { // prend game.joueur1 en parametre (string, donc pointeur)
+void askName(char joueur[NAME_PLAYER_SIZE], int numberPlayer) { // prend game.joueur1 en parametre (string, donc pointeur)
 
     char input[NAME_PLAYER_SIZE-1];
 
     do {
-        printf("Entree le nom du joueur:\n");
+        printf("What's the name of player no %d:\n", numberPlayer);
         scanf("%s", input);
     } while (strlen(input) > NAME_PLAYER_SIZE);
     //printf("Le nom choisit est: %s\n", input);

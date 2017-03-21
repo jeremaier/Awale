@@ -18,6 +18,6 @@
  * Ne peut renvoyer directement la chaine de caractere (elle ne serait generee que dans le corps de la fonction
  * et non en dehors. Donc on pourrait renvoyer un pointeur vers cette chaine !
  */
- void askName(char* joueur);
+ void askName(char* joueur, int numberPlayer);
 
  #endif // ASK_H

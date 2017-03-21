@@ -14,6 +14,7 @@
 #include "time.h"
 #include "write.h"
 #include "read.h"
+//#include "../essaiPerso.h"
 
 int whichNumber(char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
 
@@ -51,16 +52,16 @@ void boardInit(short board[][NB_HOLES]) {
 void loard_blank_game(FILE* file_list, Game *game, struct tm *timer) {
 
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
-    int number = whichNumber(file_list);
+    //int number = whichNumber(file_list);
 
     // on demande le nom des joueurs et on complete la struct Game:
-    askName(game -> joueur1);
-    askName(game -> joueur2);
+    askName(game -> joueur1, 1);
+    askName(game -> joueur2, 2);
 
-    game -> gameNumber = number;
+    game -> gameNumber = whichNumber(file_list);
     game -> gain1 = 0;
     game -> gain2 = 0;
-    game -> currentPlayer = askCurrent(); // renvoit 1 ou 2 pour savoir a qui de jouer en premier
+    game -> currentPlayer = askCurrent(); // renvoit 0 ou 1 pour savoir a qui de jouer en premier
     game -> creationGame = timer;
 
     (game -> timeSpent)[0] = 0;
@@ -74,126 +75,215 @@ void loard_blank_game(FILE* file_list, Game *game, struct tm *timer) {
             (game -> board_config)[i][j] = NB_SEED_INIT;
 }
 
-void playNewGame_c() {
-    /*
-    // on cree la struct game
-    Game game;
+int hasWinner(Game* game) {
 
-    // on demande le nom des joueurs et on complete la struct Game:
-    askName(game.joueur1);
-    askName(game.joueur2);
+    int s1 = 0;
+    int s2 = 0;
 
-    // on recupere les infos temporelles de sa creation
-    time_t secondes;
-    struct tm creationGame;
-    time(&secondes);
-    creationGame = *localtime(&secondes);
+    int j;
+    for (j=0; j<NB_HOLES; j++) {
+        s1 += (game -> board_config)[0][j];
+        s2 += (game -> board_config)[1][j];
+    }
 
-    // on initialise la struct Game
-    //loard_blank_game(&game, &creationGame);
-
-    /** test1, affichage de Game game:
-    gameToString(&game, &creationGame);*/
-
-    /**test2, sauvegarde dans saved.txt
-    char file_save[NAME_FILE_SIZE] = "saved.txt";
-    save(file_save, &game, &creationGame);*/
-
-    /**test3, ecriture dans listGames.txt
-    char file_list[NAME_FILE_SIZE] = "listGames.txt";
-    saveInList(file_list, &game, &creationGame);*/
+    return (s1 == 0 || s2 == 0);
 }
 
-void playSavedGame_c() {
+int quit(char* file_save, char* file_list, Game* game, struct tm *dateCreation) {
 
-    // on cree une struct game
-    Game game;
+    //char file_save[NAME_FILE_SIZE] = "saved.txt";
+    //char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
-    //on charge les donnees enregistree dans saved.txt
-    loard_saved_game(&game);
+    char ans = ' ';
 
-    time_t secondes;
-    struct tm creationGame;
-    time(&secondes);
-    creationGame = *localtime(&secondes);
+    do {
+        printf("\n Do you want to save the game ? (y/n)\n");
+        scanf("\n%c", &ans);
+    } while (ans != 'y' && ans != 'n');
 
-    /** test2, affichage de Game game:*/
-    gameToString(&game, &creationGame);
+    if (ans == 'y') {
+
+        save(file_save, game, dateCreation);
+        printf(" The game has been saved with success\n");
+    }
+
+    char ans2 = ' ';
+
+    do {
+        printf("\n Do you want to quit? (y/n)\n");
+        scanf("\n%c", &ans2);
+    } while (ans2 != 'y' && ans2 != 'n');
+
+    if (ans2 == 'y') {
+
+        // on retourne le gagnant :
+        if (game -> gain1 > game -> gain2)
+            printf("\n CONGRATULATION ! %s has won with a total score of: %d\n", game -> joueur1, game -> gain1);
+
+        else {
+
+            if (game -> gain1 < game -> gain2)
+                printf("\n CONGRATULATION ! %s has won with a total score of: %d\n", game -> joueur2, game -> gain2);
+            else printf("\n No winner for this game \n");
+        }
+
+        /*
+        time_t secondes;
+        struct tm timeExit;
+        time(&secondes);
+        timeExit = *localtime(&secondes);
+        */
+
+        saveInList(file_list, game, dateCreation);
+        printf(" listGames.txt has been completed\n");
+
+        return 1;
+    }
+    return 0;
 }
 
-void play_ConsoleMode() {
+void nextStep(Game* game) {
 
-    char playAgain = ' ';
+    int caseSelected = NULL; // on recupere le numero de la case a jouer
+
+    int current = (game -> currentPlayer); // on recupere le joueur qui a la main (0 ou 1)
+
+    do {
+        if (game -> currentPlayer == 0)
+            printf("\n %s, which square have I to select? (0 < nber < 7)\n", (game -> joueur1));
+        else printf("\n %s, which square have I to select? (0 < nber < 7)\n", game -> joueur2);
+        scanf("%d", &caseSelected);
+    } while (caseSelected < 1 || caseSelected > 6 || (game -> board_config)[current][caseSelected-1] == 0 ); // on n'autorise pas a jouer une case vide
+
+    int nbSeeds =  (game -> board_config)[current][caseSelected-1]; // on retient le nombre de graines dans la case selected
+
+    (game -> board_config)[current][caseSelected-1] = 0; // on vide la case que l'on a jouee
+
+    int j = caseSelected-1;
+
+    // maj du plateau
+    if ((game -> currentPlayer) == 1) {
+
+        while (nbSeeds != 0) {
+
+            while (j < NB_HOLES-1 && nbSeeds != 0 && current == 1) {
+                j++;
+                // si on retombe sur la case de depart, on la saute sans mettre de graines
+                if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                    (game -> board_config)[current][j] += 1;
+                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
+                    nbSeeds--;
+                }
+             }
+             current++;
+             current %= 2;
+             while (j >= 0 && nbSeeds != 0 && current == 0) {
+
+                if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                    (game -> board_config)[current][j] += 1;
+                    nbSeeds--;
+                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
+                }
+                j--;
+             }
+        }
+
+        // on gere les gains :
+
+        j++; // pour compenser le j-- precedent
+        // si on s'arrete sur un case adverse avec 2 ou 3 graines avec la notre
+        if (current == 0 && ((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3)) {
+
+                // on affiche le plateau de jeu
+                printf("\n                        |      status before collecting \n");
+                int u, v;
+                for (u=0; u<NB_ROW; u++) {
+                    for (v=0; v<NB_HOLES; v++) {
+                        printf(" %d ", (game -> board_config)[u][v]);
+                    } printf("\n");
+                }
+
+                // on ramasse les grains jusqu'a rencontrer une case avec nbSeeds > 3 ou sortir de la zone adverse
+                while (((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3 ) && j < NB_HOLES) {
+                    (game -> gain2) += (game -> board_config)[current][j];
+                    (game -> board_config)[current][j] = 0;
+                    j++;
+                }
+        }
+
+    } else {
+
+        while (nbSeeds != 0) {
+
+            while (j > 0 && nbSeeds != 0 && current == 0) {
+                j--;
+                if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                    (game -> board_config)[current][j] += 1;
+                    nbSeeds--;
+                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
+                }
+             }
+            current++;
+            current %= 2;
+            while (j < NB_HOLES && nbSeeds != 0 && current == 1) {
+                 if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                    (game -> board_config)[current][j] += 1;
+                    nbSeeds--;
+                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
+                 }
+                j++;
+             }
+        }
+
+        j--;
+        if (current == 1 && ((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3)) {
+
+                // on affiche le plateau de jeu
+                printf("\n                        |      status before collecting \n");
+                int u, v;
+                for (u=0; u<NB_ROW; u++) {
+                    for (v=0; v<NB_HOLES; v++) {
+                        printf(" %d ", (game -> board_config)[u][v]);
+                    } printf("\n");
+                }
+
+                // on ramasse les grains jusqu'a rencontrer une case avec nbSeeds > 3 ou sortir de la zone adverse
+                while (((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3 ) && j > 0) {
+                    (game -> gain1) += (game -> board_config)[current][j];
+                    (game -> board_config)[current][j] = 0;
+                    j--;
+                }
+        }
+    }
+
+    // on change la main pour le prochain tour
+    (game -> currentPlayer)++;
+    (game -> currentPlayer) %= 2;
+
+    printf("\n");
+    affichage(game);
+}
+
+void play_console() {
+
+    int launchAgain = ' ';
 
     do {
 
         Game game;
-
-        char file_saved[NAME_FILE_SIZE] = "saved.txt";
+        char file_save[NAME_FILE_SIZE] = "saved.txt";
         char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
-        // si le fichier de sauvegarde est vide, on ne peut que créer une nouvelle partie car pas en memoire
-        if (isEmpty(file_saved)) {
+        char loard = ' ';
+        printf("Do you want to loard from saved.txt ? (y/n)\n");
+        scanf("%c", &loard);
 
-            // on recupere les infos temporelles de sa creation
-            time_t secondes;
-            struct tm dateCreation;
-            time(&secondes);
-            dateCreation = *localtime(&secondes);
+        if (loard == 'y') {
 
-            loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
-            //nextStep(); // permet de jouer les coups (maj struct game)
+            // si le fichier de sauvegarde est vide, on ne peut que creer une nouvelle partie car pas en memoire
+            if (isEmpty(file_save)) {
 
-            printf("\n ========================== THE GAME BEGINS =========================\n\n");
-
-            affichage(&game); // on affiche le jeu
-
-            char DoYouSave = ' ';
-
-            printf("\n Do you want to save the game ? (y/n)\n");
-            scanf("\n%c", &DoYouSave);
-
-            if (DoYouSave == 'y') {
-                save(file_saved, &game, &dateCreation);
-                printf(" The game has been saved with success !\n");
-            }
-        }
-
-        else {
-
-            char answer = ' ';
-
-            printf(" Voulez-vous charger la partie existante ? (o/n)\n");
-            scanf("\n%c", &answer);
-
-            if (answer == 'o') {
-
-                // on recupere les infos temporelles de sa creation
-                time_t secondes;
-                struct tm dateReprise;
-                time(&secondes);
-                dateReprise = *localtime(&secondes);
-
-                // on charge la strcuture avec les informations enregistrees dans saved.txt
-                loard_saved_game(&game);
-
-                printf("\n ========================== THE GAME BEGINS =========================\n\n");
-
-                 // on affiche
-                affichage(&game);
-
-                char DoYouSave = ' ';
-
-                printf(" Do you want to save the game ? (y/n)\n");
-                scanf("%c\n", &DoYouSave);
-
-                if (DoYouSave == 'y') {
-                    save(file_saved, &game, &dateReprise);
-                    printf(" The game has been saved with success !\n");
-                }
-            }
-
-            else { // on initialise une nouvelle partie
+                printf("No data has been found, I'm launching a new game:\n");
 
                 // on recupere les infos temporelles de sa creation
                 time_t secondes;
@@ -202,52 +292,55 @@ void play_ConsoleMode() {
                 dateCreation = *localtime(&secondes);
 
                 loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
-                //nextStep(); // permet de jouer les coups (maj struct game)
 
                 printf("\n ========================== THE GAME BEGINS =========================\n\n");
 
-                affichage(&game); // on affiche le jeu
+                do {
+                    affichage(&game);
+                    nextStep(&game);
+                } while (!quit(file_save, file_list, &game, &dateCreation));
+            }
 
-                char DoYouSave = ' ';
+            else {
 
-                printf("\n Do you want to save the game ? (y/n)\n");
-                scanf("\n%c", &DoYouSave);
+                // on recupere les infos temporelles de sa creation
+                time_t secondes;
+                struct tm dateCreation;
+                time(&secondes);
+                dateCreation = *localtime(&secondes);
 
-                if (DoYouSave == 'y') {
-                    save(file_saved, &game, &dateCreation);
-                    printf(" The game has been saved with success !\n");
-                }
+                loard_saved_game(&game); // on initialise la struct game vide
 
+                printf("\n ========================== THE GAME BEGINS =========================\n\n");
+
+                do {
+                    affichage(&game);
+                    nextStep(&game);
+                } while (!quit(file_save, file_list, &game, &dateCreation));
             }
         }
-            printf(" Do you want to play again ? (y/n)\n");
-            scanf("\n%c", &playAgain);
-    } while (playAgain == 'y');
+
+        else {
+
+            // on recupere les infos temporelles de sa creation
+            time_t secondes;
+            struct tm dateCreation;
+            time(&secondes);
+            dateCreation = *localtime(&secondes);
+
+            loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
+
+            printf("\n ========================== THE GAME BEGINS =========================\n\n");
+
+            do {
+                affichage(&game);
+                nextStep(&game);
+            } while (!quit(file_save, file_list, &game, &dateCreation));
+        }
+
+        printf("\n Do you want to launch again ? (y/n)\n");
+        scanf("%c\n", &launchAgain);
+    } while (launchAgain == 'y');
 }
 
-/*void jouer() {}
 
-    - s'il s'agit d'une nouvelle partie :
-
-        _ on recupere le numero de la partie a creer via whichNumber()
-        _ on demande le nom des 2 joueurs
-        _ les gains sont mis a 0
-        _ le plateau de jeu est initialise
-        _ on recupere la date d'execution de la fonction comme date de creation du jeu (repere pour time elapsed)
-        _ on demande qui doit commencer (joueur 1 ou 2)
-
-        TANT QUE : il n'y a pas de gagnant || on ne quitte pas la partie (avec confirmation && quitter sans sauvergarder ?)
-
-        _ si sauvergarde, on enregistre les parametres dans saved.txt via save() avec maj time_elapsed
-        _ si gagnant on enregistre la partie a la suite dans listGames.txt
-
-        _ sinon, on recupere l'action a jouer
-        _ si conforme aux regles, maj gains, plateau de jeu, current joueur (current++ mod 2)
-
-        FIN TANT QUE
-
-    - s'il s'agit d'une reprise a partir d'une sauvergarde existante dans saved.txt :
-
-        _ on recupere les infos et maj via elles (on doit recupere le vrai temps du debut de la partie cette fois)
-        _ on rentre dans la boucle precedente
-*/

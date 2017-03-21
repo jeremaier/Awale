@@ -28,4 +28,14 @@ void testSaveInList();
 */
 void gameToString(Game* game, struct tm*);
 
+/**
+* Pour lancer une nouvelle partie
+*/
+void playNewGame_c();
+
+/**
+* Pour jouer a un jeu sauvergarde
+*/
+void playSavedGame_c();
+
 #endif // TESTS_H

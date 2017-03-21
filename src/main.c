@@ -52,14 +52,24 @@ int main(int argc, char** argv) {
     // =========== TESTS ==========
 
     //testSave();
-    //testSaveInList();
+    //testSaveInList(); ok
+    //playNewGame_c(); ok
 
-    //playNewGame_c();
-       //playSavedGame_c();
+    play_console();
 
-    play_ConsoleMode();
+    /*
+     time_t secondes;
+        struct tm timeExit;
+        time(&secondes);
+        timeExit = *localtime(&secondes);
 
-    //testSave();
+    Game game = {42, "Olive", "Tom", 0, 0, {{5,6,2,4,3,4}, {4,4,4,4,4,4}}, &timeExit, 1, {0,0,0}};
+
+    char file_save[NAME_FILE_SIZE] = "saved.txt";
+
+    save(file_save, &game, &timeExit);
+    */
+
 
     return 0;
 }

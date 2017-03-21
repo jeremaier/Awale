@@ -15,9 +15,3 @@ n°partie, nameJoueur1, nameJoueur2, gain1, gain2, board_config, timeGame, curren
 
 Les joueurs pourront donc quitter une partie en cours, puis la reprendre à l'état 
 sauvegardé dans ce fichier. Reset possible.
-
-score.txt :
-Tri en fonction des gains du gagnant.
-
-N°partie, nameGagnant, gainGagnant
-

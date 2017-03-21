@@ -37,7 +37,7 @@ typedef struct Game Game;
 
 /** CONCERNANT LA GESTION DES FICHIERS : **/
 
-#define NAME_FILE_SIZE 15
+#define NAME_FILE_SIZE 256
 #define LINE_SIZE 100
 
 #endif // SRC_CONST_H_

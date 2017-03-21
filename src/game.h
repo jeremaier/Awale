@@ -7,6 +7,7 @@
 
 #ifndef GAME_H
 #define GAME_H
+#include "const.h"
 
 /**
  * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee
@@ -25,19 +26,21 @@ void boardInit(short[][NB_HOLES]);
 void loard_blank_game(FILE* file_list, Game *game, struct tm *timer);
 
 /**
-* Pour lancer une nouvelle partie
+* Indique si plus de graines dans le camps adverse (1 si oui, 0 sinon)
 */
-void playNewGame_c();
+int hasWinner(Game* game);
 
 /**
-* Pour jouer a un jeu sauvergarde
+* Demande de jouer un coup au current joueur
+* et maj des parametres de struct game
 */
-void playSavedGame_c();
+void nextStep(Game* game);
 
 /**
-* Pour jouer en mode console (pas de SDL)
+* Arrete le jeu en renvoyant 1 et indique quel est le gagnant (gain max)
+* Peut egalement faire la sauvegarde dans les .txt
 */
-void play_ConsoleMode();
+int quit(char fileSave[NAME_FILE_SIZE], char fileList[NAME_FILE_SIZE], Game* game, struct tm* dateCreation);
 
 #endif // GAME_H
 
