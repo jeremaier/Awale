@@ -80,15 +80,7 @@ int main(int argc, char* args[]) {
 
     /*/ =========== TESTS ==========
 
-    //testSave();
-    //testSaveInList();
-
-    //playNewGame_c();
-    //playSavedGame_c();
-
     play_ConsoleMode();
-
-    //testSave();
 
     return 0;//*/
 }
