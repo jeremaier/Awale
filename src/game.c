@@ -153,6 +153,7 @@ void nextStep(Game* game) {
             printf("\n %s, which square have I to select? (0 < nber < 7)\n", (game -> joueur1));
         else printf("\n %s, which square have I to select? (0 < nber < 7)\n", game -> joueur2);
         scanf("%d", &caseSelected);
+        printf("%d\n", (game -> board_config)[current][caseSelected-1]);
     } while (caseSelected < 1 || caseSelected > 6 || (game -> board_config)[current][caseSelected-1] == 0 ); // on n'autorise pas a jouer une case vide
 
     int nbSeeds =  (game -> board_config)[current][caseSelected-1]; // on retient le nombre de graines dans la case selected
