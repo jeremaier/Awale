@@ -17,22 +17,24 @@ short removeSeeds(short board[][NB_HOLES], short row, short hole) {
 }
 
 void distributeSeeds(short board[][NB_HOLES], short row, short init) {
-	short tmp_row = row;
-    int i = init;
+    short const seedsNbr = removeSeeds(board, row, init);
+	short tmpRow = row;
+    short i = init;
+    short cpt;
 
-    while(i < removeSeeds(board, tmp_row, init) + init) {
-    	if(row == 0 && NB_HOLES - i <= 1) {
-    		i++;
-    		board[tmp_row][i]++;
-    	} else if(row == 0) {
-    		tmp_row = 1;
-    		board[tmp_row][i]++;
-    	} else if(NB_HOLES - i <= 1) {
-    		i--;
-    		board[tmp_row][i]++;
+    for(cpt = 0; cpt < seedsNbr; cpt++) {
+    	int endLine = NB_HOLES - i;
+
+    	if(tmpRow == 0) {
+    		if(endLine >= 6)
+    			tmpRow = 1;
+    		else i--;
     	} else {
-    		tmp_row = 0;
-    		board[tmp_row][i]++;
+    		if(endLine <= 1)
+        		tmpRow = 0;
+			else i++;
     	}
+
+    	board[tmpRow][i]++;
     }
 }
