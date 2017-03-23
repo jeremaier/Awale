@@ -10,8 +10,8 @@
 #include <stdlib.h>
 #include <unistd.h> // utilser la fonction _sleep(temps_ms);
 #include <time.h>
-#include <SDL2/SDL.h> // il faut supprimer cet include pour afficher des printf sur la sortie standard
-#include <SDL2/SDL_image.h>
+//#include <SDL2/SDL.h> // il faut supprimer cet include pour afficher des printf sur la sortie standard
+//#include <SDL2/SDL_image.h>
 #include <string.h>
 #include "const.h"
 #include "write.h"
@@ -21,14 +21,15 @@
 #include "ask.h"
 #include "main.h"
 
+/*
 int SDLError(char* message) {
     printf(message, SDL_GetError());
     SDL_Quit();
     return EXIT_FAILURE;
-}
+}*/
 
 int main(int argc, char* args[]) {
-    //Proposer une interface sdl ou console (pb include SDL empeche le lancement console,
+    /*/Proposer une interface sdl ou console (pb include SDL empeche le lancement console,
     //il faudra gerer avec les variables pre processeur)
 
 	short quit = 0;
@@ -78,9 +79,9 @@ int main(int argc, char* args[]) {
 	return EXIT_SUCCESS;
     //*/
 
-    /*/ =========== TESTS ==========
+    // =========== TESTS ==========
 
-    play_ConsoleMode();
+    play_console();
 
     return 0;//*/
 }

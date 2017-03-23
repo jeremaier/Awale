@@ -142,25 +142,19 @@ int quit(char* file_save, char* file_list, Game* game, struct tm *dateCreation) 
     return 0;
 }
 
-void nextStep(Game* game) {
-
-    int caseSelected = NULL; // on recupere le numero de la case a jouer
+void nextStep(Game* game, int* caseSelected) {
 
     int current = (game -> currentPlayer); // on recupere le joueur qui a la main (0 ou 1)
 
-    do {
-        if (game -> currentPlayer == 0)
-            printf("\n %s, which square have I to select? (0 < nber < 7)\n", (game -> joueur1));
-        else printf("\n %s, which square have I to select? (0 < nber < 7)\n", game -> joueur2);
-        scanf("%d", &caseSelected);
-        printf("%d\n", (game -> board_config)[current][caseSelected-1]);
-    } while (caseSelected < 1 || caseSelected > 6 || (game -> board_config)[current][caseSelected-1] == 0 ); // on n'autorise pas a jouer une case vide
+    if (game -> currentPlayer == 0)
+        printf("\n %s has choosen to play square %d \n", game -> joueur1, *caseSelected);
+    else printf("\n %s has choosen to play square %d \n", game -> joueur2, *caseSelected);
 
-    int nbSeeds =  (game -> board_config)[current][caseSelected-1]; // on retient le nombre de graines dans la case selected
+    int nbSeeds =  (game -> board_config)[current][*caseSelected-1]; // on retient le nombre de graines dans la case selected
 
-    (game -> board_config)[current][caseSelected-1] = 0; // on vide la case que l'on a jouee
+    (game -> board_config)[current][*caseSelected-1] = 0; // on vide la case que l'on a jouee
 
-    int j = caseSelected-1;
+    int j = *caseSelected-1;
 
     // maj du plateau
     if ((game -> currentPlayer) == 1) {
@@ -170,7 +164,7 @@ void nextStep(Game* game) {
             while (j < NB_HOLES-1 && nbSeeds != 0 && current == 1) {
                 j++;
                 // si on retombe sur la case de depart, on la saute sans mettre de graines
-                if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
                     (game -> board_config)[current][j] += 1;
                     //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
                     nbSeeds--;
@@ -180,7 +174,7 @@ void nextStep(Game* game) {
              current %= 2;
              while (j >= 0 && nbSeeds != 0 && current == 0) {
 
-                if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
                     (game -> board_config)[current][j] += 1;
                     nbSeeds--;
                     //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
@@ -218,7 +212,7 @@ void nextStep(Game* game) {
 
             while (j > 0 && nbSeeds != 0 && current == 0) {
                 j--;
-                if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
                     (game -> board_config)[current][j] += 1;
                     nbSeeds--;
                     //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
@@ -227,7 +221,7 @@ void nextStep(Game* game) {
             current++;
             current %= 2;
             while (j < NB_HOLES && nbSeeds != 0 && current == 1) {
-                 if (!(current == (game->currentPlayer) &&  j == caseSelected-1)) {
+                 if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
                     (game -> board_config)[current][j] += 1;
                     nbSeeds--;
                     //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
@@ -267,41 +261,57 @@ void nextStep(Game* game) {
 
 void play_console() {
 
-    int launchAgain = ' ';
+    printf(" ================ COMMANDS ================\n");
+    printf(" To launch a new game, press n\n");
+    printf(" To loard form an existing game, press l\n");
+    printf(" To save, press s\n");
+    printf(" To quit, press q\n");
+    printf(" To select a square, choose between 1 and 6\n");
+    printf(" ==========================================\n\n");
+
+    char file_save[NAME_FILE_SIZE] = "saved.txt";
+    char file_list[NAME_FILE_SIZE] = "listGames.txt";
+
+    fflush(stdin);
+
+    char answer = ' ';
+    int flag = 1; // pour quitter le jeu
 
     do {
 
         Game game;
-        char file_save[NAME_FILE_SIZE] = "saved.txt";
-        char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
-        char loard = ' ';
-        printf("Do you want to loard from saved.txt ? (y/n)\n");
-        scanf("%c", &loard);
+        // on recupere les infos temporelles de sa creation
+        time_t secondes;
+        struct tm dateCreation;
+        time(&secondes);
+        dateCreation = *localtime(&secondes);
 
-        if (loard == 'y') {
+        // a remplacer par un switch et case break
 
-            // si le fichier de sauvegarde est vide, on ne peut que creer une nouvelle partie car pas en memoire
+        answer = getc(stdin); // on recupere une entree
+
+        // on lance a new game
+        if (answer == 'n') {
+
+            loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
+            printf("\n ========================== THE GAME BEGINS =========================\n\n");
+            affichage(&game); // on affiche le plateau
+        }
+
+        // on charge via une partie existante si elle existe
+        if (answer == 'l') {
+
+            // si le fichier de sauvergarde est vide, il faut creer une nouvelle partie
             if (isEmpty(file_save)) {
 
                 printf("No data has been found, I'm launching a new game:\n");
-
-                // on recupere les infos temporelles de sa creation
-                time_t secondes;
-                struct tm dateCreation;
-                time(&secondes);
-                dateCreation = *localtime(&secondes);
-
                 loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
-
                 printf("\n ========================== THE GAME BEGINS =========================\n\n");
-
-                do {
-                    affichage(&game);
-                    nextStep(&game);
-                } while (!quit(file_save, file_list, &game, &dateCreation));
+                affichage(&game); // on affiche le plateau
             }
 
+            // sinon on charge la partie enregistree
             else {
 
                 // on recupere les infos temporelles de sa creation
@@ -311,37 +321,52 @@ void play_console() {
                 dateCreation = *localtime(&secondes);
 
                 loard_saved_game(&game); // on initialise la struct game vide
-
                 printf("\n ========================== THE GAME BEGINS =========================\n\n");
-
-                do {
-                    affichage(&game);
-                    nextStep(&game);
-                } while (!quit(file_save, file_list, &game, &dateCreation));
+                affichage(&game);
             }
         }
 
-        else {
+        if (answer == '1' || answer == '2' || answer == '3' || answer == '4' || answer == '5' || answer == '6') {
 
-            // on recupere les infos temporelles de sa creation
-            time_t secondes;
-            struct tm dateCreation;
-            time(&secondes);
-            dateCreation = *localtime(&secondes);
+            int caseSelected = answer - '0'; // char to int
 
-            loard_blank_game(file_list, &game, &dateCreation); // on initialise la struct game vide
-
-            printf("\n ========================== THE GAME BEGINS =========================\n\n");
-
-            do {
-                affichage(&game);
-                nextStep(&game);
-            } while (!quit(file_save, file_list, &game, &dateCreation));
+            // on n'autorise pas a jouer une case vide
+            if ((game.board_config)[game.currentPlayer][caseSelected-1] != 0) {
+                nextStep(&game, &caseSelected);
+            }
         }
 
-        printf("\n Do you want to launch again ? (y/n)\n");
-        scanf("%c\n", &launchAgain);
-    } while (launchAgain == 'y');
+        if (answer == 'q') {
+
+            fflush(stdin); // pour vider le buffer de getc answer et pouvoir en faire un autre a la suite
+            printf("Do you want to quit ? (y/n)\n");
+            char confirm; // on recupere la confirmation
+            confirm = getc(stdin);
+
+            if (confirm == 'y') {
+
+                // ajout de la partie dans listGames.txt
+                saveInList(file_list, &game, &dateCreation);
+                printf(" listGames.txt has been completed\n");
+
+                // on affiche le vainqueur
+                // ...
+
+                flag = 0;
+            }
+            //fflush(stdin); // on vide le buffer confirm
+        }
+
+        if (answer == 's') {
+
+            fflush(stdin);
+            save(file_save, &game, &dateCreation);
+            printf(" The game has been saved with success\n");
+        }
+
+        fflush(stdin); // on vide le buffer de answer (ou de confirm pour le cas 'q')
+
+    } while (flag);
 }
 
 

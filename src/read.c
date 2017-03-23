@@ -138,5 +138,4 @@ void loard_saved_game(Game *game) { // lecture dans saved.txt et initialisation 
     else {
         printf("Impossible de lire le fichier\n");
     }
-
 }

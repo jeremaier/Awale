@@ -34,7 +34,7 @@ int hasWinner(Game* game);
 * Demande de jouer un coup au current joueur
 * et maj des parametres de struct game
 */
-void nextStep(Game* game);
+void nextStep(Game* game, int* caseSelected);
 
 /**
 * Arrete le jeu en renvoyant 1 et indique quel est le gagnant (gain max)
