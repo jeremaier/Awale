@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "const.h"
+
 #include "movements.h"
 
 short removeSeeds(short board[][NB_HOLES], short row, short hole) {

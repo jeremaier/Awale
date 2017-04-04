@@ -7,6 +7,8 @@
 
 #ifndef TESTS_H
 #define TESTS_H
+#include "game.h"
+#include "const.h"
 
 /**
  * Affiche le plateau de jeu stocke sous forme matricielle
@@ -14,28 +16,23 @@
 void testBoardInit(short[][NB_HOLES]);
 
 /**
- * Permet de tester la sauvegarde des parametres d'une partie dans le fichier "save.txt"
+ * Permet de tester la sauvegarde des parametres d'une partie dans un fichier
  */
-void testSave();
+void testSave(char*);
 
 /**
-* Test la sauvegarde dans listGames.txt
-*/
-void testSaveInList();
+ * Permet d'afficher le contenu de Game game en console
+ */
+void gameToString(Game*, struct tm*);
 
 /**
-* Permet d'afficher le contenu de Game game en console
-*/
-void gameToString(Game* game, struct tm*);
-
-/**
-* Pour lancer une nouvelle partie
-*/
+ * Pour lancer une nouvelle partie
+ */
 void playNewGame_c();
 
 /**
-* Pour jouer a un jeu sauvergarde
-*/
+ * Pour jouer a un jeu sauvergarde
+ */
 void playSavedGame_c();
 
 #endif // TESTS_H

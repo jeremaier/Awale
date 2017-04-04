@@ -18,21 +18,7 @@
 #define NB_ROW 2
 #define NB_HOLES 6
 #define NB_SEED_INIT 4
-
 #define NAME_PLAYER_SIZE 10
-
-struct Game {
-    short gameNumber; // le numero de la partie [1, 10]
-    char joueur1[NAME_PLAYER_SIZE]; // nom joueur1 entre 1 (scanf exige au min une entree) et NAME_PLAYERS_SIZE-1 caracteres (cf askName)
-    char joueur2[NAME_PLAYER_SIZE];
-    short gain1; // nbre de graines collectees par le joueur 1
-    short gain2;
-    short board_config[NB_ROW][NB_HOLES]; // l'etat du plateau de jeu
-    struct tm *creationGame; // date et heure de creation du jeu, ou de la derniere sauvegarde si on reprend une partie sauvegarde
-    short currentPlayer; // joueur qui a la main
-    int timeSpent[3]; // le temps deja passer à jouer (utile dans le cas d'une sauvergarde) hrs min sec
-};
-typedef struct Game Game;
 
 /** CONCERNANT LA GESTION DES FICHIERS : **/
 

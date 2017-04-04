@@ -5,7 +5,6 @@
  *      Author: Jerem
  */
 
-//#include "../essaiPerso.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h> // utilser la fonction _sleep(temps_ms);
@@ -13,6 +12,7 @@
 #include <SDL2/SDL.h> // il faut supprimer cet include pour afficher des printf sur la sortie standard
 #include <SDL2/SDL_image.h>
 #include <string.h>
+
 #include "const.h"
 #include "write.h"
 #include "read.h"
