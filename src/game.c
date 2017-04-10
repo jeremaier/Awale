@@ -8,13 +8,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "const.h"
-#include "game.h"
 #include "ask.h"
 #include "time.h"
 #include "write.h"
 #include "read.h"
-//#include "../essaiPerso.h"
+#include "movements.h"
+#include "board.h"
+#include "game.h"
+
 
 int whichNumber(char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
 
@@ -41,15 +42,7 @@ int whichNumber(char* directory) { // date | game_number | name_winner | gain wi
     return cpt;
 }
 
-void boardInit(short board[][NB_HOLES]) {
-
-    int i, j;
-    for(i = 0; i < NB_ROW; i++)
-    	for(j = 0; j < NB_HOLES; j++)
-    		board[i][j] = NB_SEED_INIT;
-}
-
-void loard_blank_game(FILE* file_list, Game *game, struct tm *timer) {
+void loadBlankGame(FILE* file_list, Game *game, struct tm *timer) {
 
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
     //int number = whichNumber(file_list);
@@ -61,7 +54,7 @@ void loard_blank_game(FILE* file_list, Game *game, struct tm *timer) {
     game -> gameNumber = whichNumber(file_list);
     game -> gain1 = 0;
     game -> gain2 = 0;
-    game -> currentPlayer = askCurrent(); // renvoit 0 ou 1 pour savoir a qui de jouer en premier
+    game -> currentPlayer = askCurrent(); // renvoie 0 ou 1 pour savoir a qui de jouer
     game -> creationGame = timer;
 
     (game -> timeSpent)[0] = 0;
@@ -75,18 +68,36 @@ void loard_blank_game(FILE* file_list, Game *game, struct tm *timer) {
             (game -> board_config)[i][j] = NB_SEED_INIT;
 }
 
-int hasWinner(Game* game) {
+int gameOver(Game* game) {
 
-    int s1 = 0;
-    int s2 = 0;
-
-    int j;
-    for (j=0; j<NB_HOLES; j++) {
-        s1 += (game -> board_config)[0][j];
-        s2 += (game -> board_config)[1][j];
+    // on verifie que le joueur actuel peut jouer son tour
+    int i = 0;
+    // on verifie que le joueur peut "nourrir" son adversaire (si il n'a plus de graine il ne pourra pas : inutile de verifier)
+    if(game -> currentPlayer == 0){
+        while(i < 6){
+            if(game -> board_config[0][i] > i + 1) return 0; // Le joueur peut jouer : la partie n'est pas finie
+            i++;
+        }        
+    } else {
+        while(i < 6){
+            if(game -> board_config[1][i] > 5 - i) return 0; // Le joueur peut jouer : la partie n'est pas finie
+            i++;
+        }
     }
 
-    return (s1 == 0 || s2 == 0);
+    // La partie est terminee : il faut trouver le vainqueur
+    int a = game -> gain1 - game -> gain2;
+    switch (a) {
+        case a < 0 :
+            return 2; // le joueur 2 gagne
+        break;
+        case a == 0 :
+            return 3; // aucun joueur ne gagne : match nul
+        break;
+        case a > 0 :
+            return 1; // le joueur 1 gagne
+        break; 
+    }
 }
 
 int quit(char* file_save, char* file_list, Game* game, struct tm *dateCreation) {
@@ -107,7 +118,7 @@ int quit(char* file_save, char* file_list, Game* game, struct tm *dateCreation) 
         printf(" The game has been saved with success\n");
     }
 
-    char ans2 = ' ';
+/*    char ans2 = ' ';
 
     do {
         printf("\n Do you want to quit? (y/n)\n");
@@ -127,18 +138,18 @@ int quit(char* file_save, char* file_list, Game* game, struct tm *dateCreation) 
             else printf("\n No winner for this game \n");
         }
 
-        /*
+        
         time_t secondes;
         struct tm timeExit;
         time(&secondes);
         timeExit = *localtime(&secondes);
-        */
+        
 
         saveInList(file_list, game, dateCreation);
         printf(" listGames.txt has been completed\n");
 
         return 1;
-    }
+    } */ //Si la partie est quittee avant d'etre finie, pas de gagnant
     return 0;
 }
 
@@ -146,111 +157,14 @@ void nextStep(Game* game, int* caseSelected) {
 
     int current = (game -> currentPlayer); // on recupere le joueur qui a la main (0 ou 1)
 
-    if (game -> currentPlayer == 0)
+    if (current == 0)
         printf("\n %s has choosen to play square %d \n", game -> joueur1, *caseSelected);
     else printf("\n %s has choosen to play square %d \n", game -> joueur2, *caseSelected);
 
-    int nbSeeds =  (game -> board_config)[current][*caseSelected-1]; // on retient le nombre de graines dans la case selected
-
-    (game -> board_config)[current][*caseSelected-1] = 0; // on vide la case que l'on a jouee
-
     int j = *caseSelected-1;
+    distributeSeeds(game -> board_config, current, j) 
 
-    // maj du plateau
-    if ((game -> currentPlayer) == 1) {
-
-        while (nbSeeds != 0) {
-
-            while (j < NB_HOLES-1 && nbSeeds != 0 && current == 1) {
-                j++;
-                // si on retombe sur la case de depart, on la saute sans mettre de graines
-                if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
-                    (game -> board_config)[current][j] += 1;
-                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
-                    nbSeeds--;
-                }
-             }
-             current++;
-             current %= 2;
-             while (j >= 0 && nbSeeds != 0 && current == 0) {
-
-                if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
-                    (game -> board_config)[current][j] += 1;
-                    nbSeeds--;
-                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
-                }
-                j--;
-             }
-        }
-
-        // on gere les gains :
-
-        j++; // pour compenser le j-- precedent
-        // si on s'arrete sur un case adverse avec 2 ou 3 graines avec la notre
-        if (current == 0 && ((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3)) {
-
-                // on affiche le plateau de jeu
-                printf("\n                        |      status before collecting \n");
-                int u, v;
-                for (u=0; u<NB_ROW; u++) {
-                    for (v=0; v<NB_HOLES; v++) {
-                        printf(" %d ", (game -> board_config)[u][v]);
-                    } printf("\n");
-                }
-
-                // on ramasse les grains jusqu'a rencontrer une case avec nbSeeds > 3 ou sortir de la zone adverse
-                while (((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3 ) && j < NB_HOLES) {
-                    (game -> gain2) += (game -> board_config)[current][j];
-                    (game -> board_config)[current][j] = 0;
-                    j++;
-                }
-        }
-
-    } else {
-
-        while (nbSeeds != 0) {
-
-            while (j > 0 && nbSeeds != 0 && current == 0) {
-                j--;
-                if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
-                    (game -> board_config)[current][j] += 1;
-                    nbSeeds--;
-                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
-                }
-             }
-            current++;
-            current %= 2;
-            while (j < NB_HOLES && nbSeeds != 0 && current == 1) {
-                 if (!(current == (game->currentPlayer) &&  j == *caseSelected-1)) {
-                    (game -> board_config)[current][j] += 1;
-                    nbSeeds--;
-                    //printf("current = %d, j = %d, nbSeeds = %d\n", current, j, nbSeeds);
-                 }
-                j++;
-             }
-        }
-
-        j--;
-        if (current == 1 && ((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3)) {
-
-                // on affiche le plateau de jeu
-                printf("\n                        |      status before collecting \n");
-                int u, v;
-                for (u=0; u<NB_ROW; u++) {
-                    for (v=0; v<NB_HOLES; v++) {
-                        printf(" %d ", (game -> board_config)[u][v]);
-                    } printf("\n");
-                }
-
-                // on ramasse les grains jusqu'a rencontrer une case avec nbSeeds > 3 ou sortir de la zone adverse
-                while (((game -> board_config)[current][j] == 2 || (game -> board_config)[current][j] == 3 ) && j > 0) {
-                    (game -> gain1) += (game -> board_config)[current][j];
-                    (game -> board_config)[current][j] = 0;
-                    j--;
-                }
-        }
-    }
-
+    
     // on change la main pour le prochain tour
     (game -> currentPlayer)++;
     (game -> currentPlayer) %= 2;
@@ -263,7 +177,7 @@ void play_console() {
 
     printf(" ================ COMMANDS ================\n");
     printf(" To launch a new game, press n\n");
-    printf(" To loard form an existing game, press l\n");
+    printf(" To load form an existing game, press l\n");
     printf(" To save, press s\n");
     printf(" To quit, press q\n");
     printf(" To select a square, choose between 1 and 6\n");
