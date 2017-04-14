@@ -9,7 +9,7 @@
 #define GAME_H
 #include "const.h"
 
-struct Game {
+typedef struct Game {
     short gameNumber; // le numero de la partie [1, 10]
     char joueur1[NAME_PLAYER_SIZE]; // nom joueur1 entre 1 (scanf exige au min une entree) et NAME_PLAYERS_SIZE-1 caracteres (cf askName)
     char joueur2[NAME_PLAYER_SIZE];
@@ -19,8 +19,7 @@ struct Game {
     struct tm *creationGame; // date et heure de creation du jeu, ou de la derniere sauvegarde si on reprend une partie sauvegarde
     short currentPlayer; // joueur qui a la main
     int timeSpent[3]; // le temps deja passer à jouer (utile dans le cas d'une sauvergarde) hrs min sec
-};
-typedef struct Game Game;
+} Game;
 
 /**
  * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee
@@ -31,7 +30,7 @@ int whichNumber(char*);
 /**
  * Initialise la struct game lors d'une nouvelle partie
  */
-void loadBlankGame(FILE*, Game*, struct tm*);
+void loadBlankGame(char*, Game*, struct tm*);
 
 /**
  * Indique si plus de graines dans le camps adverse (1 si oui, 0 sinon)
@@ -39,16 +38,16 @@ void loadBlankGame(FILE*, Game*, struct tm*);
 int hasWinner(Game*);
 
 /**
-* Demande de jouer un coup au current joueur
-* et maj des parametres de struct game
-*/
-void nextStep(Game*, int*);
+ * Demande de jouer un coup au current joueur
+ * et maj des parametres de struct game
+ */
+void nextStep(Game*, int);
 
 /**
-* Arrete le jeu en renvoyant 1 et indique quel est le gagnant (gain max)
-* Peut egalement faire la sauvegarde dans les .txt
-*/
-int quit(char fileSave[NAME_FILE_SIZE], char fileList[NAME_FILE_SIZE], Game*, struct tm*);
+ * Arrete le jeu en renvoyant 1 et indique quel est le gagnant (gain max)
+ * Peut egalement faire la sauvegarde dans les .txt
+ */
+int quit(char[NAME_FILE_SIZE], char[NAME_FILE_SIZE], Game*, struct tm*);
 
 #endif // GAME_H
 

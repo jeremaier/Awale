@@ -10,7 +10,10 @@
 #include <unistd.h> // pour utiliser la fonction _sleep(temps en ms)
 #include <time.h>
 #include <string.h>
+#include <windows.h>
 
+#include "write.h"
+#include "read.h"
 #include "tests.h"
 
 void testBoardInit(short matrice[][NB_HOLES]) {
@@ -38,7 +41,7 @@ void testSave(char* path) {
     Game game = {1, "Olive", "Tom", 5, 3, {{4, 4, 4, 4, 4, 4}, {4, 4, 4, 4, 4, 4}}, &creationGame, 0, {0, 1, 0}};
 
     // on fait une pause de 3s
-    _sleep(3000);
+    Sleep(3000);
 
     // on sauvegarde les configurations de la partie dans le chemin specifie
     save(path, &game, &creationGame);

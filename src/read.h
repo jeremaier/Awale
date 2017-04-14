@@ -23,13 +23,13 @@ void read_specific(char*, int);
 /**
  * 1 si le fichier est vide, 0 sinon
  */
-int isEmpty(char chemin[NAME_FILE_SIZE]);
+int isEmpty(char[NAME_FILE_SIZE]);
 
 /**
  * Lit les noms dans le fichier deja ouvert et modifie game.joueur
  * file car on evite d'ouvrir 2 fois le fichier (cf. loadGame)
  */
-void readNames(FILE*, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLAYER_SIZE]);
+void readNames(FILE*, char[NAME_PLAYER_SIZE], char[NAME_PLAYER_SIZE]);
 
 /**
  * Charge la struct game avec les donnees de la partie stockee dans saved.txt

@@ -45,7 +45,7 @@ void read_specific(char* directory, int i) {
 }
 
 int isEmpty(char chemin[NAME_FILE_SIZE]) {
-    char line = '';
+    char line = ' ';
     FILE* file = NULL;
 
     file = fopen(chemin, "r");
@@ -73,8 +73,8 @@ void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLA
         joueur2[i] = names[1][i];
 
     // pour eviter de garder des traces de nom precedent s'ils sont plus long que les nouveaux
-    joueur1[strlen(names[0])] = "\0";
-    joueur2[strlen(names[1])] = "\0";
+    joueur1[strlen(names[0])] = '\0';
+    joueur2[strlen(names[1])] = '\0';
 }
 
 void loadSavedGame(Game *game) {
