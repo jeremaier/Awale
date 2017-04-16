@@ -17,7 +17,7 @@ typedef enum ButtonType {
   BUTTON_TYPE_LOAD
 } ButtonType;
 
-struct Clickable {
+typedef struct Clickable {
 	SDL_Surface* surface;
 	SDL_Texture* texture;
 	ButtonType type;
@@ -25,21 +25,20 @@ struct Clickable {
     int posY;
     int sizeX;
     int sizeY;
-	void (*Action)();
-};
-
-typedef struct Clickable Clickable;
+	void (*Action)(SDL_Renderer**);
+	void *data;
+} Clickable;
 
 /**
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
 
-void CreateNewButton(int, int, char*, Clickable*, SDL_Renderer**, int, int);
+Clickable CreateNewButton(int, int, char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short);
 
 /**
  * Action de chaque cliquable
  */
-void Action(int);
+void Action(void*);
 
 /**
  * Va tester la position de chaque bouton pour savoir si on a cliquer dedans

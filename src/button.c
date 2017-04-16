@@ -12,7 +12,7 @@
 #include "const.h"
 #include "button.h"
 
-void CreateNewButton(int posX, int posY, char* path, Clickable* clickableList, SDL_Renderer** renderer, int sizeDivide, int index) {
+Clickable CreateNewButton(int posX, int posY, char* path, Clickable* clickableList, SDL_Renderer** renderer, void (*action)(SDL_Renderer**), short sizeDivide, short index) {
 	Clickable newButton;
 
     CreateTexture(path, &(newButton.surface), &(newButton.texture), renderer);
@@ -21,23 +21,21 @@ void CreateNewButton(int posX, int posY, char* path, Clickable* clickableList, S
 	newButton.sizeY = (newButton.surface -> h) / sizeDivide;
 	newButton.posX = posX - newButton.sizeX;
 	newButton.posY = posY;
+	newButton.data = renderer;
+	newButton.Action = action;
 	clickableList[index] = newButton;
-}
 
-void Action(int data) {
-	if(data == 0) {
-
-	}
+	return newButton;
 }
 
 void Click(int xMouse, int yMouse, Clickable* clickableList) {
 	int i;
 
-	for(i = 0; i < BUTTON_NUMBER; i++) {
-		int isInButtonZone = xMouse >= clickableList[i].posX && xMouse <= clickableList[i].posX + clickableList[i].sizeX
+	for(i = 0; i < BUTTON_NUMBER_BOARD; i++) {
+		const int isInButtonZone = xMouse >= clickableList[i].posX && xMouse <= clickableList[i].posX + clickableList[i].sizeX
 				&& yMouse >= clickableList[i].posY && yMouse <= clickableList[i].posY + clickableList[i].sizeY;
 
 		if(isInButtonZone)
-			clickableList[i].Action();
+			clickableList[i].Action(clickableList[i].data);
 	}
 }

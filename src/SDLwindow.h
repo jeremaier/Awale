@@ -26,6 +26,11 @@ void CreateTexture(char*, SDL_Surface**, SDL_Texture**, SDL_Renderer**);
 void Display(SDL_Renderer*, SDL_Texture*, SDL_Surface*, int, int, int, int);
 
 /**
+ * Ouverture du menu options dans une partie
+ */
+void OpenOptionsMenu(SDL_Renderer**);
+
+/**
  * Lancement de la fenêtre de jeu et son affichage
  */
 int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Surface**, SDL_Texture**);

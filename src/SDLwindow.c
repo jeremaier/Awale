@@ -36,17 +36,13 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Surface** fon
 	SDL_Event event;
 	SDL_Surface* boardSurface = NULL;
 	SDL_Texture* boardTexture = NULL;
-	Clickable clickableList[BUTTON_NUMBER];
+	Clickable clickableList[BUTTON_NUMBER_BOARD];
 
-	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", clickableList, renderer, 4, 12);
-	const Clickable optionsButton = clickableList[12];
-	int xSizeOptions = optionsButton.sizeX / 4, ySizeOptions = optionsButton.sizeY / 4;
-
-	//Clickable saveButton;
-	//Clickable loadButton;
+	const short sizeDivideOptions = 4, indexOptions = 12;
+	const Clickable optionsButton = CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", clickableList, renderer, OpenOptionsMenu, sizeDivideOptions, indexOptions);
+	const int xSizeOptions = optionsButton.sizeX / sizeDivideOptions, ySizeOptions = optionsButton.sizeY / sizeDivideOptions;
 
     CreateTexture("sprites/board+background.png", &boardSurface, &boardTexture, renderer);
-
     Display(*renderer, boardTexture, boardSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     Display(*renderer, optionsButton.texture, optionsButton.surface, SCREEN_WIDTH - xSizeOptions - 5, 5, xSizeOptions, ySizeOptions);
 
