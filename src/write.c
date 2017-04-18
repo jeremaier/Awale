@@ -14,6 +14,7 @@
 
 void initialize(char* directory) { // vide le fichier directory
 	FILE* file = NULL;
+
 	file = fopen(directory, "w");
 
 	if(file != NULL) {
@@ -26,6 +27,7 @@ void initialize(char* directory) { // vide le fichier directory
 
 void write_new_line(char* directory, char* chaine) {
 	FILE* file = NULL;
+
 	file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier
 
 	if(file != NULL) {
@@ -38,9 +40,9 @@ void write_new_line(char* directory, char* chaine) {
 void time_elapsed(FILE* file, struct tm *tpsReference, int additionnal[3]) { // remplace difftime(time_t t1, time_t t2)
 	time_t secondes; // recupere le temps actuel
 	struct tm instant;
+
 	time(&secondes);
 	instant = *localtime(&secondes);
-
 	instant.tm_hour -= (*tpsReference).tm_hour - additionnal[0]; // calcul de la duree de jeu
 	instant.tm_min -= (*tpsReference).tm_min - additionnal[1];
 	instant.tm_sec -= (*tpsReference).tm_sec - additionnal[2];
@@ -51,9 +53,9 @@ void time_elapsed(FILE* file, struct tm *tpsReference, int additionnal[3]) { // 
 void timeElapsedToString(struct tm *tpsReference) { // remplace difftime(time_t t1, time_t t2)
 	time_t secondes; // recupere le temps actuel
 	struct tm instant;
+
 	time(&secondes);
 	instant = *localtime(&secondes);
-
 	instant.tm_hour -= (*tpsReference).tm_hour; // calcul de la duree de jeu
 	instant.tm_min -= (*tpsReference).tm_min;
 	instant.tm_sec -= (*tpsReference).tm_sec;
@@ -61,14 +63,15 @@ void timeElapsedToString(struct tm *tpsReference) { // remplace difftime(time_t 
 	printf(" time elapsed: %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
 }
 
-void save(char* directory, Game* game, struct tm *tpsReference) {
+void save(const char* directory, Game* game, struct tm *tpsReference) {
 	FILE* file = NULL;
+
 	file = fopen(directory, "w");
 
 	if(file != NULL) {
 		time_t secondes; // recupere la date et heure de la sauvergarde (execution de save())
 		struct tm instant;
-		int i, j;
+		short i, j;
 
 		time(&secondes);
 		instant = *localtime(&secondes);
@@ -102,14 +105,16 @@ void save(char* directory, Game* game, struct tm *tpsReference) {
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
-void saveInList(char* directory, Game* game, struct tm *tpsReference) {
+void saveInList(const char* directory, Game* game, struct tm *tpsReference) {
 	FILE* file = NULL;
+
 	file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier
 
 	if(file != NULL) {
         // recupere la date et heure de la sauvergarde (execution de saveInList())
 		time_t secondes;
 		struct tm instant;
+
 		time(&secondes);
 		instant = *localtime(&secondes);
 

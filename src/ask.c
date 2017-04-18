@@ -13,25 +13,24 @@
 #include "ask.h"
 
 int askCurrent() {
-    int ans = 0;
+    short ans = 0;
 
     do {
-        printf("Who is the current player ? (1/2)\n");
-        scanf("%d", &ans);
+        printf("Who is the current player ? (1 / 2)\n");
+        scanf("%hd", &ans);
     } while(ans != 1 && ans != 2);
-    //printf("The current player is %d\n", ans);
-    return ans-1; // -1 pour compatibilitee avec affichage(Game* game)
+
+    return ans - 1; // -1 pour compatibilite avec affichage(Game* game)
  }
 
 void askName(char joueur[NAME_PLAYER_SIZE], int numberPlayer) { // prend game.joueur1 en parametre (string, donc pointeur)
-    char input[NAME_PLAYER_SIZE-1];
+    char input[NAME_PLAYER_SIZE - 1];
     int i;
 
     do {
         printf("What's the name of player no %d:\n", numberPlayer);
         scanf("%s", input);
     } while(strlen(input) > NAME_PLAYER_SIZE);
-    //printf("Le nom choisit est: %s\n", input);
 
     // on copie la valeur input dans joueur:
     for(i = 0; i < strlen(input); i++)

@@ -20,6 +20,33 @@ void boardInit(short[][NB_HOLES]);
 /**
  * Creation des zones cliquable du plateau de jeu
  */
-void CreateClickableBoard(Clickable*);
+void CreateClickableBoard(Clickable*, SDL_Renderer**);
+
+/**
+ * Boutons du plateau de jeu
+ */
+void button11(SDL_Renderer**);
+
+void button12(SDL_Renderer**);
+
+void button13(SDL_Renderer**);
+
+void button14(SDL_Renderer**);
+
+void button15(SDL_Renderer**);
+
+void button16(SDL_Renderer**);
+
+void button21(SDL_Renderer**);
+
+void button22(SDL_Renderer**);
+
+void button23(SDL_Renderer**);
+
+void button24(SDL_Renderer**);
+
+void button25(SDL_Renderer**);
+
+void button26(SDL_Renderer**);
 
 #endif // SRC_BOARD

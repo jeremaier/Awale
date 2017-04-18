@@ -12,7 +12,7 @@
 #include "const.h"
 #include "button.h"
 
-Clickable CreateNewButton(int posX, int posY, char* path, Clickable* clickableList, SDL_Renderer** renderer, void (*action)(SDL_Renderer**), short sizeDivide, short index) {
+Clickable CreateNewButton(int posX, int posY, const char* path, Clickable* clickableList, SDL_Renderer** renderer, void (*action)(SDL_Renderer**), short sizeDivide, short index) {
 	Clickable newButton;
 
     CreateTexture(path, &(newButton.surface), &(newButton.texture), renderer);
@@ -29,11 +29,11 @@ Clickable CreateNewButton(int posX, int posY, char* path, Clickable* clickableLi
 }
 
 void Click(int xMouse, int yMouse, Clickable* clickableList) {
-	int i;
+	short i;
 
 	for(i = 0; i < BUTTON_NUMBER_BOARD; i++) {
 		const int isInButtonZone = xMouse >= clickableList[i].posX && xMouse <= clickableList[i].posX + clickableList[i].sizeX
-				&& yMouse >= clickableList[i].posY && yMouse <= clickableList[i].posY + clickableList[i].sizeY;
+								&& yMouse >= clickableList[i].posY && yMouse <= clickableList[i].posY + clickableList[i].sizeY;
 
 		if(isInButtonZone)
 			clickableList[i].Action(clickableList[i].data);

@@ -44,7 +44,7 @@ void read_specific(char* directory, int i) {
     else printf("Impossible de lire le fichier\n");
 }
 
-int isEmpty(char chemin[NAME_FILE_SIZE]) {
+int isEmpty(const char chemin[NAME_FILE_SIZE]) {
     char line = ' ';
     FILE* file = NULL;
 

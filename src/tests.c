@@ -18,7 +18,7 @@
 
 void testBoardInit(short matrice[][NB_HOLES]) {
 	printf("=== testBoardInit begin ===\n");
-	int i, j;
+	short i, j;
 
 	for(i = 0; i < NB_ROW; i++) {
 		for(j = 0; j < NB_HOLES; j++)
@@ -55,13 +55,15 @@ void gameToString(Game* game, struct tm* creation) {
     printf(" gain1: %d\n", game -> gain1);
     printf(" gain2: %d\n", game -> gain2);
     printf(" board configuration:\n");
-    int i, j;
+    short i, j;
 
-    for (i=0;i<NB_ROW; i++) {
-        for (j=0; j<NB_HOLES; j++) {
+    for (i = 0;i < NB_ROW; i++) {
+        for (j = 0; j < NB_HOLES; j++)
             printf(" %d ", (game->board_config)[i][j]);
-        } printf("\n");
+
+        printf("\n");
     }
+
     printf(" current player: %d\n", game -> currentPlayer);
     //timeElapsedToString(creation);
     printf(" time spent : %d:%d:%d\n", (game -> timeSpent)[0], (game -> timeSpent)[1], (game -> timeSpent)[2]);
@@ -98,7 +100,6 @@ void playNewGame_c() {
 }
 
 void playSavedGame_c() {
-
     // on cree une struct game
     Game game;
 

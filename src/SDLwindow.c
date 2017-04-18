@@ -19,12 +19,12 @@ int SDLError(char* message) {
     return EXIT_FAILURE;
 }
 
-void CreateTexture(char* path, SDL_Surface** surface, SDL_Texture** texture, SDL_Renderer** renderer) {
+void CreateTexture(const char* path, SDL_Surface** surface, SDL_Texture** texture, SDL_Renderer** renderer) {
     *surface = IMG_Load(path);
     *texture = SDL_CreateTextureFromSurface(*renderer, *surface);
 }
 
-void Display(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Surface* surface, int x, int y, int w, int h) {
+void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, int h) {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderCopy(renderer, texture, NULL, &rect);
     SDL_RenderPresent(renderer);
@@ -38,15 +38,15 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Surface** fon
 	SDL_Texture* boardTexture = NULL;
 	Clickable clickableList[BUTTON_NUMBER_BOARD];
 
-	const short sizeDivideOptions = 4, indexOptions = 12;
-	const Clickable optionsButton = CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", clickableList, renderer, OpenOptionsMenu, sizeDivideOptions, indexOptions);
-	const int xSizeOptions = optionsButton.sizeX / sizeDivideOptions, ySizeOptions = optionsButton.sizeY / sizeDivideOptions;
+	const short indexOptions = 12;
+	const Clickable optionsButton = CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", clickableList, renderer, OpenOptionsMenu, 4, indexOptions);
 
     CreateTexture("sprites/board+background.png", &boardSurface, &boardTexture, renderer);
-    Display(*renderer, boardTexture, boardSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    Display(*renderer, optionsButton.texture, optionsButton.surface, SCREEN_WIDTH - xSizeOptions - 5, 5, xSizeOptions, ySizeOptions);
+    Display(*renderer, boardTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Display(*renderer, optionsButton.texture, SCREEN_WIDTH - optionsButton.sizeX - 5, 5, optionsButton.sizeX, optionsButton.sizeY);
 
     while(!quit) {
+    	SDL_PollEvent(&event);
     	while(SDL_PollEvent(&event)) {
     		xMouse = event.motion.x;
     		yMouse = event.motion.y;

@@ -16,20 +16,20 @@
 #include "board.h"
 #include "game.h"
 
-int whichNumber(char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
+int whichNumber(const char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
     FILE* file = NULL;
-    file = fopen(directory, "r");
-
     int line;
     int cpt = 1; // si le fichier est vide, aucune partie n'a ete instanciee, on ecrit donc la numero 1
+
+    file = fopen(directory, "r");
 
     if(file != NULL) {
         line = fgetc(file);
 
         while(line != EOF) {
-            if (line == '\n') {
+            if (line == '\n')
                 cpt++;
-            } line = fgetc(file);
+            line = fgetc(file);
         }
 
         fclose(file);
@@ -39,7 +39,7 @@ int whichNumber(char* directory) { // date | game_number | name_winner | gain wi
     return cpt;
 }
 
-void loadBlankGame(char* file_list, Game *game, struct tm *timer) {
+void loadBlankGame(const char* file_list, Game *game, struct tm *timer) {
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
     //int number = whichNumber(file_list);
 
@@ -57,16 +57,12 @@ void loadBlankGame(char* file_list, Game *game, struct tm *timer) {
     (game -> timeSpent)[1] = 0;
     (game -> timeSpent)[2] = 0;
 
-    // initialisation du tableau
-    int i, j;
-    for (i = 0; i < NB_ROW; i++)
-        for (j = 0; j < NB_HOLES; j++)
-            (game -> board_config)[i][j] = NB_SEED_INIT;
+    boardInit(game -> board_config);
 }
 
 int gameOver(Game* game) {
     // on verifie que le joueur actuel peut jouer son tour
-    int i = 0;
+    short i = 0;
     // on verifie que le joueur peut "nourrir" son adversaire (si il n'a plus de graine il ne pourra pas : inutile de verifier)
     if(game -> currentPlayer == 0) {
         while(i < 6) {
@@ -81,7 +77,8 @@ int gameOver(Game* game) {
     }
 
     // La partie est terminee : il faut trouver le vainqueur
-    int a = game -> gain1 - game -> gain2;
+    short a = game -> gain1 - game -> gain2;
+
     if(a > 0)
     	return 1; // le joueur 1 gagne
     else if(a < 0)
@@ -140,8 +137,8 @@ int quit(char* file_save, char* file_list, Game* game, struct tm *dateCreation) 
     return 0;
 }
 
-void nextStep(Game* game, int caseSelected) {
-    int current = (game -> currentPlayer); // on recupere le joueur qui a la main (0 ou 1)
+void nextStep(Game* game, const int caseSelected) {
+    const short current = (game -> currentPlayer); // on recupere le joueur qui a la main (0 ou 1)
 
     if (current == 0)
         printf("\n %s has choosen to play square %d \n", game -> joueur1, caseSelected);
@@ -166,16 +163,15 @@ void play_console() {
     printf(" To select a square, choose between 1 and 6\n");
     printf(" ==========================================\n\n");
 
-    char file_save[NAME_FILE_SIZE] = "saved.txt";
-    char file_list[NAME_FILE_SIZE] = "listGames.txt";
+    const char file_save[NAME_FILE_SIZE] = "saved.txt";
+    const char file_list[NAME_FILE_SIZE] = "listGames.txt";
 
     fflush(stdin);
 
     char answer = ' ';
-    int flag = 1; // pour quitter le jeu
+    short flag = 1; // pour quitter le jeu
 
     do {
-        Game game;
         // on recupere les infos temporelles de sa creation
         time_t secondes;
         struct tm dateCreation;
@@ -209,7 +205,7 @@ void play_console() {
         }
 
         if (answer == '1' || answer == '2' || answer == '3' || answer == '4' || answer == '5' || answer == '6') {
-            int caseSelected = answer - '0'; // char to int
+            const short caseSelected = answer - '0'; // char to int
 
             // on n'autorise pas a jouer une case vide
             if ((game.board_config)[game.currentPlayer][caseSelected - 1] != 0)
@@ -219,8 +215,7 @@ void play_console() {
         if (answer == 'q') {
             fflush(stdin); // pour vider le buffer de getc answer et pouvoir en faire un autre a la suite
             printf("Do you want to quit ? (y / n)\n");
-            char confirm; // on recupere la confirmation
-            confirm = getc(stdin);
+            const char confirm  = getc(stdin);
 
             if (confirm == 'y') {
                 // ajout de la partie dans listGames.txt
@@ -236,7 +231,6 @@ void play_console() {
         }
 
         if (answer == 's') {
-
             fflush(stdin);
             save(file_save, &game, &dateCreation);
             printf(" The game has been saved with success\n");

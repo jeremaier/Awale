@@ -33,7 +33,7 @@ typedef struct Clickable {
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
 
-Clickable CreateNewButton(int, int, char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short);
+Clickable CreateNewButton(int, int, const char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short);
 
 /**
  * Action de chaque cliquable

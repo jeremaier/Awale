@@ -18,12 +18,12 @@ int SDLError(char*);
 /**
  * Assignation à la variable surface d'une nouvelle surface et à texture d'une nouvelle texture
  */
-void CreateTexture(char*, SDL_Surface**, SDL_Texture**, SDL_Renderer**);
+void CreateTexture(const char*, SDL_Surface**, SDL_Texture**, SDL_Renderer**);
 
 /**
  * Affiche une texture à une certaine postion et avec une certaine dimension sur la fenetre
  */
-void Display(SDL_Renderer*, SDL_Texture*, SDL_Surface*, int, int, int, int);
+void Display(SDL_Renderer*, SDL_Texture*, int, int, int, int);
 
 /**
  * Ouverture du menu options dans une partie

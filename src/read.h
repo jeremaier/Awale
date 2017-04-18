@@ -23,7 +23,7 @@ void read_specific(char*, int);
 /**
  * 1 si le fichier est vide, 0 sinon
  */
-int isEmpty(char[NAME_FILE_SIZE]);
+int isEmpty(const char[NAME_FILE_SIZE]);
 
 /**
  * Lit les noms dans le fichier deja ouvert et modifie game.joueur

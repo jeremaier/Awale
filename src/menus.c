@@ -9,15 +9,21 @@
 #include <stdlib.h>
 #include <SDL2/SDL_image.h>
 
-#include "const.h"
 #include "SDLwindow.h"
 #include "menus.h"
 
-void DisplayButtons(SDL_Renderer** renderer, Clickable* clickableList, short len, int verticalSpace, int horizontalSpace, int xFirstPos, int yFirstPos) {
+void CreateButtons(const char* buttonsImg[BUTTON_NUMBER_OPTIONS], void (*buttonsFonction[BUTTON_NUMBER_OPTIONS])(SDL_Renderer** renderer), Clickable* clickableList, short len, SDL_Renderer** renderer, short sizeDivideButtons, int horizontalSpace, int verticalSpace, int xFirstPos, int yFirstPos) {
 	short i;
 
 	for(i = 0; i < len; i++)
-	    Display(*renderer, clickableList[i].texture, clickableList[i].surface, 0, 0, 0, 0);
+		CreateNewButton(xFirstPos + horizontalSpace * i, yFirstPos + verticalSpace * i, buttonsImg[i], clickableList, renderer, buttonsFonction[i], sizeDivideButtons, i);
+}
+
+void DisplayButtons(SDL_Renderer** renderer, Clickable* clickableList, short len) {
+	short i;
+
+	for(i = 0; i < len; i++)
+	    Display(*renderer, clickableList[i].texture, clickableList[i].posX, clickableList[i].posY, clickableList[i].sizeX, clickableList[i].sizeY);
 }
 
 void eventLoop(Clickable* clickableList) {
@@ -46,14 +52,18 @@ void freeUpMemory(Clickable* clickableList, short len) {
 }
 
 void OpenOptionsMenu(SDL_Renderer** renderer) {
+	SDL_Surface* optionsSurface = NULL;
+	SDL_Texture* optionsTexture = NULL;
 	Clickable clickableList[BUTTON_NUMBER_OPTIONS];
+	const char *buttonsImg[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/save.png", "sprites/save.png"};
+	void (*buttonsFonction[BUTTON_NUMBER_OPTIONS])(SDL_Renderer** renderer) = {OpenSaveMenu, OpenLoadMenu, OpenScoreMenu};
 
-	const short sizeDivideButtons = 4;
-	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/save.png", clickableList, renderer, OpenSaveMenu, sizeDivideButtons, 0);
-	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/load.png", clickableList, renderer, OpenLoadMenu, sizeDivideButtons, 1);
-	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/score.png", clickableList, renderer, OpenScoreMenu, sizeDivideButtons, 2);
+	CreateButtons(buttonsImg, buttonsFonction, clickableList, BUTTON_NUMBER_OPTIONS, renderer, 4, 0, 0, 30, 0);
+    CreateTexture("sprites/board+background.png", &optionsSurface, &optionsTexture, renderer);
 
-	DisplayButtons(renderer, clickableList, BUTTON_NUMBER_OPTIONS, 0, 0, 0, 0);
+    Display(*renderer, optionsTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	DisplayButtons(renderer, clickableList, BUTTON_NUMBER_OPTIONS);
+
     eventLoop(clickableList);
 
     freeUpMemory(clickableList, BUTTON_NUMBER_OPTIONS);

@@ -21,16 +21,18 @@ typedef struct Game {
     int timeSpent[3]; // le temps deja passer à jouer (utile dans le cas d'une sauvergarde) hrs min sec
 } Game;
 
+Game game;
+
 /**
  * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee
  * dans listGames.txt ie nb de lignes ecrites
  */
-int whichNumber(char*);
+int whichNumber(const char*);
 
 /**
  * Initialise la struct game lors d'une nouvelle partie
  */
-void loadBlankGame(char*, Game*, struct tm*);
+void loadBlankGame(const char*, Game*, struct tm*);
 
 /**
  * Indique si plus de graines dans le camps adverse (1 si oui, 0 sinon)
@@ -41,7 +43,7 @@ int hasWinner(Game*);
  * Demande de jouer un coup au current joueur
  * et maj des parametres de struct game
  */
-void nextStep(Game*, int);
+void nextStep(Game*, const int);
 
 /**
  * Arrete le jeu en renvoyant 1 et indique quel est le gagnant (gain max)

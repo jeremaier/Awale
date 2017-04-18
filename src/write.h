@@ -33,13 +33,13 @@ void timeElapsedToString (struct tm*);
 /**
  * Enregistre dans directory (= save.txt) toutes les donnees relative a une partie
  */
-void save(char*, Game*, struct tm*);
+void save(const char*, Game*, struct tm*);
 
 /**
  * Enregistre les resultats d'une partie finie dans listGames.txt (reprise impossible) a la suite des precedentes
  * A appeller des qu'une partie est terminee
  */
-void saveInList(char*, Game*, struct tm*);
+void saveInList(const char*, Game*, struct tm*);
 
 /**
  * Affiche une belle partie en mode console
