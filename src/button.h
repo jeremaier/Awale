@@ -20,6 +20,8 @@ typedef enum ButtonType {
 typedef struct Clickable {
 	SDL_Surface* surface;
 	SDL_Texture* texture;
+	SDL_Surface* surfaceOver;
+	SDL_Texture* textureOver;
 	ButtonType type;
     int posX;
     int posY;
@@ -33,7 +35,7 @@ typedef struct Clickable {
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
 
-Clickable CreateNewButton(int, int, const char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short);
+Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short);
 
 /**
  * Action de chaque cliquable
@@ -41,8 +43,13 @@ Clickable CreateNewButton(int, int, const char*, Clickable*, SDL_Renderer**, voi
 void Action(void*);
 
 /**
- * Va tester la position de chaque bouton pour savoir si on a cliquer dedans
+ * Regarde si la souris est au dessus d'un bouton
  */
-void Click(int, int, Clickable*);
+Clickable Over(int, int, Clickable*);
+
+/**
+ * Liberation de l'espace memoire utilise par les images SDL
+ */
+void freeUpMemoryButton(Clickable*, short);
 
 #endif /* SRC_BUTTON_H_ */

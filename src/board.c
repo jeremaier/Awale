@@ -22,12 +22,14 @@ void boardInit(short board[][NB_HOLES]) {
     		board[i][j] = NB_SEED_INIT;
 }
 
-void CreateClickableBoard(Clickable* ClickableList, SDL_Renderer** renderer) {
+void CreateClickableBoard(Clickable* clickableList, SDL_Renderer** renderer) {
 	short i;
+	const short hInit = 210, vInit = 330;
+	const short hSpace = 130, vSpace = 140;
 	void (*buttonFunction[NB_ROW * NB_HOLES])(SDL_Renderer** renderer) = {button11, button12, button13, button14, button15, button16, button21, button22, button23, button24, button25, button26};
 
 	for(i = 0; i < NB_ROW * NB_HOLES; i++)
-		CreateNewButton(92 + i * 126, 333 + (i % 5) * 130, "", ClickableList, renderer, buttonFunction[i], 1, i);
+		CreateNewButton(hInit + hSpace * (i - (i / NB_HOLES) * NB_HOLES), vInit + (i / NB_HOLES) * vSpace, "sprites/hole.png", "sprites/hole.png", clickableList, renderer, buttonFunction[i], 1, i);
 }
 
 void button11(SDL_Renderer** renderer) {

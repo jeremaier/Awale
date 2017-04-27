@@ -15,7 +15,7 @@
 /**
  * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
  */
-void CreateButtons(const char* [BUTTON_NUMBER_OPTIONS], void (*[BUTTON_NUMBER_OPTIONS])(SDL_Renderer**), Clickable*, short, SDL_Renderer**, short, int, int, int, int);
+void CreateButtons(const char* [BUTTON_NUMBER_OPTIONS], const char* [BUTTON_NUMBER_OPTIONS], void (*[BUTTON_NUMBER_OPTIONS])(SDL_Renderer**), Clickable*, short, SDL_Renderer**, short, int, int, int, int);
 
 /**
  * Affiche une liste de boutons en fonction des espaces entre eux
@@ -26,11 +26,6 @@ void DisplayButtons(SDL_Renderer**, Clickable*, short);
  * Boucle d'interractions avec la fenetre du jeu
  */
 void eventLoop(Clickable*);
-
-/**
- * Liberation de l'espace memoire utilise par les images SDL
- */
-void freeUpMemory(Clickable*, short);
 
 /**
  * Affichage et interractions avec le menu pause

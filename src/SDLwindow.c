@@ -8,7 +8,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL_image.h>
-
+//////////////////////////////////////////////
+#include <string.h>
+#include "game.h"
+#include "tests.h"
+#include <time.h>
+/////////////////////////////////
+#include "board.h"
 #include "const.h"
 #include "button.h"
 #include "SDLwindow.h"
@@ -32,38 +38,70 @@ void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, 
 
 int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Surface** fontSurface, SDL_Texture** fontTexture) {
 	short quit = 0;
-	int xMouse = 0, yMouse = 0;
+	short xMouse = 0, yMouse = 0;
+	short over = 0;
+	short i = 0;
+
 	SDL_Event event;
 	SDL_Surface* boardSurface = NULL;
 	SDL_Texture* boardTexture = NULL;
 	Clickable clickableList[BUTTON_NUMBER_BOARD];
 
-	const short indexOptions = 12;
-	const Clickable optionsButton = CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", clickableList, renderer, OpenOptionsMenu, 4, indexOptions);
+	CreateClickableBoard(clickableList, renderer);
+	const Clickable optionsButton = CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", "sprites/optionsClick.png", clickableList, renderer, OpenOptionsMenu, 4, 12);
+	Clickable overButton = CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 1, 13);
 
-    CreateTexture("sprites/board+background.png", &boardSurface, &boardTexture, renderer);
+    CreateTexture("sprites/back720.png", &boardSurface, &boardTexture, renderer);
     Display(*renderer, boardTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    Display(*renderer, optionsButton.texture, SCREEN_WIDTH - optionsButton.sizeX - 5, 5, optionsButton.sizeX, optionsButton.sizeY);
+    Display(*renderer, optionsButton.texture, optionsButton.posX, optionsButton.posY, optionsButton.sizeX, optionsButton.sizeY);
+
+    for(i = 0; i < NB_HOLES * NB_ROW; i++)
+	    Display(*renderer, clickableList[i].texture, clickableList[i].posX, clickableList[i].posY, clickableList[i].sizeX, clickableList[i].sizeY);
 
     while(!quit) {
-    	SDL_PollEvent(&event);
-    	while(SDL_PollEvent(&event)) {
-    		xMouse = event.motion.x;
-    		yMouse = event.motion.y;
-    	}
+    	SDL_Delay(10);
 
-        switch (event.type) {
-            case SDL_QUIT: quit = 1;
-                break;
-            case SDL_MOUSEBUTTONDOWN: Click(xMouse, yMouse, clickableList);
-            	break;
-        }
+    	while(SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT: quit = 1;
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                	if(overButton.posX != clickableList[BUTTON_NUMBER_BOARD - 1].posX && overButton.posY != clickableList[BUTTON_NUMBER_BOARD - 1].posY)
+                		overButton.Action(overButton.data);
+                	break;
+                case SDL_MOUSEMOTION:
+                	xMouse = event.motion.x;
+                	yMouse = event.motion.y;
+                	Clickable currentButton = Over(xMouse, yMouse, clickableList);
+
+                	if(currentButton.posX != overButton.posX && currentButton.posY != overButton.posY) {
+                		if(!over) {
+                			over = 1;
+                			overButton = currentButton;
+							Display(*renderer, overButton.textureOver, overButton.posX, overButton.posY, overButton.sizeX, overButton.sizeY);
+						} else {
+							over = 0;
+							Display(*renderer, overButton.texture, overButton.posX, overButton.posY, overButton.sizeX, overButton.sizeY);
+						}
+                	}
+                	break;
+                default:
+                	break;
+            }
+    	}
     }
 
+    time_t secondes;
+    struct tm creationGame;
+    time(&secondes);
+    creationGame = *localtime(&secondes);
+
+    /** test1, affichage de Game game:*/
+    gameToString(&game, &creationGame);
+
     SDL_DestroyTexture(boardTexture);
-    SDL_DestroyTexture(optionsButton.texture);
     SDL_FreeSurface(boardSurface);
-    SDL_FreeSurface(optionsButton.surface);
+    freeUpMemoryButton(clickableList, BUTTON_NUMBER_BOARD - 1);
 
     return EXIT_SUCCESS;
 }
@@ -83,7 +121,7 @@ int LaunchSDL() {
 								SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MOUSE_FOCUS);
 	if(window == NULL) return SDLError("Can't create window : %s\n");
 
-	SDL_SetWindowIcon(window, IMG_Load("sprites/logo2.png"));
+	SDL_SetWindowIcon(window, IMG_Load("sprites/logo.png"));
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(renderer == NULL) return SDLError("Can't create renderer : %s\n");
