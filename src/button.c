@@ -10,25 +10,28 @@
 #include <string.h>
 
 #include "SDLwindow.h"
+#include "menus.h"
 #include "const.h"
 #include "button.h"
 
-Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, void (*action)(SDL_Renderer**), short sizeDivide, short index) {
+Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, void (*action)(SDL_Renderer**), short sizeDivide, short index, ButtonType buttonType, char* text) {
 	Clickable newButton;
 
-	if(strcmp(path, ""))
+	if(buttonType != BUTTON_TYPE_EMPTY) {
 		CreateTexture(path, &(newButton.surface), &(newButton.texture), renderer);
+		newButton.sizeX = (newButton.surface -> w) / sizeDivide;
+		newButton.sizeY = (newButton.surface -> h) / sizeDivide;
+	}
 
-	if(strcmp(pathOver, ""))
+	if(buttonType == BUTTON_TYPE_WITH_SURFACE_OVER)
 		CreateTexture(pathOver, &(newButton.surfaceOver), &(newButton.textureOver), renderer);
 
-    newButton.type = BUTTON_TYPE_OPTIONS;
-	newButton.sizeX = (newButton.surface -> w) / sizeDivide;
-	newButton.sizeY = (newButton.surface -> h) / sizeDivide;
+    newButton.type = buttonType;
 	newButton.posX = posX - newButton.sizeX;
 	newButton.posY = posY;
 	newButton.data = renderer;
 	newButton.Action = action;
+	newButton.text = text;
 	clickableList[index] = newButton;
 
 	return newButton;
@@ -37,24 +40,29 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 Clickable Over(int xMouse, int yMouse, Clickable* clickableList) {
 	short i;
 
-	for(i = 0; i < BUTTON_NUMBER_BOARD; i++) {
-		const int isInButtonZone = xMouse >= clickableList[i].posX && xMouse <= clickableList[i].posX + clickableList[i].sizeX
-								&& yMouse >= clickableList[i].posY && yMouse <= clickableList[i].posY + clickableList[i].sizeY;
+	for(i = 0; i < buttonNumber; i++) {
+		const Clickable button = clickableList[i + 1];
+		const int isInButtonZone = xMouse >= button.posX && xMouse <= button.posX + button.sizeX && yMouse >= button.posY && yMouse <= button.posY + button.sizeY;
 
 		if(isInButtonZone)
-			return clickableList[i];
+			return button;
 	}
 
-	return clickableList[13];
+	return clickableList[0];
 }
 
-void freeUpMemoryButton(Clickable* clickableList, short len) {
+void freeUpMemoryButton(Clickable* clickableList) {
 	short i;
 
-	for(i = 0; i < len; i++) {
-		SDL_DestroyTexture(clickableList[i].texture);
-		SDL_DestroyTexture(clickableList[i].textureOver);
-		SDL_FreeSurface(clickableList[i].surface);
-		SDL_FreeSurface(clickableList[i].surfaceOver);
+	for(i = 0; i < BUTTON_NUMBER_BOARD; i++) {
+		if(clickableList[i].type != BUTTON_TYPE_EMPTY) {
+			SDL_DestroyTexture(clickableList[i].texture);
+			SDL_FreeSurface(clickableList[i].surface);
+		}
+
+		if(clickableList[i].type == BUTTON_TYPE_WITH_SURFACE_OVER) {
+			SDL_DestroyTexture(clickableList[i].textureOver);
+			SDL_FreeSurface(clickableList[i].surfaceOver);
+		}
 	}
 }

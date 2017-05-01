@@ -33,7 +33,7 @@ void OpenOptionsMenu(SDL_Renderer**);
 /**
  * Lancement de la fenêtre de jeu et son affichage
  */
-int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Surface**, SDL_Texture**);
+int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Texture**);
 
 /**
  * Lancement de toutes les initialisations SDL avec demarrage de la fenetre principale

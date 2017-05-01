@@ -11,10 +11,9 @@
 #include <SDL2/SDL.h>
 
 typedef enum ButtonType {
-  BUTTON_TYPE_BOARD,
-  BUTTON_TYPE_OPTIONS,
-  BUTTON_TYPE_SAVE,
-  BUTTON_TYPE_LOAD
+	BUTTON_TYPE_EMPTY,
+	BUTTON_TYPE_WITH_SURFACE,
+	BUTTON_TYPE_WITH_SURFACE_OVER
 } ButtonType;
 
 typedef struct Clickable {
@@ -28,14 +27,15 @@ typedef struct Clickable {
     int sizeX;
     int sizeY;
 	void (*Action)(SDL_Renderer**);
-	void *data;
+	void* data;
+	char* text;
 } Clickable;
 
 /**
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
 
-Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short);
+Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short, ButtonType, char*);
 
 /**
  * Action de chaque cliquable
@@ -50,6 +50,6 @@ Clickable Over(int, int, Clickable*);
 /**
  * Liberation de l'espace memoire utilise par les images SDL
  */
-void freeUpMemoryButton(Clickable*, short);
+void freeUpMemoryButton(Clickable*);
 
 #endif /* SRC_BUTTON_H_ */

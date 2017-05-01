@@ -24,20 +24,14 @@ typedef struct Game {
 Game game;
 
 /**
- * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee
- * dans listGames.txt ie nb de lignes ecrites
- */
-int whichNumber(const char*);
-
-/**
  * Initialise la struct game lors d'une nouvelle partie
  */
 void loadBlankGame(const char*, Game*, struct tm*);
 
 /**
- * Indique si plus de graines dans le camps adverse (1 si oui, 0 sinon)
+ * Regarde si la partie est finie, si oui, on indique le joueur gagnant
  */
-int hasWinner(Game*);
+int gameOver(Game*);
 
 /**
  * Demande de jouer un coup au current joueur

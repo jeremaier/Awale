@@ -48,6 +48,8 @@ void testSave(char* path) {
 }
 
 void gameToString(Game* game, struct tm* creation) {
+    short i, j;
+
     printf(" === BEGIN AFFICHAGE GAME ===\n");
     printf(" game number: %d\n", game -> gameNumber);
     printf(" name player1: %s\n", game -> joueur1);
@@ -55,7 +57,6 @@ void gameToString(Game* game, struct tm* creation) {
     printf(" gain1: %d\n", game -> gain1);
     printf(" gain2: %d\n", game -> gain2);
     printf(" board configuration:\n");
-    short i, j;
 
     for (i = 0; i < NB_ROW; i++) {
         for (j = 0; j < NB_HOLES; j++)
@@ -73,10 +74,6 @@ void gameToString(Game* game, struct tm* creation) {
 void playNewGame_c() {
     // on cree la struct game
     Game game;
-
-    // on demande le nom des joueurs et on complete la struct Game:
-    //askName(game.joueur1);
-    //askName(game.joueur2);
 
     // on recupere les infos temporelles de sa creation
     time_t secondes;

@@ -37,4 +37,10 @@ void readNames(FILE*, char[NAME_PLAYER_SIZE], char[NAME_PLAYER_SIZE]);
  */
 void loadSavedGame(Game*);
 
+/**
+ * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee
+ * dans listGames.txt ie nb de lignes ecrites
+ */
+int whichNumber(const char*);
+
 #endif // READ_H

@@ -16,29 +16,6 @@
 #include "board.h"
 #include "game.h"
 
-int whichNumber(const char* directory) { // date | game_number | name_winner | gain winner | name_loser | gain_loser | time_elapsed
-    FILE* file = NULL;
-    int line;
-    int cpt = 1; // si le fichier est vide, aucune partie n'a ete instanciee, on ecrit donc la numero 1
-
-    file = fopen(directory, "r");
-
-    if(file != NULL) {
-        line = fgetc(file);
-
-        while(line != EOF) {
-            if (line == '\n')
-                cpt++;
-            line = fgetc(file);
-        }
-
-        fclose(file);
-    }
-    else printf("Impossible de lire le fichier\n");
-
-    return cpt;
-}
-
 void loadBlankGame(const char* file_list, Game *game, struct tm *timer) {
     // on recupere quel devrait etre le numero de cette partie (i+1 si i parties deja jouees)
     //int number = whichNumber(file_list);
@@ -61,20 +38,15 @@ void loadBlankGame(const char* file_list, Game *game, struct tm *timer) {
 }
 
 int gameOver(Game* game) {
-    // on verifie que le joueur actuel peut jouer son tour
     short i = 0;
+
     // on verifie que le joueur peut "nourrir" son adversaire (si il n'a plus de graine il ne pourra pas : inutile de verifier)
-    if(game -> currentPlayer == 0) {
-        while(i < 6) {
-            if(game -> board_config[0][i] > i + 1) return 0; // Le joueur peut jouer : la partie n'est pas finie
-            i++;
-        }
-    } else {
-        while(i < 6) {
-            if(game -> board_config[1][i] > 5 - i) return 0; // Le joueur peut jouer : la partie n'est pas finie
-            i++;
-        }
-    }
+	for(i = 0; i < 6; i++) {
+		if(game -> currentPlayer == 0 && game -> board_config[0][i] > i + 1)
+			return 0; // Le joueur peut jouer : la partie n'est pas finie
+		else if(game -> board_config[1][i] > 5 - i)
+			return 0; // Le joueur peut jouer : la partie n'est pas finie
+	}
 
     // La partie est terminee : il faut trouver le vainqueur
     short a = game -> gain1 - game -> gain2;

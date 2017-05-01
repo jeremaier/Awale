@@ -134,3 +134,26 @@ void loadSavedGame(Game *game) {
     }
     else printf("Impossible de lire le fichier\n");
 }
+
+int whichNumber(const char* directory) {
+    FILE* file = NULL;
+    int line;
+    int cpt = 1; // si le fichier est vide, aucune partie n'a ete instanciee, on ecrit donc la numero 1
+
+    file = fopen(directory, "r");
+
+    if(file != NULL) {
+        line = fgetc(file);
+
+        while(line != EOF) {
+            if (line == '\n')
+                cpt++;
+            line = fgetc(file);
+        }
+
+        fclose(file);
+    }
+    else printf("Impossible de lire le fichier\n");
+
+    return cpt;
+}
