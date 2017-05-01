@@ -63,7 +63,7 @@ void timeElapsedToString(struct tm *tpsReference) { // remplace difftime(time_t 
 	printf(" time elapsed: %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
 }
 
-void save(const char* directory, Game* game, struct tm *tpsReference) {
+void save(const char* directory, Game* game, struct tm* tpsReference) {
 	FILE* file = NULL;
 
 	file = fopen(directory, "w");
@@ -105,7 +105,7 @@ void save(const char* directory, Game* game, struct tm *tpsReference) {
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
-void saveInList(const char* directory, Game* game, struct tm *tpsReference) {
+void saveInList(const char* directory, struct tm *tpsReference) {
 	FILE* file = NULL;
 
 	file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier
@@ -124,13 +124,13 @@ void saveInList(const char* directory, Game* game, struct tm *tpsReference) {
 				instant.tm_mon + 1,
 				instant.tm_year + 1900,
 				instant.tm_hour, instant.tm_min,
-				instant.tm_sec, game -> gameNumber,
-				game -> joueur1,
-				game -> gain1,
-				game -> joueur2,
-				game -> gain2);
+				instant.tm_sec, game.gameNumber,
+				game.joueur1,
+				game.gain1,
+				game.joueur2,
+				game.gain2);
 
-		time_elapsed(file, tpsReference, game -> timeSpent);
+		time_elapsed(file, tpsReference, game.timeSpent);
 		fclose(file);
 	}
 	else printf("Impossible d'ecrire dans le fichier\n");
@@ -145,8 +145,8 @@ void affichage(Game *game) {
 
         if(i == 0) {
             if (game -> currentPlayer == 0)
-                printf("      |      current player: %s (row %d)\n", game -> joueur1, game -> currentPlayer+1);
-            else printf("      |      current player: %s (row %d)\n", game -> joueur2, game -> currentPlayer+1);
+                printf("      |      current player: %s (row %d)\n", game -> joueur1, game -> currentPlayer + 1);
+            else printf("      |      current player: %s (row %d)\n", game -> joueur2, game -> currentPlayer + 1);
         }
 		else printf("      |      %s's profit: %d,    %s's profit: %d\n", game -> joueur1, game -> gain1, game -> joueur2, game -> gain2);
     }

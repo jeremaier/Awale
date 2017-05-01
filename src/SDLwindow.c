@@ -8,16 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-//////////////////////////////////////////////
+#include <string.h>
+
 #include "game.h"
-#include "tests.h"
-#include <time.h>
-/////////////////////////////////
 #include "menus.h"
-#include "board.h"
-#include "const.h"
-#include "button.h"
 #include "SDLwindow.h"
 
 int SDLError(char* message) {
@@ -31,97 +25,83 @@ void CreateTexture(const char* path, SDL_Surface** surface, SDL_Texture** textur
     *texture = SDL_CreateTextureFromSurface(*renderer, *surface);
 }
 
-void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, int h) {
+void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, int h, int firstInit) {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderCopy(renderer, texture, NULL, &rect);
-    SDL_RenderPresent(renderer);
+
+    if(!firstInit)
+    	SDL_RenderPresent(renderer);
 }
 
-int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture) {
-    /*/////////////////////////////////////////
-    time_t secondes;
-    struct tm creationGame;
-    time(&secondes);
-    creationGame = *localtime(&secondes);
-    boardInit(game.board_config);
-    gameToString(&game, &creationGame);
-    //////////////////////////////////////////*/
-	short quit = 0, xMouse = 0, yMouse = 0, over = 0, i = 0;
+void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** arrowSurface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, SDL_Color color) {
+	short i = 0;
 
-	SDL_Event event;
+    Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
+    Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY, 1);
 
-	/*SDL_Surface *texte = NULL;
-	TTF_Font *police = NULL;
-	SDL_Color couleurNoire = {0, 0, 0};
-    police = TTF_OpenFont("Calibri.ttf", 30);
-    texte = TTF_RenderText_Blended(police, "Pause", couleurNoire);*/
+    if(game.currentPlayer)
+    	Display(*renderer, *arrowTexture, 15, clickableList[0].posY + clickableList[0].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
+    else Display(*renderer, *arrowTexture, 15, clickableList[1].posY + clickableList[1].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
 
-	buttonNumber = BUTTON_NUMBER_BOARD;
-	menuNumber = 0;
+    SDL_RenderCopy(*renderer, *playerTexture, NULL, playerRect);
+    SDL_RenderCopy(*renderer, *g1Texture, NULL, g1Rect);
+    SDL_RenderCopy(*renderer, *g2Texture, NULL, g2Rect);
 
-	AllocationClickableList();
-	Clickable overButton = CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 1, 0, BUTTON_TYPE_EMPTY, "");
-	CreateClickableBoard(clickableList, renderer);
-    Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY);
+    for(i = 0; i < NB_HOLES * NB_ROW; i++) {
+	    Display(*renderer, clickableList[i + 1].texture, clickableList[i + 1].posX, clickableList[i + 1].posY, clickableList[i + 1].sizeX, clickableList[i + 1].sizeY, 1);
 
-    for(i = 0; i < NB_HOLES * NB_ROW; i++)
-	    Display(*renderer, clickableList[i + 1].texture, clickableList[i + 1].posX, clickableList[i + 1].posY, clickableList[i + 1].sizeX, clickableList[i + 1].sizeY);
+	    char seedNumber[3];
+		SDL_Surface* seedSurface = NULL;
+	    SDL_Texture* seedTexture = NULL;
+	    SDL_Rect seedRect;
 
-    /*SDL_Rect position;
-    position.x = 60;
-    position.y = 370;
-    SDL_Surface *pSurf = SDL_GetWindowSurface(*window);
-    SDL_BlitSurface(texte, NULL, pSurf, &position);
-    SDL_UpdateWindowSurface(*window);*/
+	    sprintf(seedNumber, "%d", game.board_config[i / NB_HOLES][(i - (i / NB_HOLES) * NB_HOLES)]);
+	    RefreshText(renderer, boardFont, &seedRect, &seedSurface, &seedTexture, seedNumber, color);
+	    seedRect.x = clickableList[i + 1].posX + clickableList[i + 1].sizeX / 2 - seedRect.w / 2;
+	    seedRect.y = clickableList[i + 1].posY + clickableList[i + 1].sizeY / 2 - seedRect.h / 2;
 
-    while(!quit) {
-    	SDL_Delay(10);
-
-    	while(SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                	quit = 1;
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                	if(overButton.type != BUTTON_TYPE_EMPTY)
-                		overButton.Action(overButton.data);
-                	break;
-                case SDL_MOUSEMOTION:
-                	xMouse = event.motion.x;
-                	yMouse = event.motion.y;
-                	Clickable currentButton = Over(xMouse, yMouse, clickableList);
-
-                	if(overButton.type != currentButton.type) {
-                		if(!over) {
-                			over = 1;
-                			overButton = currentButton;
-
-                			if(overButton.type == BUTTON_TYPE_WITH_SURFACE_OVER)
-                				Display(*renderer, overButton.textureOver, overButton.posX, overButton.posY, overButton.sizeX, overButton.sizeY);
-						} else {
-							over = 0;
-
-							if(overButton.type != BUTTON_TYPE_EMPTY)
-								Display(*renderer, overButton.texture, overButton.posX, overButton.posY, overButton.sizeX, overButton.sizeY);
-						}
-                	}
-                	break;
-                default:
-                	break;
-            }
-    	}
+	    SDL_RenderCopy(*renderer, seedTexture, NULL, &seedRect);
     }
 
-    //TTF_CloseFont(police);
-    freeUpMemoryButton(clickableList);
+    SDL_RenderPresent(*renderer);
+}
 
-    return EXIT_SUCCESS;
+void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** playerSurface, SDL_Texture** playerTexture, char* text, SDL_Color color) {
+    SDL_DestroyTexture(*playerTexture);
+    SDL_FreeSurface(*playerSurface);
+	*playerSurface = TTF_RenderText_Blended(*boardFont, text, color);
+	*playerTexture = SDL_CreateTextureFromSurface(*renderer, *playerSurface);
+	SDL_QueryTexture(*playerTexture, NULL, NULL, &(rect -> w), &(rect -> h));
+}
+
+void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, char* playerName, TTF_Font** boardFont, SDL_Color color) {
+    char playerText[10 + NAME_PLAYER_SIZE];
+    char g1Text[10 + NAME_PLAYER_SIZE];
+    char g2Text[10 + NAME_PLAYER_SIZE];
+    char g1[3];
+    char g2[3];
+
+	sprintf(g1, "%hd", game.gain1);
+	sprintf(g2, "%hd", game.gain2);
+
+	strcpy(playerText , "Joueur : ");
+	strcpy(g1Text , "Gain ");
+	strcpy(g2Text , "Gain ");
+	strcat(playerText, playerName);
+	strcat(g1Text, game.joueur1);
+	strcat(g2Text, game.joueur2);
+	strcat(g1Text, " : ");
+	strcat(g2Text, " : ");
+	strcat(g1Text, g1);
+	strcat(g2Text, g2);
+
+	RefreshText(renderer, boardFont, playerRect, playerSurface, playerTexture, playerText, color);
+	RefreshText(renderer, boardFont, g1Rect, g1Surface, g1Texture, g1Text, color);
+	RefreshText(renderer, boardFont, g2Rect, g2Surface, g2Texture, g2Text, color);
+	BoardDiplayed(renderer, playerRect, g1Rect, g2Rect, arrowSurface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
 }
 
 int LaunchSDL() {
-    //Proposer une interface sdl ou console (pb include SDL empeche le lancement console,
-    //il faudra gerer avec les variables pre processeur)
 	SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
 	SDL_Surface* fontSurface = NULL;
@@ -129,7 +109,7 @@ int LaunchSDL() {
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) return SDLError("Can't init SDL : %s\n");
 	if(IMG_Init(IMG_INIT_JPG) < 0) return SDLError("Can't init SDL_image : %s\n");
-	//if(TTF_Init() < 0) return SDLError("Can't init SDL_ttf : %s\n");
+	if(TTF_Init() < 0) return SDLError("Can't init SDL_image : %s\n");
 
 	window = SDL_CreateWindow("Awale", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,
 								SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MOUSE_FOCUS);
@@ -149,7 +129,7 @@ int LaunchSDL() {
     SDL_FreeSurface(fontSurface);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    //TTF_Quit();
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 

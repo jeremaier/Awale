@@ -26,7 +26,7 @@ typedef struct Clickable {
     int posY;
     int sizeX;
     int sizeY;
-	void (*Action)(SDL_Renderer**);
+	int (*Action)(SDL_Renderer**);
 	void* data;
 	char* text;
 } Clickable;
@@ -35,7 +35,7 @@ typedef struct Clickable {
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
 
-Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, void (*)(SDL_Renderer**), short, short, ButtonType, char*);
+Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, int (*)(SDL_Renderer**), short, short, ButtonType, char*);
 
 /**
  * Action de chaque cliquable
@@ -45,7 +45,12 @@ void Action(void*);
 /**
  * Regarde si la souris est au dessus d'un bouton
  */
-Clickable Over(int, int, Clickable*);
+Clickable IsOverButton(int, int, Clickable*);
+
+/**
+ * Change la liste des boutons qui sont clickable dans le menu courant
+ */
+void AllocationClickableList();
 
 /**
  * Liberation de l'espace memoire utilise par les images SDL

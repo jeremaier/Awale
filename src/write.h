@@ -39,7 +39,7 @@ void save(const char*, Game*, struct tm*);
  * Enregistre les resultats d'une partie finie dans listGames.txt (reprise impossible) a la suite des precedentes
  * A appeller des qu'une partie est terminee
  */
-void saveInList(const char*, Game*, struct tm*);
+void saveInList(const char*, struct tm*);
 
 /**
  * Affiche une belle partie en mode console

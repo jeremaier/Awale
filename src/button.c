@@ -14,7 +14,7 @@
 #include "const.h"
 #include "button.h"
 
-Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, void (*action)(SDL_Renderer**), short sizeDivide, short index, ButtonType buttonType, char* text) {
+Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, int (*action)(SDL_Renderer**), short sizeDivide, short index, ButtonType buttonType, char* text) {
 	Clickable newButton;
 
 	if(buttonType != BUTTON_TYPE_EMPTY) {
@@ -37,7 +37,7 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 	return newButton;
 }
 
-Clickable Over(int xMouse, int yMouse, Clickable* clickableList) {
+Clickable IsOverButton(int xMouse, int yMouse, Clickable* clickableList) {
 	short i;
 
 	for(i = 0; i < buttonNumber; i++) {
@@ -49,6 +49,12 @@ Clickable Over(int xMouse, int yMouse, Clickable* clickableList) {
 	}
 
 	return clickableList[0];
+}
+
+void AllocationClickableList() {
+	if (clickableList != 0)
+		clickableList = (Clickable*) realloc(clickableList, buttonNumber * sizeof(Clickable));
+	else clickableList = (Clickable*) malloc(buttonNumber * sizeof(Clickable));
 }
 
 void freeUpMemoryButton(Clickable* clickableList) {

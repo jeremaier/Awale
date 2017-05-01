@@ -72,9 +72,6 @@ void gameToString(Game* game, struct tm* creation) {
 }
 
 void playNewGame_c() {
-    // on cree la struct game
-    Game game;
-
     // on recupere les infos temporelles de sa creation
     time_t secondes;
     struct tm creationGame;
@@ -83,7 +80,7 @@ void playNewGame_c() {
 
     // on initialise la struct Game
     char file_list[NAME_FILE_SIZE] = "listGames.txt";
-    loadBlankGame(file_list, &game, &creationGame);
+    loadBlankGame(file_list, &creationGame);
 
     /** test1, affichage de Game game:*/
     gameToString(&game, &creationGame);
@@ -93,13 +90,10 @@ void playNewGame_c() {
     save(file_save, &game, &creationGame);
 
     /**test3, ecriture dans listGames.txt*/
-    saveInList(file_list, &game, &creationGame);
+    saveInList(file_list, &creationGame);
 }
 
 void playSavedGame_c() {
-    // on cree une struct game
-    Game game;
-
     //on charge les donnees enregistree dans saved.txt
     loadSavedGame(&game);
 

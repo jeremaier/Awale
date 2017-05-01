@@ -7,9 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "const.h"
-#include "string.h"
 #include "ask.h"
 
 int askCurrent() {
@@ -20,7 +20,7 @@ int askCurrent() {
         scanf("%hd", &ans);
     } while(ans != 1 && ans != 2);
 
-    return ans - 1; // -1 pour compatibilite avec affichage(Game* game)
+    return ans - 1; // -1 pour compatibilite avec affichage
  }
 
 void askName(char joueur[NAME_PLAYER_SIZE], int numberPlayer) { // prend game.joueur1 en parametre (string, donc pointeur)

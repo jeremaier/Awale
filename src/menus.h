@@ -19,7 +19,7 @@ short buttonNumber;
 /**
  * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
  */
-void CreateButtons(const char* [buttonNumber], const char* [buttonNumber], void (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, short, int, int, int, int, ButtonType, char*);
+void CreateButtons(const char* [buttonNumber], const char* [buttonNumber], int (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, short, int, int, int, int, ButtonType, char*);
 
 /**
  * Affiche une liste de boutons en fonction des espaces entre eux
@@ -27,33 +27,28 @@ void CreateButtons(const char* [buttonNumber], const char* [buttonNumber], void 
 void DisplayButtons(SDL_Renderer**, Clickable*, short);
 
 /**
- * Boucle d'interractions avec la fenetre du jeu
+ * Lancement de la fenêtre de jeu et son affichage
  */
-void eventLoop(Clickable*);
+int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Texture**);
 
 /**
  * Affichage et interractions avec le menu pause
  */
-void OpenOptionsMenu(SDL_Renderer**);
+int OpenOptionsMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu de sauvegarde
  */
-void OpenSaveMenu(SDL_Renderer**);
+int OpenSaveMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu de chargement de partie
  */
-void OpenLoadMenu(SDL_Renderer**);
+int OpenLoadMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu des scores
  */
-void OpenScoreMenu(SDL_Renderer**);
-
-/**
- * Change la liste des boutons qui sont clickable dans le menu courant
- */
-void AllocationClickableList();
+int OpenScoreMenu(SDL_Renderer**);
 
 #endif /* SRC_MENUS_H_ */

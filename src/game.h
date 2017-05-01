@@ -26,24 +26,34 @@ Game game;
 /**
  * Initialise la struct game lors d'une nouvelle partie
  */
-void loadBlankGame(const char*, Game*, struct tm*);
+void loadBlankGame(const char*, struct tm*);
 
 /**
  * Regarde si la partie est finie, si oui, on indique le joueur gagnant
  */
-int gameOver(Game*);
-
-/**
- * Demande de jouer un coup au current joueur
- * et maj des parametres de struct game
- */
-void nextStep(Game*, const int);
+int gameOver();
 
 /**
  * Arrete le jeu en renvoyant 1 et indique quel est le gagnant (gain max)
  * Peut egalement faire la sauvegarde dans les .txt
  */
-int quit(char[NAME_FILE_SIZE], char[NAME_FILE_SIZE], Game*, struct tm*);
+int quit(char[NAME_FILE_SIZE], char[NAME_FILE_SIZE], struct tm*);
+
+/**
+ * Demande de jouer un coup au current joueur
+ * et maj des parametres de struct game
+ */
+void nextStep(const int);
+
+/**
+ * Fourni le temps present du jeu
+ */
+struct tm* localTime();
+
+/**
+ * Permet de jouer en console
+ */
+void play_console();
 
 #endif // GAME_H
 

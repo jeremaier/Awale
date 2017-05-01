@@ -9,6 +9,9 @@
 #define SRC_SDLWINDOW_H_
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
+#include "const.h"
 
 /**
  * Renvoi une erreur lors d'erreurs d'initialisations de variables SDL
@@ -23,17 +26,22 @@ void CreateTexture(const char*, SDL_Surface**, SDL_Texture**, SDL_Renderer**);
 /**
  * Affiche une texture à une certaine postion et avec une certaine dimension sur la fenetre
  */
-void Display(SDL_Renderer*, SDL_Texture*, int, int, int, int);
+void Display(SDL_Renderer*, SDL_Texture*, int, int, int, int, int);
 
 /**
- * Ouverture du menu options dans une partie
+ * Affiche l'ensemble du menu principal (plateau, scores, bouton options)
  */
-void OpenOptionsMenu(SDL_Renderer**);
+void BoardDiplayed(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, SDL_Color);
 
 /**
- * Lancement de la fenêtre de jeu et son affichage
+ * Rafraichi un texte
  */
-int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Texture**);
+void RefreshText(SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Surface**, SDL_Texture**, char* text, SDL_Color);
+
+/**
+ * Rafraichi l'ensemble du plateau
+ */
+void RefreshParameters(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, char*, TTF_Font**, SDL_Color);
 
 /**
  * Lancement de toutes les initialisations SDL avec demarrage de la fenetre principale
