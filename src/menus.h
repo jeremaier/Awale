@@ -9,6 +9,8 @@
 #define SRC_MENUS_H_
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 #include "const.h"
 #include "button.h"
 
@@ -19,7 +21,7 @@ short buttonNumber;
 /**
  * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
  */
-void CreateButtons(const char* [buttonNumber], const char* [buttonNumber], int (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, short, int, int, int, int, ButtonType, char*);
+void CreateButtons(const char*[buttonNumber], const char*[buttonNumber], short (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, int, int, int, int, ButtonType, char*);
 
 /**
  * Affiche une liste de boutons en fonction des espaces entre eux
@@ -32,23 +34,28 @@ void DisplayButtons(SDL_Renderer**, Clickable*, short);
 int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Texture**);
 
 /**
+ * Affiche le gagnant s'il y en a un
+ */
+void OpenGameOverMenu(SDL_Renderer**, TTF_Font**, char*, SDL_Color);
+
+/**
  * Affichage et interractions avec le menu pause
  */
-int OpenOptionsMenu(SDL_Renderer**);
+short OpenOptionsMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu de sauvegarde
  */
-int OpenSaveMenu(SDL_Renderer**);
+short OpenSaveMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu de chargement de partie
  */
-int OpenLoadMenu(SDL_Renderer**);
+short OpenLoadMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu des scores
  */
-int OpenScoreMenu(SDL_Renderer**);
+short OpenScoreMenu(SDL_Renderer**);
 
 #endif /* SRC_MENUS_H_ */

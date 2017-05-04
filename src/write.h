@@ -17,13 +17,13 @@ void initialize(char*);
 /**
  * Rajoute une ligne definie a la fin du fichier
  */
-void write_new_line(char*, char*);
+void writeNewLine(char*, char*);
 
 /**
  * Ecrit le temps passe a jouer dans le fichier (date de debut stockee dans tpsReference)
  * Si on part d'une partie enregistree, on doit y rajouter le temps deja passe a jouer (additionnal)
  */
-void time_elapsed(FILE*, struct tm*, int[3]);
+void timeElapsed(FILE*, struct tm*, int[3]);
 
 /**
  * Pour faire un print et non ecrire dans un fichier avec fprintf (redit time_elapsed())

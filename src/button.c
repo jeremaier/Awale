@@ -14,13 +14,16 @@
 #include "const.h"
 #include "button.h"
 
-Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, int (*action)(SDL_Renderer**), short sizeDivide, short index, ButtonType buttonType, char* text) {
+Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, short (*action)(SDL_Renderer**), short index, ButtonType buttonType, char* text) {
 	Clickable newButton;
 
 	if(buttonType != BUTTON_TYPE_EMPTY) {
 		CreateTexture(path, &(newButton.surface), &(newButton.texture), renderer);
-		newButton.sizeX = (newButton.surface -> w) / sizeDivide;
-		newButton.sizeY = (newButton.surface -> h) / sizeDivide;
+		newButton.sizeX = (newButton.surface -> w);
+		newButton.sizeY = (newButton.surface -> h);
+	} else {
+		newButton.sizeX = 0;
+		newButton.sizeY = 0;
 	}
 
 	if(buttonType == BUTTON_TYPE_WITH_SURFACE_OVER)

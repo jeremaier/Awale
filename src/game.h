@@ -40,6 +40,11 @@ int gameOver();
 int quit(char[NAME_FILE_SIZE], char[NAME_FILE_SIZE], struct tm*);
 
 /**
+ * Changement de joueur courant
+ */
+void changePlayer();
+
+/**
  * Demande de jouer un coup au current joueur
  * et maj des parametres de struct game
  */
@@ -48,7 +53,7 @@ void nextStep(const int);
 /**
  * Fourni le temps present du jeu
  */
-struct tm* localTime();
+struct tm currentTime();
 
 /**
  * Permet de jouer en console

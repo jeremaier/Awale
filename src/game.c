@@ -45,12 +45,13 @@ int gameOver() {
 			return 0; // Le joueur peut jouer : la partie n'est pas finie
 	}
 
-    short a = game.gain1 - game.gain2; // La partie est terminee : il faut trouver le vainqueur
+    const short a = game.gain1 - game.gain2; // La partie est terminee : il faut trouver le vainqueur
 
     if(a > 0)
     	return 1; // le joueur 1 gagne
     else if(a < 0)
     	return 2; // le joueur 2 gagne
+
     return 3; // aucun joueur ne gagne : match nul
 }
 
@@ -105,6 +106,11 @@ int quit(char* file_save, char* file_list, struct tm *dateCreation) {
     return 0;
 }
 
+void changePlayer() {
+    game.currentPlayer ++;
+    game.currentPlayer %= 2;
+}
+
 void nextStep(const int caseSelected) {
     const short current = (game.currentPlayer); // on recupere le joueur qui a la main (0 ou 1)
 
@@ -112,20 +118,17 @@ void nextStep(const int caseSelected) {
         printf("\n %s has choosen to play square %d \n", game.joueur1, caseSelected);
     else printf("\n %s has choosen to play square %d \n", game.joueur2, caseSelected);
 
-    distributeSeeds(game.board_config, current, caseSelected - 1);
-    
-    // on change la main pour le prochain tour
-    (game.currentPlayer)++;
-    (game.currentPlayer) %= 2;
+    distributeSeeds(current, caseSelected - 1);
+    changePlayer();
 
     printf("\n");
     affichage(&game);
 }
 
-struct tm* localTime() {
+struct tm currentTime() {
     time_t secondes;
     time(&secondes);
-    return localtime(&secondes);
+    return *localtime(&secondes);
 }
 
 void play_console() {
@@ -144,7 +147,7 @@ void play_console() {
     fflush(stdin);
 
     do {
-        struct tm dateCreation = *localTime();
+        struct tm dateCreation = currentTime();
         answer = getc(stdin);
 
         switch(answer) {

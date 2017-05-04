@@ -26,7 +26,7 @@ typedef struct Clickable {
     int posY;
     int sizeX;
     int sizeY;
-	int (*Action)(SDL_Renderer**);
+	short (*Action)(SDL_Renderer**);
 	void* data;
 	char* text;
 } Clickable;
@@ -34,8 +34,7 @@ typedef struct Clickable {
 /**
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
-
-Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, int (*)(SDL_Renderer**), short, short, ButtonType, char*);
+Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, short (*)(SDL_Renderer**), short, ButtonType, char*);
 
 /**
  * Action de chaque cliquable

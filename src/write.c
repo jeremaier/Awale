@@ -7,8 +7,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
 #include "write.h"
 
@@ -25,7 +25,7 @@ void initialize(char* directory) { // vide le fichier directory
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
-void write_new_line(char* directory, char* chaine) {
+void writeNewLine(char* directory, char* chaine) {
 	FILE* file = NULL;
 
 	file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier
@@ -37,12 +37,9 @@ void write_new_line(char* directory, char* chaine) {
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
-void time_elapsed(FILE* file, struct tm *tpsReference, int additionnal[3]) { // remplace difftime(time_t t1, time_t t2)
-	time_t secondes; // recupere le temps actuel
-	struct tm instant;
+void timeElapsed(FILE* file, struct tm *tpsReference, int additionnal[3]) { // remplace difftime(time_t t1, time_t t2)
+	struct tm instant = currentTime();
 
-	time(&secondes);
-	instant = *localtime(&secondes);
 	instant.tm_hour -= (*tpsReference).tm_hour - additionnal[0]; // calcul de la duree de jeu
 	instant.tm_min -= (*tpsReference).tm_min - additionnal[1];
 	instant.tm_sec -= (*tpsReference).tm_sec - additionnal[2];
@@ -51,11 +48,8 @@ void time_elapsed(FILE* file, struct tm *tpsReference, int additionnal[3]) { // 
 }
 
 void timeElapsedToString(struct tm *tpsReference) { // remplace difftime(time_t t1, time_t t2)
-	time_t secondes; // recupere le temps actuel
-	struct tm instant;
+	struct tm instant = currentTime();
 
-	time(&secondes);
-	instant = *localtime(&secondes);
 	instant.tm_hour -= (*tpsReference).tm_hour; // calcul de la duree de jeu
 	instant.tm_min -= (*tpsReference).tm_min;
 	instant.tm_sec -= (*tpsReference).tm_sec;
@@ -69,12 +63,9 @@ void save(const char* directory, Game* game, struct tm* tpsReference) {
 	file = fopen(directory, "w");
 
 	if(file != NULL) {
-		time_t secondes; // recupere la date et heure de la sauvergarde (execution de save())
-		struct tm instant;
 		short i, j;
+		struct tm instant = currentTime();
 
-		time(&secondes);
-		instant = *localtime(&secondes);
 		fprintf(file,
 				"%d/%d/%d %d:%d:%d\n",
 				instant.tm_mday + 1,
@@ -98,7 +89,7 @@ void save(const char* directory, Game* game, struct tm* tpsReference) {
 			for(j = 0; j < NB_HOLES; j++)
 				fprintf(file, "%d\n", game -> board_config[i][j]);
 
-		time_elapsed(file, tpsReference, game -> timeSpent); // ecrit le temps ecoule
+		timeElapsed(file, tpsReference, game -> timeSpent); // ecrit le temps ecoule
 		fprintf(file, "%hd\n", game -> currentPlayer);
 		fclose(file);
 	}
@@ -111,12 +102,8 @@ void saveInList(const char* directory, struct tm *tpsReference) {
 	file = fopen(directory, "a"); // append, pour lire ou ecrire a la fin d'un fichier
 
 	if(file != NULL) {
-        // recupere la date et heure de la sauvergarde (execution de saveInList())
-		time_t secondes;
-		struct tm instant;
-
-		time(&secondes);
-		instant = *localtime(&secondes);
+		// recupere la date et heure de la sauvergarde (execution de saveInList())
+		struct tm instant = currentTime();
 
 		fprintf(file,
 				"%d/%d/%d %d:%d:%d | %d | %s | %d | %s | %d | ",
@@ -130,24 +117,24 @@ void saveInList(const char* directory, struct tm *tpsReference) {
 				game.joueur2,
 				game.gain2);
 
-		time_elapsed(file, tpsReference, game.timeSpent);
+		timeElapsed(file, tpsReference, game.timeSpent);
 		fclose(file);
 	}
 	else printf("Impossible d'ecrire dans le fichier\n");
 }
 
 void affichage(Game *game) {
-    int i, j;
+	int i, j;
 
-    for(i = 0; i < NB_ROW; i++) {
-        for(j = 0; j < NB_HOLES; j++)
-            printf(" %d ", (game -> board_config)[i][j]);
+	for(i = 0; i < NB_ROW; i++) {
+		for(j = 0; j < NB_HOLES; j++)
+			printf(" %d ", (game -> board_config)[i][j]);
 
-        if(i == 0) {
-            if (game -> currentPlayer == 0)
-                printf("      |      current player: %s (row %d)\n", game -> joueur1, game -> currentPlayer + 1);
-            else printf("      |      current player: %s (row %d)\n", game -> joueur2, game -> currentPlayer + 1);
-        }
+		if(i == 0) {
+			if (game -> currentPlayer == 0)
+				printf("      |      current player: %s (row %d)\n", game -> joueur1, game -> currentPlayer + 1);
+			else printf("      |      current player: %s (row %d)\n", game -> joueur2, game -> currentPlayer + 1);
+		}
 		else printf("      |      %s's profit: %d,    %s's profit: %d\n", game -> joueur1, game -> gain1, game -> joueur2, game -> gain2);
-    }
+	}
 }

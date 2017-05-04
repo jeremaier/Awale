@@ -39,9 +39,9 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
     Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
     Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY, 1);
 
-    if(game.currentPlayer)
-    	Display(*renderer, *arrowTexture, 15, clickableList[0].posY + clickableList[0].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
-    else Display(*renderer, *arrowTexture, 15, clickableList[1].posY + clickableList[1].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
+    if(!game.currentPlayer)
+    	Display(*renderer, *arrowTexture, 15, clickableList[1].posY + clickableList[1].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
+    else Display(*renderer, *arrowTexture, 15, clickableList[7].posY + clickableList[7].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
 
     SDL_RenderCopy(*renderer, *playerTexture, NULL, playerRect);
     SDL_RenderCopy(*renderer, *g1Texture, NULL, g1Rect);
@@ -56,7 +56,7 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
 	    SDL_Rect seedRect;
 
 	    sprintf(seedNumber, "%d", game.board_config[i / NB_HOLES][(i - (i / NB_HOLES) * NB_HOLES)]);
-	    RefreshText(renderer, boardFont, &seedRect, &seedSurface, &seedTexture, seedNumber, color);
+	    RefreshText(renderer, boardFont, &seedRect, &seedSurface, &seedTexture, seedNumber, color, 0);
 	    seedRect.x = clickableList[i + 1].posX + clickableList[i + 1].sizeX / 2 - seedRect.w / 2;
 	    seedRect.y = clickableList[i + 1].posY + clickableList[i + 1].sizeY / 2 - seedRect.h / 2;
 
@@ -66,15 +66,21 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
     SDL_RenderPresent(*renderer);
 }
 
-void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** playerSurface, SDL_Texture** playerTexture, char* text, SDL_Color color) {
-    SDL_DestroyTexture(*playerTexture);
-    SDL_FreeSurface(*playerSurface);
-	*playerSurface = TTF_RenderText_Blended(*boardFont, text, color);
+void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** playerSurface, SDL_Texture** playerTexture, char* text, SDL_Color color, short center) {
+	if(playerTexture != NULL) {
+		SDL_DestroyTexture(*playerTexture);
+		SDL_FreeSurface(*playerSurface);
+	}
+
+    *playerSurface = TTF_RenderText_Blended(*boardFont, text, color);
 	*playerTexture = SDL_CreateTextureFromSurface(*renderer, *playerSurface);
 	SDL_QueryTexture(*playerTexture, NULL, NULL, &(rect -> w), &(rect -> h));
+
+	if(center)
+		rect -> x = SCREEN_WIDTH / 2 - rect -> w / 2;
 }
 
-void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, char* playerName, TTF_Font** boardFont, SDL_Color color) {
+void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, SDL_Color color) {
     char playerText[10 + NAME_PLAYER_SIZE];
     char g1Text[10 + NAME_PLAYER_SIZE];
     char g2Text[10 + NAME_PLAYER_SIZE];
@@ -83,11 +89,9 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
 
 	sprintf(g1, "%hd", game.gain1);
 	sprintf(g2, "%hd", game.gain2);
-
 	strcpy(playerText , "Joueur : ");
 	strcpy(g1Text , "Gain ");
 	strcpy(g2Text , "Gain ");
-	strcat(playerText, playerName);
 	strcat(g1Text, game.joueur1);
 	strcat(g2Text, game.joueur2);
 	strcat(g1Text, " : ");
@@ -95,10 +99,23 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
 	strcat(g1Text, g1);
 	strcat(g2Text, g2);
 
-	RefreshText(renderer, boardFont, playerRect, playerSurface, playerTexture, playerText, color);
-	RefreshText(renderer, boardFont, g1Rect, g1Surface, g1Texture, g1Text, color);
-	RefreshText(renderer, boardFont, g2Rect, g2Surface, g2Texture, g2Text, color);
+	if(!game.currentPlayer)
+		strcat(playerText, game.joueur1);
+	else strcat(playerText, game.joueur2);
+
+	RefreshText(renderer, boardFont, playerRect, playerSurface, playerTexture, playerText, color, 0);
+	RefreshText(renderer, boardFont, g1Rect, g1Surface, g1Texture, g1Text, color, 0);
+	RefreshText(renderer, boardFont, g2Rect, g2Surface, g2Texture, g2Text, color, 0);
 	BoardDiplayed(renderer, playerRect, g1Rect, g2Rect, arrowSurface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
+}
+
+void PrintTempMessage(SDL_Renderer** renderer, SDL_Texture** messageTexture, SDL_Surface** messageSurface, TTF_Font** boardFont, char* messageText, SDL_Color color) {
+    SDL_Rect messageRect;
+
+    messageRect.y = 200;
+
+	RefreshText(renderer, boardFont, &messageRect, messageSurface, messageTexture, messageText, color, 1);
+    SDL_RenderCopy(*renderer, *messageTexture, NULL, &messageRect);
 }
 
 int LaunchSDL() {

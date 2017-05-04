@@ -36,12 +36,17 @@ void BoardDiplayed(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface*
 /**
  * Rafraichi un texte
  */
-void RefreshText(SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Surface**, SDL_Texture**, char* text, SDL_Color);
+void RefreshText(SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Surface**, SDL_Texture**, char* text, SDL_Color, short);
 
 /**
  * Rafraichi l'ensemble du plateau
  */
-void RefreshParameters(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, char*, TTF_Font**, SDL_Color);
+void RefreshParameters(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, SDL_Color);
+
+/**
+ * Afficher un message temporaire sur la fenetre (ne clique pas sur la bonne rangée, sur une case vide,...)
+ */
+void PrintTempMessage(SDL_Renderer**, SDL_Texture**, SDL_Surface**, TTF_Font**, char*, SDL_Color);
 
 /**
  * Lancement de toutes les initialisations SDL avec demarrage de la fenetre principale

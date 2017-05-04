@@ -25,28 +25,28 @@ void CreateClickableBoard(Clickable*, SDL_Renderer**);
 /**
  * Boutons du plateau de jeu
  */
-int button11(SDL_Renderer**);
+short button11(SDL_Renderer**);
 
-int button12(SDL_Renderer**);
+short button12(SDL_Renderer**);
 
-int button13(SDL_Renderer**);
+short button13(SDL_Renderer**);
 
-int button14(SDL_Renderer**);
+short button14(SDL_Renderer**);
 
-int button15(SDL_Renderer**);
+short button15(SDL_Renderer**);
 
-int button16(SDL_Renderer**);
+short button16(SDL_Renderer**);
 
-int button21(SDL_Renderer**);
+short button21(SDL_Renderer**);
 
-int button22(SDL_Renderer**);
+short button22(SDL_Renderer**);
 
-int button23(SDL_Renderer**);
+short button23(SDL_Renderer**);
 
-int button24(SDL_Renderer**);
+short button24(SDL_Renderer**);
 
-int button25(SDL_Renderer**);
+short button25(SDL_Renderer**);
 
-int button26(SDL_Renderer**);
+short button26(SDL_Renderer**);
 
 #endif // SRC_BOARD
