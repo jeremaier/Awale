@@ -13,26 +13,26 @@
 /**
  * Affiche le plateau de jeu stocke sous forme matricielle
  */
-void testBoardInit(short[][NB_HOLES]);
+void TestBoardInit(short[][NB_HOLES]);
 
 /**
  * Permet de tester la sauvegarde des parametres d'une partie dans un fichier
  */
-void testSave(char*);
+void TestSave(char*);
 
 /**
  * Permet d'afficher le contenu de Game game en console
  */
-void gameToString(Game*, struct tm*);
+void GameToString(Game*, struct tm*);
 
 /**
  * Pour lancer une nouvelle partie
  */
-void playNewGame_c();
+void PlayNewGame();
 
 /**
  * Pour jouer a un jeu sauvergarde
  */
-void playSavedGame_c();
+void PlaySavedGame();
 
 #endif // TESTS_H

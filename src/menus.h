@@ -15,8 +15,7 @@
 #include "button.h"
 
 Clickable* clickableList;
-short menuNumber;
-short buttonNumber;
+short menuNumber, buttonNumber, restart;
 
 /**
  * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
@@ -36,7 +35,7 @@ int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Texture**);
 /**
  * Affiche le gagnant s'il y en a un
  */
-void OpenGameOverMenu(SDL_Renderer**, TTF_Font**, char*, SDL_Color);
+void OpenGameOverMenu(SDL_Renderer**, SDL_Texture**, SDL_Surface**, TTF_Font**, TTF_Font**, char*, SDL_Color, Clickable*);
 
 /**
  * Affichage et interractions avec le menu pause

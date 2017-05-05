@@ -15,7 +15,7 @@
 /**
  * Initialisation du plateau de jeu avec selection du joueur et le nombre de graines par trou
  */
-void boardInit(short[][NB_HOLES]);
+void BoardInit(short[][NB_HOLES]);
 
 /**
  * Creation des zones cliquable du plateau de jeu
@@ -25,28 +25,28 @@ void CreateClickableBoard(Clickable*, SDL_Renderer**);
 /**
  * Boutons du plateau de jeu
  */
-short button11(SDL_Renderer**);
+short Button11(SDL_Renderer**);
 
-short button12(SDL_Renderer**);
+short Button12(SDL_Renderer**);
 
-short button13(SDL_Renderer**);
+short Button13(SDL_Renderer**);
 
-short button14(SDL_Renderer**);
+short Button14(SDL_Renderer**);
 
-short button15(SDL_Renderer**);
+short Button15(SDL_Renderer**);
 
-short button16(SDL_Renderer**);
+short Button16(SDL_Renderer**);
 
-short button21(SDL_Renderer**);
+short Button21(SDL_Renderer**);
 
-short button22(SDL_Renderer**);
+short Button22(SDL_Renderer**);
 
-short button23(SDL_Renderer**);
+short Button23(SDL_Renderer**);
 
-short button24(SDL_Renderer**);
+short Button24(SDL_Renderer**);
 
-short button25(SDL_Renderer**);
+short Button25(SDL_Renderer**);
 
-short button26(SDL_Renderer**);
+short Button26(SDL_Renderer**);
 
 #endif // SRC_BOARD

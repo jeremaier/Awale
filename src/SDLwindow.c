@@ -66,15 +66,13 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
     SDL_RenderPresent(*renderer);
 }
 
-void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** playerSurface, SDL_Texture** playerTexture, char* text, SDL_Color color, short center) {
-	if(playerTexture != NULL) {
-		SDL_DestroyTexture(*playerTexture);
-		SDL_FreeSurface(*playerSurface);
-	}
+void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** textSurface, SDL_Texture** textTexture, char* text, SDL_Color color, short center) {
+	if(textTexture != NULL)
+		SDL_DestroyTexture(*textTexture);
 
-    *playerSurface = TTF_RenderText_Blended(*boardFont, text, color);
-	*playerTexture = SDL_CreateTextureFromSurface(*renderer, *playerSurface);
-	SDL_QueryTexture(*playerTexture, NULL, NULL, &(rect -> w), &(rect -> h));
+    *textSurface = TTF_RenderText_Blended(*boardFont, text, color);
+	*textTexture = SDL_CreateTextureFromSurface(*renderer, *textSurface);
+	SDL_QueryTexture(*textTexture, NULL, NULL, &(rect -> w), &(rect -> h));
 
 	if(center)
 		rect -> x = SCREEN_WIDTH / 2 - rect -> w / 2;
@@ -87,8 +85,8 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
     char g1[3];
     char g2[3];
 
-	sprintf(g1, "%hd", game.gain1);
-	sprintf(g2, "%hd", game.gain2);
+	sprintf(g1, "%hd", game.gains[0]);
+	sprintf(g2, "%hd", game.gains[1]);
 	strcpy(playerText , "Joueur : ");
 	strcpy(g1Text , "Gain ");
 	strcpy(g2Text , "Gain ");

@@ -12,7 +12,7 @@
 #include "const.h"
 #include "ask.h"
 
-int askCurrent() {
+int AskCurrent() {
     short ans = 0;
 
     do {
@@ -23,7 +23,7 @@ int askCurrent() {
     return ans - 1; // -1 pour compatibilite avec affichage
  }
 
-void askName(char joueur[NAME_PLAYER_SIZE], int numberPlayer) { // prend game.joueur1 en parametre (string, donc pointeur)
+void AskName(char joueur[NAME_PLAYER_SIZE], int numberPlayer) { // prend game.joueur1 en parametre (string, donc pointeur)
     char input[NAME_PLAYER_SIZE - 1];
     int i;
 

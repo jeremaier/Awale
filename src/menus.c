@@ -7,11 +7,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL2/SDL_image.h>
 #include <time.h>
-////////////
 #include <string.h>
-////////////
 
 #include "board.h"
 #include "game.h"
@@ -45,21 +42,26 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 	SDL_Event event;
 	SDL_Color whiteColor = {255, 255, 255};
 	TTF_Font* boardFont = NULL;
+	TTF_Font* buttonFont = NULL;
 	SDL_Surface* playerSurface = NULL;
 	SDL_Surface* arrowSurface = NULL;
 	SDL_Surface* g1Surface = NULL;
 	SDL_Surface* g2Surface = NULL;
 	SDL_Surface* messageSurface = NULL;
+	SDL_Surface* winSurface = NULL;
 	SDL_Texture* playerTexture = NULL;
 	SDL_Texture* arrowTexture = NULL;
 	SDL_Texture* g1Texture = NULL;
 	SDL_Texture* g2Texture = NULL;
 	SDL_Texture* messageTexture = NULL;
+	SDL_Texture* winTexture = NULL;
 	SDL_Rect playerRect;
 	SDL_Rect g1Rect;
 	SDL_Rect g2Rect;
+
 	buttonNumber = BUTTON_NUMBER_BOARD;
 	menuNumber = 0;
+	restart = 0;
 	playerRect.x = HINITTEXT;
 	playerRect.y = SCREEN_HEIGHT - 80;
 	g1Rect.x = playerRect.x + HSPACETEXT;
@@ -73,17 +75,9 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 	AllocationClickableList();
 	Clickable overButton = CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 0, BUTTON_TYPE_EMPTY, "");
 	CreateClickableBoard(clickableList, renderer);
-
-	////////////////////////////
-	const char file_list[NAME_FILE_SIZE] = "listGames.txt";
-	struct tm dateCreation = currentTime();
-	loadBlankGame(file_list, &dateCreation);
-	strcpy(game.joueur1 , "PD");
-	strcpy(game.joueur2 , "PD2");
-	////////////////////////////
-
+	CreateNewButton(600, 190, "sprites/restart.png", "sprites/restartOver.png", clickableList, renderer, Restart, 14, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Recommencer");
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
-	RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
+	Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
 
 	while(!quit) {
 		SDL_Delay(10);
@@ -97,28 +91,31 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 				if(currentButton.type != BUTTON_TYPE_EMPTY) {
 					const short action = currentButton.Action(currentButton.data);
 
+					if(action == 0 && menuNumber == 1) {
+						Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
+						SDL_DestroyTexture(winTexture);
+						SDL_FreeSurface(winSurface);
+						TTF_CloseFont(buttonFont);
+					}
+
 					if(!winner && action > 0) {
-						changePlayer();
-						/*
-						 *
-						 * Verifier s'il y a des graines a recup
-						 *
-						 */
-						winner = gameOver();
+						ChangePlayer();
+						//Verifier s'il y a des graines a recup
+						winner = GameOver();
 
 						switch(winner) {
 						case 1:
 							strcat(winText, game.joueur1);
 							strcat(winText, " a gagné");
-							OpenGameOverMenu(renderer, &boardFont, winText, whiteColor);
+							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, winText, whiteColor, &clickableList[14]);
 							break;
 						case 2:
 							strcat(winText, game.joueur2);
 							strcat(winText, " a gagné");
-							OpenGameOverMenu(renderer, &boardFont, winText, whiteColor);
+							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, winText, whiteColor, &clickableList[14]);
 							break;
 						case 3:
-							OpenGameOverMenu(renderer, &boardFont, "Il y a égalité", whiteColor);
+							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, "Il y a égalité", whiteColor, &clickableList[14]);
 							break;
 						default:
 							break;
@@ -147,14 +144,17 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 						over = 1;
 						overButton = currentButton;
 
-						if(overButton.type == BUTTON_TYPE_WITH_SURFACE_OVER)
+						if(overButton.type == BUTTON_TYPE_WITH_SURFACE_OVER || overButton.type == BUTTON_TYPE_WITH_OVER_AND_TEXT)
 							Display(*renderer, overButton.textureOver, overButton.posX, overButton.posY, overButton.sizeX, overButton.sizeY, 0);
 					} else {
 						over = 0;
 
-						if(overButton.type != BUTTON_TYPE_EMPTY)
+						if(overButton.type == BUTTON_TYPE_WITH_SURFACE_OVER || (overButton.type == BUTTON_TYPE_WITH_OVER_AND_TEXT && menuNumber == 1))
 							Display(*renderer, overButton.texture, overButton.posX, overButton.posY, overButton.sizeX, overButton.sizeY, 0);
 					}
+
+					if(strcmp(overButton.text, "") != 0 && menuNumber == 1)
+						Display(*renderer, overButton.textTexture, overButton.textRect.x, overButton.textRect.y, overButton.textRect.w, overButton.textRect.h, 0);
 				}
 
 				break;
@@ -169,47 +169,55 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 	SDL_DestroyTexture(messageTexture);
 	SDL_DestroyTexture(g1Texture);
 	SDL_DestroyTexture(g2Texture);
+	SDL_DestroyTexture(winTexture);
 	SDL_FreeSurface(arrowSurface);
 	SDL_FreeSurface(playerSurface);
 	SDL_FreeSurface(messageSurface);
 	SDL_FreeSurface(g1Surface);
 	SDL_FreeSurface(g2Surface);
+	SDL_FreeSurface(winSurface);
 	TTF_CloseFont(boardFont);
-	freeUpMemoryButton(clickableList);
+	FreeUpMemoryButton(clickableList);
+
+	if(menuNumber == 1)
+		TTF_CloseFont(buttonFont);
 
 	return EXIT_SUCCESS;
 }
 
-void OpenGameOverMenu(SDL_Renderer** renderer, TTF_Font** boardFont, char* winText, SDL_Color color) {
+void OpenGameOverMenu(SDL_Renderer** renderer, SDL_Texture** winTexture, SDL_Surface** winSurface, TTF_Font** boardFont, TTF_Font** buttonFont, char* winText, SDL_Color color, Clickable* restartButton) {
 	const char file_list[NAME_FILE_SIZE] = "listGames.txt";
-	struct tm dateCreation = currentTime();
-	SDL_Surface* winSurface = NULL;
-	SDL_Texture* winTexture = NULL;
-	SDL_Rect winRect;
+	struct tm dateCreation = CurrentTime();
+	SDL_Rect winnerRect;
 
-	winRect.x = 100;
-	winRect.y = 300;
+	menuNumber = 1;
+	winnerRect.x = 100;
+	winnerRect.y = 255;
+	restartButton -> textRect.x = restartButton -> posX + 10;
+	restartButton -> textRect.y = restartButton -> posY + 12;
+	*buttonFont = TTF_OpenFont("calibril.ttf", 30);
 
-	RefreshText(renderer, boardFont, &winRect, &winSurface, &winTexture, winText, color, 1);
-	SDL_RenderCopy(*renderer, winTexture, NULL, &winRect);
-	saveInList(file_list, &dateCreation);
-	/*
-	 * SDL_DestroyTexture(*winTexture);
-	 * SDL_FreeSurface(*winSurface);
-	 */
+    Display(*renderer, clickableList[14].texture, clickableList[14].posX, clickableList[14].posY, clickableList[14].sizeX, clickableList[14].sizeY, 1);
+	RefreshText(renderer, boardFont, &winnerRect, winSurface, winTexture, winText, color, 1);
+	RefreshText(renderer, buttonFont, &(restartButton -> textRect), &(restartButton -> textSurface), &(restartButton -> textTexture), restartButton -> text, color, 0);
+	SDL_RenderCopy(*renderer, *winTexture, NULL, &winnerRect);
+	SDL_RenderCopy(*renderer, restartButton -> textTexture, NULL, &(restartButton -> textRect));
+    SDL_RenderPresent(*renderer);
+	SaveInList(file_list, &dateCreation);
 }
 
 short OpenOptionsMenu(SDL_Renderer** renderer) {
 	buttonNumber = BUTTON_NUMBER_OPTIONS;
-	menuNumber = 1;
+	menuNumber = 2;
 	SDL_Surface* optionsSurface = NULL;
-	SDL_Texture* optionsTexture = NULL;
 	SDL_Surface *pauseText = NULL;
+	SDL_Texture* optionsTexture = NULL;
 	SDL_Color whiteColor = {255, 255, 255};
 	TTF_Font* pauseFont = NULL;
 	SDL_Texture* textTexture;
 	SDL_Rect textRect;
 
+	AllocationClickableList();
 	pauseFont = TTF_OpenFont("calibril.ttf", 72);
 	if(pauseFont == NULL) return SDLError("Can't create police : %s\n");
 
@@ -231,7 +239,7 @@ short OpenOptionsMenu(SDL_Renderer** renderer) {
 	SDL_RenderCopy(*renderer, textTexture, NULL, &textRect);
 	SDL_RenderPresent(*renderer);
 
-	return -1;
+	return 0;
 }
 
 short OpenSaveMenu(SDL_Renderer** renderer) {

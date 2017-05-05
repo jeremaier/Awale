@@ -12,38 +12,38 @@
 /**
  * Efface le contenu du fichier
  */
-void initialize(char*);
+void Initialize(char*);
 
 /**
  * Rajoute une ligne definie a la fin du fichier
  */
-void writeNewLine(char*, char*);
+void WriteNewLine(char*, char*);
 
 /**
  * Ecrit le temps passe a jouer dans le fichier (date de debut stockee dans tpsReference)
  * Si on part d'une partie enregistree, on doit y rajouter le temps deja passe a jouer (additionnal)
  */
-void timeElapsed(FILE*, struct tm*, int[3]);
+void TimeElapsed(FILE*, struct tm*, int[3]);
 
 /**
  * Pour faire un print et non ecrire dans un fichier avec fprintf (redit time_elapsed())
  */
-void timeElapsedToString (struct tm*);
+void TimeElapsedToString (struct tm*);
 
 /**
  * Enregistre dans directory (= save.txt) toutes les donnees relative a une partie
  */
-void save(const char*, Game*, struct tm*);
+void Save(const char*, Game*, struct tm*);
 
 /**
  * Enregistre les resultats d'une partie finie dans listGames.txt (reprise impossible) a la suite des precedentes
  * A appeller des qu'une partie est terminee
  */
-void saveInList(const char*, struct tm*);
+void SaveInList(const char*, struct tm*);
 
 /**
  * Affiche une belle partie en mode console
  */
-void affichage(Game*);
+void DisplayConsole(Game*);
 
 #endif // WRITE_H

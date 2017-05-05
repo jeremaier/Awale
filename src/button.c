@@ -26,7 +26,7 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 		newButton.sizeY = 0;
 	}
 
-	if(buttonType == BUTTON_TYPE_WITH_SURFACE_OVER)
+	if(buttonType == BUTTON_TYPE_WITH_SURFACE_OVER || buttonType == BUTTON_TYPE_WITH_OVER_AND_TEXT)
 		CreateTexture(pathOver, &(newButton.surfaceOver), &(newButton.textureOver), renderer);
 
     newButton.type = buttonType;
@@ -41,9 +41,14 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 }
 
 Clickable IsOverButton(int xMouse, int yMouse, Clickable* clickableList) {
-	short i;
+	short i, first = 0, last;
 
-	for(i = 0; i < buttonNumber; i++) {
+	if(menuNumber == 1)
+		last = buttonNumber - 1;
+	else if(menuNumber == 0)
+		last = buttonNumber - 2;
+
+	for(i = first; i < last; i++) {
 		const Clickable button = clickableList[i + 1];
 		const int isInButtonZone = xMouse >= button.posX && xMouse <= button.posX + button.sizeX && yMouse >= button.posY && yMouse <= button.posY + button.sizeY;
 
@@ -60,7 +65,7 @@ void AllocationClickableList() {
 	else clickableList = (Clickable*) malloc(buttonNumber * sizeof(Clickable));
 }
 
-void freeUpMemoryButton(Clickable* clickableList) {
+void FreeUpMemoryButton(Clickable* clickableList) {
 	short i;
 
 	for(i = 0; i < BUTTON_NUMBER_BOARD; i++) {
@@ -69,9 +74,12 @@ void freeUpMemoryButton(Clickable* clickableList) {
 			SDL_FreeSurface(clickableList[i].surface);
 		}
 
-		if(clickableList[i].type == BUTTON_TYPE_WITH_SURFACE_OVER) {
+		if(clickableList[i].type == BUTTON_TYPE_WITH_SURFACE_OVER || clickableList[i].type == BUTTON_TYPE_WITH_OVER_AND_TEXT) {
 			SDL_DestroyTexture(clickableList[i].textureOver);
 			SDL_FreeSurface(clickableList[i].surfaceOver);
 		}
+
+		if(clickableList[i].type == BUTTON_TYPE_WITH_OVER_AND_TEXT)
+			SDL_DestroyTexture(clickableList[i].textTexture);
 	}
 }

@@ -16,7 +16,7 @@
 #include "read.h"
 #include "tests.h"
 
-void testBoardInit(short matrice[][NB_HOLES]) {
+void TestBoardInit(short matrice[][NB_HOLES]) {
 	printf("=== testBoardInit begin ===\n");
 	short i, j;
 
@@ -30,7 +30,7 @@ void testBoardInit(short matrice[][NB_HOLES]) {
 	printf("=== testBoardInit end ===\n");
 }
 
-void testSave(char* path) {
+void TestSave(char* path) {
     // on recupere la date et l'heure actuelle
     time_t secondes;
     struct tm creationGame;
@@ -38,24 +38,24 @@ void testSave(char* path) {
     creationGame = *localtime(&secondes);
 
     // on cree un nouveau jeu (configurations)
-    Game game = {1, "Olive", "Tom", 5, 3, {{4, 4, 4, 4, 4, 4}, {4, 4, 4, 4, 4, 4}}, &creationGame, 0, {0, 1, 0}};
+    Game game = {1, "Olive", "Tom", {5, 3}, {{4, 4, 4, 4, 4, 4}, {4, 4, 4, 4, 4, 4}}, &creationGame, 0, {0, 1, 0}};
 
     // on fait une pause de 3s
     Sleep(3000);
 
     // on sauvegarde les configurations de la partie dans le chemin specifie
-    save(path, &game, &creationGame);
+    Save(path, &game, &creationGame);
 }
 
-void gameToString(Game* game, struct tm* creation) {
+void GameToString(Game* game, struct tm* creation) {
     short i, j;
 
     printf(" === BEGIN AFFICHAGE GAME ===\n");
     printf(" game number: %d\n", game -> gameNumber);
     printf(" name player1: %s\n", game -> joueur1);
     printf(" name player2: %s\n", game -> joueur2);
-    printf(" gain1: %d\n", game -> gain1);
-    printf(" gain2: %d\n", game -> gain2);
+    printf(" gain1: %d\n", game -> gains[0]);
+    printf(" gain2: %d\n", game -> gains[1]);
     printf(" board configuration:\n");
 
     for (i = 0; i < NB_ROW; i++) {
@@ -71,7 +71,7 @@ void gameToString(Game* game, struct tm* creation) {
     printf(" === END DISPLAY GAME ===\n");
 }
 
-void playNewGame_c() {
+void PlayNewGame() {
     // on recupere les infos temporelles de sa creation
     time_t secondes;
     struct tm creationGame;
@@ -80,22 +80,22 @@ void playNewGame_c() {
 
     // on initialise la struct Game
     char file_list[NAME_FILE_SIZE] = "listGames.txt";
-    loadBlankGame(file_list, &creationGame);
+    LoadBlankGame(file_list, &creationGame);
 
     /** test1, affichage de Game game:*/
-    gameToString(&game, &creationGame);
+    GameToString(&game, &creationGame);
 
     /**test2, sauvegarde dans saved.txt*/
     char file_save[NAME_FILE_SIZE] = "saved.txt";
-    save(file_save, &game, &creationGame);
+    Save(file_save, &game, &creationGame);
 
     /**test3, ecriture dans listGames.txt*/
-    saveInList(file_list, &creationGame);
+    SaveInList(file_list, &creationGame);
 }
 
-void playSavedGame_c() {
+void PlaySavedGame() {
     //on charge les donnees enregistree dans saved.txt
-    loadSavedGame(&game);
+    LoadSavedGame(&game);
 
     time_t secondes;
     struct tm creationGame;
@@ -103,5 +103,5 @@ void playSavedGame_c() {
     creationGame = *localtime(&secondes);
 
     /** test2, affichage de Game game:*/
-    gameToString(&game, &creationGame);
+    GameToString(&game, &creationGame);
 }

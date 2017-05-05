@@ -11,13 +11,13 @@
 /**
  * Demande quel joueur doit commencer (1 ou 2)
  */
-int askCurrent();
+int AskCurrent();
 
 /**
  * Demande le nom du joueur et modifie le nom dans la structure game
  * Ne peut renvoyer directement la chaine de caractere (elle ne serait generee que dans le corps de la fonction
  * et non en dehors. Donc on pourrait renvoyer un pointeur vers cette chaine !
  */
-void askName(char*, int);
+void AskName(char*, int);
 
 #endif // ASK_H

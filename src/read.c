@@ -11,7 +11,7 @@
 
 #include "read.h"
 
-void readlines(char* directory) {
+void ReadLines(char* directory) {
     char line[LINE_SIZE] = "";
     FILE* file = NULL;
 
@@ -26,7 +26,7 @@ void readlines(char* directory) {
     else printf("Impossible de lire le fichier\n");
 }
 
-void read_specific(char* directory, int i) {
+void ReadSpecific(char* directory, int i) {
     char line[LINE_SIZE] = "";
     FILE* file = NULL;
 
@@ -44,7 +44,7 @@ void read_specific(char* directory, int i) {
     else printf("Impossible de lire le fichier\n");
 }
 
-int isEmpty(const char chemin[NAME_FILE_SIZE]) {
+int IsEmpty(const char chemin[NAME_FILE_SIZE]) {
     char line = ' ';
     FILE* file = NULL;
 
@@ -59,7 +59,7 @@ int isEmpty(const char chemin[NAME_FILE_SIZE]) {
     return line == EOF;
 }
 
-void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLAYER_SIZE]) {
+void ReadNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLAYER_SIZE]) {
     char names[2][NAME_FILE_SIZE];
     int i;
 
@@ -77,7 +77,7 @@ void readNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLA
     joueur2[strlen(names[1])] = '\0';
 }
 
-void loadSavedGame(Game *game) {
+void LoadSavedGame(Game *game) {
     char file_saved[NAME_FILE_SIZE] = "saved.txt";
     FILE* file = NULL;
 
@@ -94,14 +94,14 @@ void loadSavedGame(Game *game) {
         game -> gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
 
         // on recupere les noms et on modifie directement la valeur game.joueur1/2
-        readNames(file, game -> joueur1, game -> joueur2);
+        ReadNames(file, game -> joueur1, game -> joueur2);
 
         // on recupere les gains de chaques joueurs
         fscanf(file, "%d %d", &profits[0], &profits[1]);
 
         // et on les stocks dans la structure game
-        game -> gain1 = profits[0];
-        game -> gain2 = profits[1];
+        game -> gains[0] = profits[0];
+        game -> gains[1] = profits[1];
 
         // on recupere le tableau
         int i, j;
@@ -135,7 +135,7 @@ void loadSavedGame(Game *game) {
     else printf("Impossible de lire le fichier\n");
 }
 
-int whichNumber(const char* directory) {
+int WhichNumber(const char* directory) {
     FILE* file = NULL;
     int line;
     int cpt = 1; // si le fichier est vide, aucune partie n'a ete instanciee, on ecrit donc la numero 1

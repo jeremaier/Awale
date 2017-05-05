@@ -13,7 +13,8 @@
 typedef enum ButtonType {
 	BUTTON_TYPE_EMPTY,
 	BUTTON_TYPE_WITH_SURFACE,
-	BUTTON_TYPE_WITH_SURFACE_OVER
+	BUTTON_TYPE_WITH_SURFACE_OVER,
+	BUTTON_TYPE_WITH_OVER_AND_TEXT
 } ButtonType;
 
 typedef struct Clickable {
@@ -21,6 +22,9 @@ typedef struct Clickable {
 	SDL_Texture* texture;
 	SDL_Surface* surfaceOver;
 	SDL_Texture* textureOver;
+	SDL_Surface* textSurface;
+	SDL_Texture* textTexture;
+	SDL_Rect textRect;
 	ButtonType type;
     int posX;
     int posY;
@@ -54,6 +58,6 @@ void AllocationClickableList();
 /**
  * Liberation de l'espace memoire utilise par les images SDL
  */
-void freeUpMemoryButton(Clickable*);
+void FreeUpMemoryButton(Clickable*);
 
 #endif /* SRC_BUTTON_H_ */
