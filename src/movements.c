@@ -11,6 +11,7 @@
 #include "const.h"
 #include "game.h"
 #include "movements.h"
+#include "game.h"
 
 short removeSeeds(const short row, const short hole) {
 	const short seedsNbr = game.board_config[row][hole];
@@ -50,3 +51,28 @@ short distributeSeeds(const short row, const short init) {
 
 	return seedsNbr;
 }
+
+void takeWonSeeds(const short hole) {
+	short row = (game.currentPlayer + 1) % 2;
+
+	short j = hole;
+
+	// On regarde les cases à gauche de celle ou la derniere graine a ete posee
+
+	while(j >=0 && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
+		game.gain[game.currentPlayer] += game.board_config[row][j];
+		game.board_config[row][j] = 0;
+		j--;
+	}
+
+	j = hole + 1;
+
+	// On regarde les cases à gauche de celle ou la derniere graine a ete posee
+
+	while(j <NB_HOLES && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
+		game.gain[game.currentPlayer] += game.board_config[row][j];
+		game.board_config[row][j] = 0;
+		j++;
+	}
+}
+
