@@ -14,14 +14,15 @@
 #include "game.h"
 #include "write.h"
 #include "SDLwindow.h"
+#include "movements.h"
 #include "menus.h"
 
-void CreateButtons(const char* buttonsImg[buttonNumber], const char* buttonsImgOver[buttonNumber], short (*buttonsFonction[buttonNumber])(SDL_Renderer** renderer), Clickable* clickableList, SDL_Renderer** renderer, int horizontalSpace, int verticalSpace, int xFirstPos, int yFirstPos, ButtonType buttonType, char* text) {
+void CreateButtons(const char* buttonsImg[buttonNumber], const char* buttonsImgOver[buttonNumber], short (*buttonsFonction[buttonNumber])(SDL_Renderer** renderer), Clickable* clickableList, SDL_Renderer** renderer, int horizontalSpace, int verticalSpace, int xFirstPos, int yFirstPos, ButtonType buttonType, const char* buttonsText[buttonNumber]) {
 	short i;
 	//AllocationClickableList();
 
 	for(i = 0; i < buttonNumber; i++)
-		CreateNewButton(xFirstPos + horizontalSpace * i, yFirstPos + verticalSpace * i, buttonsImg[i], buttonsImgOver[i], clickableList, renderer, buttonsFonction[i], i + 1, buttonType, text);
+		CreateNewButton(xFirstPos + horizontalSpace * i, yFirstPos + verticalSpace * i, buttonsImg[i], buttonsImgOver[i], clickableList, renderer, buttonsFonction[i], i + 1, buttonType, buttonsText[i]);
 
 }
 
@@ -100,8 +101,9 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 					}
 
 					if(!winner && action > 0) {
-						ChangePlayer();
+						SDL_Delay(1000);
 						TakeWonSeeds(action);
+						ChangePlayer();
 						winner = GameOver();
 
 						switch(winner) {
@@ -226,11 +228,11 @@ short OpenOptionsMenu(SDL_Renderer** renderer) {
 
 	const char *buttonsImg[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/save.png", "sprites/save.png"};
 	const char *buttonsImgOver[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/save.png", "sprites/save.png"};
-	const char *buttonsText[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/save.png", "sprites/save.png"};
+	const char *buttonsText[BUTTON_NUMBER_OPTIONS] = {"Save", "Load", "Score"};
 	short (*buttonsFonction[BUTTON_NUMBER_OPTIONS])(SDL_Renderer** renderer) = {OpenSaveMenu, OpenLoadMenu, OpenScoreMenu};
 
-	CreateButtons(buttonsImg, buttonsImgOver, buttonsFonction, clickableList, renderer, 300, 0, 250, 50, BUTTON_TYPE_WITH_SURFACE_OVER, "");
-	/*CreateTexture("sprites/backOptions.png", &optionsSurface, &optionsTexture, renderer);
+	CreateButtons(buttonsImg, buttonsImgOver, buttonsFonction, clickableList, renderer, 300, 0, 250, 50, BUTTON_TYPE_WITH_SURFACE_OVER, buttonsText);
+	CreateTexture("sprites/backOptions.png", &optionsSurface, &optionsTexture, renderer);
 	SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 	textRect.x = SCREEN_WIDTH / 2 - textRect.w / 2;
 	textRect.y = 180;
@@ -238,7 +240,7 @@ short OpenOptionsMenu(SDL_Renderer** renderer) {
 	Display(*renderer, optionsTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
 	DisplayButtons(renderer, clickableList, buttonNumber);
 	SDL_RenderCopy(*renderer, textTexture, NULL, &textRect);
-	SDL_RenderPresent(*renderer);*/
+	SDL_RenderPresent(*renderer);
 
 	return 0;
 }

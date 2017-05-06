@@ -14,7 +14,7 @@
 #include "const.h"
 #include "button.h"
 
-Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, short (*action)(SDL_Renderer**), short index, ButtonType buttonType, char* text) {
+Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, short (*action)(SDL_Renderer**), short index, ButtonType buttonType, const char* text) {
 	Clickable newButton;
 
 	if(buttonType != BUTTON_TYPE_EMPTY) {

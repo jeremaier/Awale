@@ -30,6 +30,8 @@ short DistributeSeeds(const short row, const short init) {
 	short i = init;
 	short cpt;
 
+	initHole = init;
+
 	for(cpt = 0; cpt < seedsNbr; cpt++) {
 		short endLine = NB_HOLES - i;
 
@@ -48,12 +50,15 @@ short DistributeSeeds(const short row, const short init) {
 		else seedsNbr++;
 	}
 
+	if(seedsNbr > 11)
+		return seedsNbr--;
+
 	return seedsNbr;
 }
 
-void TakeWonSeeds(const short hole) {
+void TakeWonSeeds(const short initSeedsNbr) {
 	const short row = (game.currentPlayer + 1) % 2;
-	short j = hole;
+	short j = initHole;
 
 	// On regarde les cases a gauche de celle ou la derniere graine a ete posee
 	while(j >= 0 && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
@@ -62,7 +67,7 @@ void TakeWonSeeds(const short hole) {
 		j--;
 	}
 
-	j = hole + 1;
+	j = initHole + 1;
 
 	// On regarde les cases a gauche de celle ou la derniere graine a ete posee
 	while(j < NB_HOLES && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){

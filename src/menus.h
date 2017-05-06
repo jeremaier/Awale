@@ -20,7 +20,7 @@ short menuNumber, buttonNumber, restart;
 /**
  * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
  */
-void CreateButtons(const char*[buttonNumber], const char*[buttonNumber], short (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, int, int, int, int, ButtonType, char*);
+void CreateButtons(const char*[buttonNumber], const char*[buttonNumber], short (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, int, int, int, int, ButtonType, const char*[buttonNumber]);
 
 /**
  * Affiche une liste de boutons en fonction des espaces entre eux

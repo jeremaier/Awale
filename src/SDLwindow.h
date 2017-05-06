@@ -36,7 +36,7 @@ void BoardDiplayed(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface*
 /**
  * Rafraichi un texte
  */
-void RefreshText(SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Surface**, SDL_Texture**, char* text, SDL_Color, short);
+void RefreshText(SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Surface**, SDL_Texture**, const char* text, SDL_Color, short);
 
 /**
  * Rafraichi l'ensemble du plateau

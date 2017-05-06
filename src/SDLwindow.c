@@ -66,7 +66,7 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
     SDL_RenderPresent(*renderer);
 }
 
-void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** textSurface, SDL_Texture** textTexture, char* text, SDL_Color color, short center) {
+void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** textSurface, SDL_Texture** textTexture, const char* text, SDL_Color color, short center) {
 	if(textTexture != NULL)
 		SDL_DestroyTexture(*textTexture);
 
