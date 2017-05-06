@@ -36,8 +36,28 @@ void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, 
 void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** arrowSurface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, SDL_Color color) {
 	short i = 0;
 
-    Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
-    Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY, 1);
+	if(menuNumber != 2)
+	    Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
+
+	if(menuNumber == 0) {
+		Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY, 1);
+
+	    for(i = 0; i < NB_HOLES * NB_ROW; i++) {
+		    Display(*renderer, clickableList[i + 1].texture, clickableList[i + 1].posX, clickableList[i + 1].posY, clickableList[i + 1].sizeX, clickableList[i + 1].sizeY, 1);
+
+		    char seedNumber[3];
+			SDL_Surface* seedSurface = NULL;
+		    SDL_Texture* seedTexture = NULL;
+		    SDL_Rect seedRect;
+
+		    sprintf(seedNumber, "%d", game.board_config[i / NB_HOLES][(i - (i / NB_HOLES) * NB_HOLES)]);
+		    RefreshText(renderer, boardFont, &seedRect, &seedSurface, &seedTexture, seedNumber, color, 0);
+		    seedRect.x = clickableList[i + 1].posX + clickableList[i + 1].sizeX / 2 - seedRect.w / 2;
+		    seedRect.y = clickableList[i + 1].posY + clickableList[i + 1].sizeY / 2 - seedRect.h / 2;
+
+		    SDL_RenderCopy(*renderer, seedTexture, NULL, &seedRect);
+	    }
+	} else Display(*renderer, clickableList[4].texture, clickableList[4].posX, clickableList[4].posY, clickableList[4].sizeX, clickableList[4].sizeY, 1);
 
     if(!game.currentPlayer)
     	Display(*renderer, *arrowTexture, 15, clickableList[1].posY + clickableList[1].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
@@ -46,22 +66,6 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
     SDL_RenderCopy(*renderer, *playerTexture, NULL, playerRect);
     SDL_RenderCopy(*renderer, *g1Texture, NULL, g1Rect);
     SDL_RenderCopy(*renderer, *g2Texture, NULL, g2Rect);
-
-    for(i = 0; i < NB_HOLES * NB_ROW; i++) {
-	    Display(*renderer, clickableList[i + 1].texture, clickableList[i + 1].posX, clickableList[i + 1].posY, clickableList[i + 1].sizeX, clickableList[i + 1].sizeY, 1);
-
-	    char seedNumber[3];
-		SDL_Surface* seedSurface = NULL;
-	    SDL_Texture* seedTexture = NULL;
-	    SDL_Rect seedRect;
-
-	    sprintf(seedNumber, "%d", game.board_config[i / NB_HOLES][(i - (i / NB_HOLES) * NB_HOLES)]);
-	    RefreshText(renderer, boardFont, &seedRect, &seedSurface, &seedTexture, seedNumber, color, 0);
-	    seedRect.x = clickableList[i + 1].posX + clickableList[i + 1].sizeX / 2 - seedRect.w / 2;
-	    seedRect.y = clickableList[i + 1].posY + clickableList[i + 1].sizeY / 2 - seedRect.h / 2;
-
-	    SDL_RenderCopy(*renderer, seedTexture, NULL, &seedRect);
-    }
 
     SDL_RenderPresent(*renderer);
 }

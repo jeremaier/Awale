@@ -23,7 +23,6 @@ void CreateButtons(const char* buttonsImg[buttonNumber], const char* buttonsImgO
 
 	for(i = 0; i < buttonNumber; i++)
 		CreateNewButton(xFirstPos + horizontalSpace * i, yFirstPos + verticalSpace * i, buttonsImg[i], buttonsImgOver[i], clickableList, renderer, buttonsFonction[i], i + 1, buttonType, buttonsText[i]);
-
 }
 
 void DisplayButtons(SDL_Renderer** renderer, Clickable* clickableList, short len) {
@@ -101,7 +100,6 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 					}
 
 					if(!winner && action > 0) {
-						SDL_Delay(1000);
 						TakeWonSeeds(action);
 						ChangePlayer();
 						winner = GameOver();
@@ -226,12 +224,13 @@ short OpenOptionsMenu(SDL_Renderer** renderer) {
 	pauseText = TTF_RenderText_Blended(pauseFont, "Pause", whiteColor);
 	textTexture = SDL_CreateTextureFromSurface(*renderer, pauseText);
 
-	const char *buttonsImg[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/save.png", "sprites/save.png"};
-	const char *buttonsImgOver[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/save.png", "sprites/save.png"};
+	const char *buttonsImg[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/load.png", "sprites/score.png"};
+	const char *buttonsImgOver[BUTTON_NUMBER_OPTIONS] = {"sprites/saveOver.png", "sprites/loadOver.png", "sprites/scoreOver.png"};
 	const char *buttonsText[BUTTON_NUMBER_OPTIONS] = {"Save", "Load", "Score"};
 	short (*buttonsFonction[BUTTON_NUMBER_OPTIONS])(SDL_Renderer** renderer) = {OpenSaveMenu, OpenLoadMenu, OpenScoreMenu};
 
-	CreateButtons(buttonsImg, buttonsImgOver, buttonsFonction, clickableList, renderer, 300, 0, 250, 50, BUTTON_TYPE_WITH_SURFACE_OVER, buttonsText);
+	CreateButtons(buttonsImg, buttonsImgOver, buttonsFonction, clickableList, renderer, 300, 0, 250, 50, BUTTON_TYPE_WITH_OVER_AND_TEXT, buttonsText);
+	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", "sprites/optionsOver.png", clickableList, renderer, NULL, 4, BUTTON_TYPE_WITH_SURFACE_OVER, "");
 	CreateTexture("sprites/backOptions.png", &optionsSurface, &optionsTexture, renderer);
 	SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 	textRect.x = SCREEN_WIDTH / 2 - textRect.w / 2;

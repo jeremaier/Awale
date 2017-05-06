@@ -28,7 +28,7 @@ void CreateClickableBoard(Clickable* clickableList, SDL_Renderer** renderer) {
 	short (*buttonFunction[NB_ROW * NB_HOLES])(SDL_Renderer** renderer) = {Button11, Button12, Button13, Button14, Button15, Button16, Button21, Button22, Button23, Button24, Button25, Button26};
 
 	for(i = 0; i < NB_ROW * NB_HOLES; i++)
-		CreateNewButton(HINIT + HSPACE * (i - (i / NB_HOLES) * NB_HOLES), VINIT + (i / NB_HOLES) * VSPACE, "sprites/hole3.png", "", clickableList, renderer, buttonFunction[i], i + 1, BUTTON_TYPE_WITH_SURFACE, "0");
+		CreateNewButton(HINIT + HSPACE * (i - (i / NB_HOLES) * NB_HOLES), VINIT + (i / NB_HOLES) * VSPACE, "sprites/hole.png", "", clickableList, renderer, buttonFunction[i], i + 1, BUTTON_TYPE_WITH_SURFACE, "0");
 
 	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", "sprites/optionsOver.png", clickableList, renderer, OpenOptionsMenu, 13, BUTTON_TYPE_WITH_SURFACE_OVER, "");
 }
