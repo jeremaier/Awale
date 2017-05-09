@@ -30,8 +30,6 @@ short DistributeSeeds(const short row, const short init) {
 	short i = init;
 	short cpt;
 
-	initHole = init;
-
 	for(cpt = 0; cpt < seedsNbr; cpt++) {
 		short endLine = NB_HOLES - i;
 
@@ -48,7 +46,15 @@ short DistributeSeeds(const short row, const short init) {
 		if(cpt != 11)
 			game.board_config[tmpRow][i]++;
 		else seedsNbr++;
+
+
 	}
+
+	endHole = i;
+
+	if(game.currentPlayer != tmpRow)
+		inOpponentRow = 0;
+	else inOpponentRow = 1;
 
 	if(seedsNbr > 11)
 		return seedsNbr--;

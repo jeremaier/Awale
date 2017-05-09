@@ -8,7 +8,8 @@
 #ifndef SRC_MOVEMENTS_H_
 #define SRC_MOVEMENTS_H_
 
-short initHole;
+short inOpponentRow;
+short endHole;
 
 /**
  * Supprime les graines du trou selectionné et retourne le même nombre de graines
