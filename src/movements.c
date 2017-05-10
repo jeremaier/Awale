@@ -64,22 +64,24 @@ short DistributeSeeds(const short row, const short init) {
 
 void TakeWonSeeds(const short initSeedsNbr) {
 	const short row = (game.currentPlayer + 1) % 2;
-	short j = initHole;
+	short j = endHole;
 
-	// On regarde les cases a gauche de celle ou la derniere graine a ete posee
-	while(j >= 0 && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
-		game.gains[game.currentPlayer] += game.board_config[row][j];
-		game.board_config[row][j] = 0;
-		j--;
-	}
-
-	j = initHole + 1;
-
-	// On regarde les cases a gauche de celle ou la derniere graine a ete posee
-	while(j < NB_HOLES && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
-		game.gains[game.currentPlayer] += game.board_config[row][j];
-		game.board_config[row][j] = 0;
-		j++;
+	if(inOpponentRow){
+		if (row){
+			// Joueur du bas : on regarde les cases a gauche de celle ou la derniere graine a ete posee
+			while(j >= 0 && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
+				game.gains[game.currentPlayer] += game.board_config[row][j];
+				game.board_config[row][j] = 0;
+				j--;
+			}
+		} else {
+			// joueur a droite : on regarde les cases a gauche de celle ou la derniere graine a ete posee
+			while(j < NB_HOLES && (game.board_config[row][j] == 2 || game.board_config[row][j] == 3)){
+				game.gains[game.currentPlayer] += game.board_config[row][j];
+				game.board_config[row][j] = 0;
+				j++;
+			}
+		}
 	}
 }
 
