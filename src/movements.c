@@ -24,42 +24,54 @@ short RemoveSeeds(const short row, const short hole) {
 	return seedsNbr;
 }
 
+short isFeeding(const short row, const short init){
+	short nbSeeds;
+	nbSeeds = game.board_config[row][init];
+	if(row == 0 && (init < nbSeeds)) return 1;
+	else if (row == 1 && (NB_HOLES - init <= nbSeeds)) return 1;
+	else return 0;
+}
+
 short DistributeSeeds(const short row, const short init) {
-	short seedsNbr = RemoveSeeds(row, init);
-	short tmpRow = row;
-	short i = init;
-	short cpt;
 
-	for(cpt = 0; cpt < seedsNbr; cpt++) {
-		short endLine = NB_HOLES - i;
+	if(isFeeding(row, init)){
+		short seedsNbr = RemoveSeeds(row, init);
+		short tmpRow = row;
+		short i = init;
+		short cpt;
 
-		if(tmpRow == 0) {
-			if(endLine >= 6)
-				tmpRow = 1;
-			else i--;
-		} else {
-			if(endLine <= 1)
-				tmpRow = 0;
-			else i++;
+		for(cpt = 0; cpt < seedsNbr; cpt++) {
+			short endLine = NB_HOLES - i;
+
+			if(tmpRow == 0) {
+				if(endLine >= 6)
+					tmpRow = 1;
+				else i--;
+			} else {
+				if(endLine <= 1)
+					tmpRow = 0;
+				else i++;
+			}
+
+			if(cpt != 11)
+				game.board_config[tmpRow][i]++;
+			else seedsNbr++;
+
+
 		}
 
-		if(cpt != 11)
-			game.board_config[tmpRow][i]++;
-		else seedsNbr++;
+		endHole = i;
 
+		if(game.currentPlayer != tmpRow)
+			inOpponentRow = 0;
+		else inOpponentRow = 1;
 
+		if(seedsNbr > 11)
+			return seedsNbr--;
+
+		return seedsNbr;
 	}
-
-	endHole = i;
-
-	if(game.currentPlayer != tmpRow)
-		inOpponentRow = 0;
-	else inOpponentRow = 1;
-
-	if(seedsNbr > 11)
-		return seedsNbr--;
-
-	return seedsNbr;
+	else return 0;
 }
 
 void TakeWonSeeds(const short initSeedsNbr) {
