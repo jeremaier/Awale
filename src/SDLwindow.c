@@ -118,6 +118,7 @@ void PrintTempMessage(SDL_Renderer** renderer, SDL_Texture** messageTexture, SDL
 
 	RefreshText(renderer, boardFont, &messageRect, messageSurface, messageTexture, messageText, color, 1);
     SDL_RenderCopy(*renderer, *messageTexture, NULL, &messageRect);
+    SDL_RenderPresent(*renderer);
 }
 
 int LaunchSDL() {
@@ -142,7 +143,7 @@ int LaunchSDL() {
     CreateTexture("sprites/back.png", &fontSurface, &fontTexture, &renderer);
     if(fontSurface == NULL || fontTexture == NULL) return SDLError("Can't create surface or texture : %s\n");
 
-    LaunchWindow(&window, &renderer, &fontTexture);
+    OpenBoardMenu(&window, &renderer, &fontTexture);
 
     SDL_DestroyTexture(fontTexture);
     SDL_FreeSurface(fontSurface);

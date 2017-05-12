@@ -68,7 +68,7 @@ void PlayConsole();
 /**
  * Initialisation ou reinitialisation de l'ensemble du jeu pour permettre de rejouer une partie
  */
-void Start(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, SDL_Color);
+void Start(SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, SDL_Color, short*);
 
 /**
  * Signifie au jeu que le bouton "recommencer" a été appuyé

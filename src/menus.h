@@ -30,7 +30,7 @@ void DisplayButtons(SDL_Renderer**, Clickable*, short);
 /**
  * Lancement de la fenêtre de jeu et son affichage
  */
-int LaunchWindow(SDL_Window**, SDL_Renderer**, SDL_Texture**);
+int OpenBoardMenu(SDL_Window**, SDL_Renderer**, SDL_Texture**);
 
 /**
  * Affiche le gagnant s'il y en a un

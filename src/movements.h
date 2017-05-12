@@ -12,6 +12,11 @@ short inOpponentRow;
 short endHole;
 
 /**
+ * Verifie si on donne des graines a l'adversaire de facon a ce que la partie continue
+ */
+short isFeeding(const short, const short, const short);
+
+/**
  * Supprime les graines du trou selectionné et retourne le même nombre de graines
  */
 short RemoveSeeds(const short, const short);

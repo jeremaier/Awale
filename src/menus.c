@@ -36,7 +36,7 @@ void DisplayButtons(SDL_Renderer** renderer, Clickable* clickableList, short len
 	}
 }
 
-int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture) {
+int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture) {
 	short quit = 0, xMouse = 0, yMouse = 0, over = 0, winner = 0;
 	char winText[10 + NAME_PLAYER_SIZE] = {"Le joueur "};
 	Clickable currentButton;
@@ -76,9 +76,9 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 	AllocationClickableList();
 	Clickable overButton = CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 0, BUTTON_TYPE_EMPTY, "");
 	CreateClickableBoard(clickableList, renderer);
-	CreateNewButton(600, 190, "sprites/restart.png", "sprites/restartOver.png", clickableList, renderer, Restart, 14, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Recommencer");
+	CreateNewButton(610, 190, "sprites/restart.png", "sprites/restartOver.png", clickableList, renderer, Restart, 14, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Recommencer");
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
-	Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
+	Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor, &winner);
 
 	while(!quit) {
 		SDL_Delay(10);
@@ -93,7 +93,7 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 					const short action = currentButton.Action(currentButton.data);
 
 					if(action == 0 && menuNumber == 1) {
-						Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
+						Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor, &winner);
 						SDL_DestroyTexture(winTexture);
 						SDL_FreeSurface(winSurface);
 						TTF_CloseFont(buttonFont);
@@ -105,17 +105,18 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 						winner = GameOver();
 
 						switch(winner) {
-						case 1:
-							strcat(winText, game.joueur1);
+						case 1: case 2:
+							if(winner == 1)
+								strcat(winText, game.joueur1);
+							else strcat(winText, game.joueur2);
+
 							strcat(winText, " a gagné");
+							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
 							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, winText, whiteColor, &clickableList[14]);
 							break;
-						case 2:
-							strcat(winText, game.joueur2);
-							strcat(winText, " a gagné");
-							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, winText, whiteColor, &clickableList[14]);
-							break;
+
 						case 3:
+							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
 							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, "Il y a égalité", whiteColor, &clickableList[14]);
 							break;
 						default:
@@ -123,14 +124,24 @@ int LaunchWindow(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fon
 						}
 					}
 
-					RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
+					if(menuNumber != 1)
+						RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
 
-					if(action == -2 || action == -1) {
-						if(action == -2)
-							PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Mauvaise ligne", whiteColor);
-						else PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Pas de graines à deplacer", whiteColor);
+					switch(action) {
+					case -3:
+						PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Mauvaise ligne", whiteColor);
+						break;
 
-						SDL_RenderPresent(*renderer);
+					case -2:
+						PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Pas de graines à deplacer", whiteColor);
+						break;
+
+					case -1:
+						PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Il faut nourrir l'adversaire", whiteColor);
+						break;
+
+					default:
+						break;
 					}
 				}
 
@@ -192,18 +203,17 @@ void OpenGameOverMenu(SDL_Renderer** renderer, SDL_Texture** winTexture, SDL_Sur
 	SDL_Rect winnerRect;
 
 	menuNumber = 1;
-	winnerRect.x = 100;
-	winnerRect.y = 255;
+	winnerRect.y = 140;
 	restartButton -> textRect.x = restartButton -> posX + 10;
 	restartButton -> textRect.y = restartButton -> posY + 12;
 	*buttonFont = TTF_OpenFont("calibril.ttf", 30);
 
-    Display(*renderer, clickableList[14].texture, clickableList[14].posX, clickableList[14].posY, clickableList[14].sizeX, clickableList[14].sizeY, 1);
+	Display(*renderer, clickableList[14].texture, clickableList[14].posX, clickableList[14].posY, clickableList[14].sizeX, clickableList[14].sizeY, 1);
 	RefreshText(renderer, boardFont, &winnerRect, winSurface, winTexture, winText, color, 1);
 	RefreshText(renderer, buttonFont, &(restartButton -> textRect), &(restartButton -> textSurface), &(restartButton -> textTexture), restartButton -> text, color, 0);
 	SDL_RenderCopy(*renderer, *winTexture, NULL, &winnerRect);
 	SDL_RenderCopy(*renderer, restartButton -> textTexture, NULL, &(restartButton -> textRect));
-    SDL_RenderPresent(*renderer);
+	SDL_RenderPresent(*renderer);
 	SaveInList(file_list, &dateCreation);
 }
 
