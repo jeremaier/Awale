@@ -36,13 +36,22 @@ void DisplayButtons(SDL_Renderer** renderer, Clickable* clickableList, short len
 	}
 }
 
-int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture) {
+Clickable CreateBoardButtons(SDL_Renderer** renderer) {
+	buttonNumber = BUTTON_NUMBER_BOARD;
+	menuNumber = 0;
+	AllocationClickableList();
+	CreateClickableBoard(clickableList, renderer);
+	CreateNewButton(610, 190, "sprites/restart.png", "sprites/restartOver.png", clickableList, renderer, Restart, 14, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Recommencer");
+
+	return CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 0, BUTTON_TYPE_EMPTY, "");
+}
+
+int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture, TTF_Font** boardFont, char* gamer1, char* gamer2) {
 	short quit = 0, xMouse = 0, yMouse = 0, over = 0, winner = 0;
 	char winText[10 + NAME_PLAYER_SIZE] = {"Le joueur "};
 	Clickable currentButton;
 	SDL_Event event;
 	SDL_Color whiteColor = {255, 255, 255};
-	TTF_Font* boardFont = NULL;
 	TTF_Font* buttonFont = NULL;
 	SDL_Surface* playerSurface = NULL;
 	SDL_Surface* arrowSurface = NULL;
@@ -60,8 +69,6 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 	SDL_Rect g1Rect;
 	SDL_Rect g2Rect;
 
-	buttonNumber = BUTTON_NUMBER_BOARD;
-	menuNumber = 0;
 	restart = 0;
 	playerRect.x = HINITTEXT;
 	playerRect.y = SCREEN_HEIGHT - 80;
@@ -69,16 +76,11 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 	g1Rect.y = playerRect.y;
 	g2Rect.x = playerRect.x + 2 * HSPACETEXT;
 	g2Rect.y = playerRect.y;
+	Clickable overButton = CreateBoardButtons(renderer);
 
-	boardFont = TTF_OpenFont("calibril.ttf", 30);
-	if(boardFont == NULL) return SDLError("Can't create police : %s\n");
-
-	AllocationClickableList();
-	Clickable overButton = CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 0, BUTTON_TYPE_EMPTY, "");
-	CreateClickableBoard(clickableList, renderer);
-	CreateNewButton(610, 190, "sprites/restart.png", "sprites/restartOver.png", clickableList, renderer, Restart, 14, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Recommencer");
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
-	Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor, &winner);
+	InitializeGame(window, renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor, gamer1, gamer2, &winner);
+	RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
 
 	while(!quit) {
 		SDL_Delay(10);
@@ -92,11 +94,19 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 				if(currentButton.type != BUTTON_TYPE_EMPTY) {
 					const short action = currentButton.Action(currentButton.data);
 
-					if(action == 0 && menuNumber == 1) {
-						Start(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor, &winner);
-						SDL_DestroyTexture(winTexture);
-						SDL_FreeSurface(winSurface);
-						TTF_CloseFont(buttonFont);
+					if(action == 0) {
+						if(menuNumber == 1) {
+							InitializeGame(window, renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor, gamer1, gamer2, &winner);
+							SDL_DestroyTexture(winTexture);
+							SDL_FreeSurface(winSurface);
+							TTF_CloseFont(buttonFont);
+							restart = 1;
+							quit = 1;
+						} else {
+							menuNumber = 0;
+							CreateBoardButtons(renderer);
+							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
+						}
 					}
 
 					if(!winner && action > 0) {
@@ -111,13 +121,13 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 							else strcat(winText, game.joueur2);
 
 							strcat(winText, " a gagné");
-							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
-							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, winText, whiteColor, &clickableList[14]);
+							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
+							OpenGameOverMenu(renderer, &winTexture, &winSurface, boardFont, &buttonFont, winText, whiteColor, &clickableList[14]);
 							break;
 
 						case 3:
-							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
-							OpenGameOverMenu(renderer, &winTexture, &winSurface, &boardFont, &buttonFont, "Il y a égalité", whiteColor, &clickableList[14]);
+							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
+							OpenGameOverMenu(renderer, &winTexture, &winSurface, boardFont, &buttonFont, "Il y a égalité", whiteColor, &clickableList[14]);
 							break;
 						default:
 							break;
@@ -125,19 +135,19 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 					}
 
 					if(menuNumber != 1)
-						RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, &boardFont, whiteColor);
+						RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
 
 					switch(action) {
 					case -3:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Mauvaise ligne", whiteColor);
+						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "Mauvaise ligne", whiteColor);
 						break;
 
 					case -2:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Pas de graines à deplacer", whiteColor);
+						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "Pas de graines à deplacer", whiteColor);
 						break;
 
 					case -1:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, &boardFont, "Il faut nourrir l'adversaire", whiteColor);
+						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "Il faut nourrir l'adversaire", whiteColor);
 						break;
 
 					default:
@@ -188,11 +198,17 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 	SDL_FreeSurface(g1Surface);
 	SDL_FreeSurface(g2Surface);
 	SDL_FreeSurface(winSurface);
-	TTF_CloseFont(boardFont);
 	FreeUpMemoryButton(clickableList);
 
 	if(menuNumber == 1)
 		TTF_CloseFont(buttonFont);
+
+	if(restart) {
+		restart = 0;
+		OpenNameSelectionMenu(window, renderer, fontTexture, boardFont);
+	}
+
+	TTF_CloseFont(*boardFont);
 
 	return EXIT_SUCCESS;
 }
@@ -221,7 +237,7 @@ short OpenOptionsMenu(SDL_Renderer** renderer) {
 	buttonNumber = BUTTON_NUMBER_OPTIONS;
 	menuNumber = 2;
 	SDL_Surface* optionsSurface = NULL;
-	SDL_Surface *pauseText = NULL;
+	SDL_Surface* pauseText = NULL;
 	SDL_Texture* optionsTexture = NULL;
 	SDL_Color whiteColor = {255, 255, 255};
 	TTF_Font* pauseFont = NULL;
@@ -234,13 +250,13 @@ short OpenOptionsMenu(SDL_Renderer** renderer) {
 	pauseText = TTF_RenderText_Blended(pauseFont, "Pause", whiteColor);
 	textTexture = SDL_CreateTextureFromSurface(*renderer, pauseText);
 
-	const char *buttonsImg[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/load.png", "sprites/score.png"};
-	const char *buttonsImgOver[BUTTON_NUMBER_OPTIONS] = {"sprites/saveOver.png", "sprites/loadOver.png", "sprites/scoreOver.png"};
-	const char *buttonsText[BUTTON_NUMBER_OPTIONS] = {"Save", "Load", "Score"};
-	short (*buttonsFonction[BUTTON_NUMBER_OPTIONS])(SDL_Renderer** renderer) = {OpenSaveMenu, OpenLoadMenu, OpenScoreMenu};
+	const char *buttonsImg[BUTTON_NUMBER_OPTIONS] = {"sprites/save.png", "sprites/load.png"};
+	const char *buttonsImgOver[BUTTON_NUMBER_OPTIONS] = {"sprites/saveOver.png", "sprites/loadOver.png"};
+	const char *buttonsText[BUTTON_NUMBER_OPTIONS] = {"Save", "Load"};
+	short (*buttonsFonction[BUTTON_NUMBER_OPTIONS])(SDL_Renderer** renderer) = {OpenSaveMenu, OpenLoadMenu};
 
 	CreateButtons(buttonsImg, buttonsImgOver, buttonsFonction, clickableList, renderer, 300, 0, 250, 50, BUTTON_TYPE_WITH_OVER_AND_TEXT, buttonsText);
-	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", "sprites/optionsOver.png", clickableList, renderer, NULL, 4, BUTTON_TYPE_WITH_SURFACE_OVER, "");
+	CreateNewButton(SCREEN_WIDTH - 5, 5, "sprites/options.png", "sprites/optionsOver.png", clickableList, renderer, Restart, 3, BUTTON_TYPE_WITH_SURFACE_OVER, "");
 	CreateTexture("sprites/backOptions.png", &optionsSurface, &optionsTexture, renderer);
 	SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 	textRect.x = SCREEN_WIDTH / 2 - textRect.w / 2;
@@ -262,6 +278,127 @@ short OpenLoadMenu(SDL_Renderer** renderer) {
 	return 0;
 }
 
-short OpenScoreMenu(SDL_Renderer** renderer) {
-	return 0;
+void RefreshNameSelection(char* name, short gamer, SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* name1Rect, SDL_Rect* name2Rect, SDL_Rect* gamer1Rect, SDL_Rect* gamer2Rect, SDL_Texture** arrowTexture, SDL_Texture** name1Texture, SDL_Texture** name2Texture, SDL_Texture** gamer1Texture, SDL_Texture** gamer2Texture, SDL_Texture** fontTexture, SDL_Surface** arrowSurface, SDL_Surface** nameSurface, SDL_Color color, short* SDLQuit) {
+	if(gamer == 1)
+		RefreshText(renderer, boardFont, name1Rect, nameSurface, name1Texture, name, color, 0);
+	else RefreshText(renderer, boardFont, name2Rect, nameSurface, name2Texture, name, color, 0);
+
+	Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
+	SDL_RenderCopy(*renderer, *gamer1Texture, NULL, gamer1Rect);
+	SDL_RenderCopy(*renderer, *gamer2Texture, NULL, gamer2Rect);
+	SDL_RenderCopy(*renderer, *name1Texture, NULL, name1Rect);
+	SDL_RenderCopy(*renderer, *name2Texture, NULL, name2Rect);
+
+    if(gamer == 1)
+    	Display(*renderer, *arrowTexture, 200, gamer1Rect -> y + gamer1Rect -> h / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
+    else Display(*renderer, *arrowTexture, 200, gamer2Rect -> y + gamer2Rect -> h / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
+
+	SDL_RenderPresent(*renderer);
+}
+
+short OpenNameSelectionMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture, TTF_Font** boardFont) {
+	SDL_Surface* gamer1Surface = NULL;
+	SDL_Surface* gamer2Surface = NULL;
+	SDL_Surface* arrowSurface = NULL;
+	SDL_Texture* gamer1Texture = NULL;
+	SDL_Texture* gamer2Texture = NULL;
+	SDL_Texture* name1Texture = NULL;
+	SDL_Texture* name2Texture = NULL;
+	SDL_Texture* arrowTexture = NULL;
+	SDL_Rect gamer1Rect;
+	SDL_Rect gamer2Rect;
+	SDL_Rect name1Rect;
+	SDL_Rect name2Rect;
+	SDL_Color whiteColor = {255, 255, 255};
+	char* gamer1Text = {"Joueur 1 : "};
+	char* gamer2Text = {"Joueur 2 : "};
+	char* gamer1;
+	char* gamer2;
+	short SDLQuit = 0;
+
+	gamer1Rect.x = 300;
+	gamer2Rect.x = 300;
+	name1Rect.x = gamer1Rect.x + 130;
+	name2Rect.x = gamer2Rect.x + 130;
+	gamer1Rect.y = SCREEN_HEIGHT / 2 - 50;
+	gamer2Rect.y = SCREEN_HEIGHT / 2 + 20;
+	name1Rect.y = gamer1Rect.y;
+	name2Rect.y = gamer2Rect.y;
+
+	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
+	RefreshText(renderer, boardFont, &gamer1Rect, &gamer1Surface, &gamer1Texture, gamer1Text, whiteColor, 0);
+	RefreshText(renderer, boardFont, &gamer2Rect, &gamer2Surface, &gamer2Texture, gamer2Text, whiteColor, 0);
+	SDL_RenderCopy(*renderer, gamer1Texture, NULL, &gamer1Rect);
+	SDL_RenderCopy(*renderer, gamer2Texture, NULL, &gamer2Rect);
+	Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
+	Display(*renderer, arrowTexture, 200, gamer1Rect.y + gamer1Rect.h / 2 - arrowSurface -> h / 2, arrowSurface -> w, arrowSurface -> h, 1);
+	SDL_RenderPresent(*renderer);
+
+	gamer1 = ReadStringSDL(1, renderer, boardFont, &name1Rect, &name2Rect, &gamer1Rect, &gamer2Rect, &arrowTexture, &name1Texture, &name2Texture, &gamer1Texture, &gamer2Texture, fontTexture, &arrowSurface, whiteColor, &SDLQuit);
+
+	if(!SDLQuit)
+		gamer2 = ReadStringSDL(2, renderer, boardFont, &name1Rect, &name2Rect, &gamer1Rect, &gamer2Rect, &arrowTexture, &name1Texture, &name2Texture, &gamer1Texture, &gamer2Texture, fontTexture, &arrowSurface, whiteColor, &SDLQuit);
+
+	SDL_DestroyTexture(gamer1Texture);
+	SDL_DestroyTexture(gamer2Texture);
+	SDL_DestroyTexture(name1Texture);
+	SDL_DestroyTexture(name2Texture);
+	SDL_FreeSurface(gamer1Surface);
+	SDL_FreeSurface(gamer2Surface);
+
+	if(!SDLQuit)
+		OpenBoardMenu(window, renderer, fontTexture, boardFont, gamer1, gamer2);
+
+	return 1;
+}
+
+char* ReadStringSDL(short gamer, SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* name1Rect, SDL_Rect* name2Rect, SDL_Rect* gamer1Rect, SDL_Rect* gamer2Rect, SDL_Texture** arrowTexture, SDL_Texture** name1Texture, SDL_Texture** name2Texture, SDL_Texture** gamer1Texture, SDL_Texture** gamer2Texture, SDL_Texture** fontTexture, SDL_Surface** arrowSurface, SDL_Color color, short* SDLQuit) {
+	int index = 0, quit = 0, letter;
+	SDL_Event event;
+	SDL_Surface* nameSurface = NULL;
+	char* name = (char*)malloc(NAME_PLAYER_SIZE * sizeof(char));
+	name[0] = '\0';
+
+	RefreshNameSelection(name, gamer, renderer, boardFont, name1Rect, name2Rect, gamer1Rect, gamer2Rect, arrowTexture, name1Texture, name2Texture, gamer1Texture, gamer2Texture, fontTexture, arrowSurface, &nameSurface, color, SDLQuit);
+
+	if(gamer == 1)
+		RefreshText(renderer, boardFont, name1Rect, &nameSurface, name1Texture, name, color, 0);
+	else RefreshText(renderer, boardFont, name2Rect, &nameSurface, name2Texture, name, color, 0);
+
+	while(!quit) {
+		SDL_Delay(10);
+
+		while(SDL_PollEvent(&event)) {
+			switch(event.type) {
+			case SDL_QUIT:
+				*SDLQuit = 1;
+				quit = 1;
+				break;
+
+			case SDL_KEYDOWN:
+				letter = event.key.keysym.sym;
+
+				if(letter >= 32 && letter <= 127 && index < NAME_PLAYER_SIZE) {
+					name[index] = (char)letter;
+					name[index + 1] = '\0';
+					index++;
+				} else if(letter == SDLK_BACKSPACE && index) {
+					printf("%d", index);
+					name[index - 1] = '\0';
+					index--;
+				} else if(letter == SDLK_RETURN && index != 0) {
+					name[index] = '\0';
+					quit = 1;
+				}
+
+				RefreshNameSelection(name, gamer, renderer, boardFont, name1Rect, name2Rect, gamer1Rect, gamer2Rect, arrowTexture, name1Texture, name2Texture, gamer1Texture, gamer2Texture, fontTexture, arrowSurface, &nameSurface, color, SDLQuit);
+
+				break;
+			}
+		}
+	}
+
+	SDL_FreeSurface(nameSurface);
+
+	return name;
 }

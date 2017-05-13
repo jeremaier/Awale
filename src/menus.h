@@ -28,9 +28,14 @@ void CreateButtons(const char*[buttonNumber], const char*[buttonNumber], short (
 void DisplayButtons(SDL_Renderer**, Clickable*, short);
 
 /**
+ * Creation de l'ensemble des boutons necessaires
+ */
+Clickable CreateBoardButtons(SDL_Renderer** renderer);
+
+/**
  * Lancement de la fenêtre de jeu et son affichage
  */
-int OpenBoardMenu(SDL_Window**, SDL_Renderer**, SDL_Texture**);
+int OpenBoardMenu(SDL_Window**, SDL_Renderer**, SDL_Texture**, TTF_Font**, char*, char*);
 
 /**
  * Affiche le gagnant s'il y en a un
@@ -53,8 +58,18 @@ short OpenSaveMenu(SDL_Renderer**);
 short OpenLoadMenu(SDL_Renderer**);
 
 /**
- * Affichage et interractions avec le menu des scores
+ * Ouvre le menu de selection des noms
  */
-short OpenScoreMenu(SDL_Renderer**);
+short OpenNameSelectionMenu(SDL_Window**, SDL_Renderer**, SDL_Texture**, TTF_Font**);
+
+/**
+ * Rafraichissement du menu de choix des prenoms
+ */
+void RefreshNameSelection(char*, short, SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Surface**, SDL_Surface**, SDL_Color , short*);
+
+/**
+ * Lecture des saisies clavier pour les noms
+ */
+char* ReadStringSDL(short, SDL_Renderer**, TTF_Font**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Surface**, SDL_Color, short*);
 
 #endif /* SRC_MENUS_H_ */

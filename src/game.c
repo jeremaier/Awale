@@ -7,9 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-////////////
 #include <string.h>
-////////////
 
 #include "menus.h"
 #include "ask.h"
@@ -212,18 +210,15 @@ void PlayConsole() {
     } while (flag);
 }
 
-void Start(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, SDL_Color color, short* winner) {
+void InitializeGame(SDL_Window** window, SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, SDL_Color color, char* gamer1, char* gamer2, short* winner) {
 	const char file_list[NAME_FILE_SIZE] = "listGames.txt";
 	struct tm dateCreation = CurrentTime();
-	LoadBlankGame(file_list, &dateCreation);
-	//////////////////////////////
-	strcpy(game.joueur1 , "PD");
-	strcpy(game.joueur2 , "PD2");
-	//////////////////////////////
 	menuNumber = 0;
-	restart = 0;
 	*winner = 0;
-	RefreshParameters(renderer, playerRect, g1Rect, g2Rect, playerSurface, arrowSurface, g1Surface, g2Surface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
+
+	LoadBlankGame(file_list, &dateCreation);
+	strcpy(game.joueur1, gamer1);
+	strcpy(game.joueur2, gamer2);
 }
 
 short Restart() {

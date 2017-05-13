@@ -126,6 +126,7 @@ int LaunchSDL() {
 	SDL_Renderer* renderer = NULL;
 	SDL_Surface* fontSurface = NULL;
 	SDL_Texture* fontTexture = NULL;
+	TTF_Font* boardFont = NULL;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) return SDLError("Can't init SDL : %s\n");
 	if(IMG_Init(IMG_INIT_JPG) < 0) return SDLError("Can't init SDL_image : %s\n");
@@ -143,12 +144,16 @@ int LaunchSDL() {
     CreateTexture("sprites/back.png", &fontSurface, &fontTexture, &renderer);
     if(fontSurface == NULL || fontTexture == NULL) return SDLError("Can't create surface or texture : %s\n");
 
-    OpenBoardMenu(&window, &renderer, &fontTexture);
+	boardFont = TTF_OpenFont("calibril.ttf", 30);
+	if(boardFont == NULL) return SDLError("Can't create police : %s\n");
+
+    OpenNameSelectionMenu(&window, &renderer, &fontTexture, &boardFont);
 
     SDL_DestroyTexture(fontTexture);
     SDL_FreeSurface(fontSurface);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_CloseFont(boardFont);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
