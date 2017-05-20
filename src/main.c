@@ -5,18 +5,12 @@
  *      Author: Jerem
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-
-//#include "SDLwindow.h"
+#include "SDLwindow.h"
 #include "main.h"
-#include "game.h"
 
 int main(int argc, char* args[]) {
-	//return LaunchSDL();
-    /*/ =========== TESTS ==========*/
+	return LaunchSDL();
+    //PlayConsole();
 
-    PlayConsole();
-
-    return 0;//*/
+    return 0;
 }

@@ -16,8 +16,62 @@
 #include "read.h"
 #include "SDLwindow.h"
 #include "movements.h"
-//#include "ia.h"
+#include "ia.h"
 #include "menus.h"
+
+void WarningMessage(int action, SDL_Renderer** renderer, SDL_Surface** messageSurface, SDL_Texture** messageTexture, TTF_Font** boardFont, SDL_Color color) {
+	switch(action) {
+	case -3:
+		PrintTempMessage(renderer, messageTexture, messageSurface, boardFont, "Mauvaise ligne", color);
+		break;
+
+	case -2:
+		PrintTempMessage(renderer, messageTexture, messageSurface, boardFont, "Pas de graines à deplacer", color);
+		break;
+
+	case -1:
+		PrintTempMessage(renderer, messageTexture, messageSurface, boardFont, "Il faut nourrir l'adversaire", color);
+		break;
+
+	case 100:
+		PrintTempMessage(renderer, messageTexture, messageSurface, boardFont, "La dernière partie a été chargée", color);
+		break;
+
+	case 101:
+		PrintTempMessage(renderer, messageTexture, messageSurface, boardFont, "La partie a été sauvegardée", color);
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Next(int winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** winSurface, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** winTexture, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, TTF_Font** buttonFont, char* winText, SDL_Color color) {
+	if(!winner && action > 0 && action < 100) {
+		TakeWonSeeds(action);
+		ChangePlayer();
+		winner = GameOver();
+
+		switch(winner) {
+		case 1: case 2:
+			if(winner == 1)
+				strcat(winText, game.joueur1);
+			else strcat(winText, game.joueur2);
+
+			strcat(winText, " a gagné");
+			RefreshParameters(renderer, playerRect, g1Rect, g2Rect, playerSurface, arrowSurface, g1Surface, g2Surface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
+			OpenGameOverMenu(renderer, winTexture, winSurface, boardFont, buttonFont, winText, color, &clickableList[15]);
+			break;
+
+		case 3:
+			RefreshParameters(renderer, playerRect, g1Rect, g2Rect, playerSurface, arrowSurface, g1Surface, g2Surface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
+			OpenGameOverMenu(renderer, winTexture, winSurface, boardFont, buttonFont, "Il y a égalité", color, &clickableList[15]);
+			break;
+		default:
+			break;
+		}
+	}
+}
 
 int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture, TTF_Font** boardFont, char* gamer1, char* gamer2) {
 	short quit = 0, xMouse = 0, yMouse = 0, over = 0, winner = 0;
@@ -66,7 +120,7 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				if(currentButton.type != BUTTON_TYPE_EMPTY) {
-					const short action = currentButton.Action(currentButton.data);
+					short action = currentButton.Action(currentButton.data);
 
 					if(action == 0 && menuNumber == 1) {
 						InitializeGame(gamer1, gamer2, &winner);
@@ -74,61 +128,17 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 						quit = 1;
 					}
 
-					/*if(strcmp(game.joueur2, "ia") == 0 && game.currentPlayer == 1)
-						PlayIA();*/
+					Next(winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
 
-					if(!winner && action > 0 && action < 100) {
-						TakeWonSeeds(action);
-						ChangePlayer();
-						winner = GameOver();
-
-						switch(winner) {
-						case 1: case 2:
-							if(winner == 1)
-								strcat(winText, game.joueur1);
-							else strcat(winText, game.joueur2);
-
-							strcat(winText, " a gagné");
-							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
-							OpenGameOverMenu(renderer, &winTexture, &winSurface, boardFont, &buttonFont, winText, whiteColor, &clickableList[15]);
-							break;
-
-						case 3:
-							RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
-							OpenGameOverMenu(renderer, &winTexture, &winSurface, boardFont, &buttonFont, "Il y a égalité", whiteColor, &clickableList[15]);
-							break;
-						default:
-							break;
-						}
+					if(strcmp(game.joueur2, "ia") == 0 && game.currentPlayer == 1) {
+						action = DistributeSeeds(game.currentPlayer, PlayIA() - 1);
+						Next(winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
 					}
 
 					if(menuNumber != 1)
 						RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
 
-					switch(action) {
-					case -3:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "Mauvaise ligne", whiteColor);
-						break;
-
-					case -2:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "Pas de graines à deplacer", whiteColor);
-						break;
-
-					case -1:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "Il faut nourrir l'adversaire", whiteColor);
-						break;
-
-					case 100:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "La dernière partie a été chargée", whiteColor);
-						break;
-
-					case 101:
-						PrintTempMessage(renderer, &messageTexture, &messageSurface, boardFont, "La partie a été sauvegardée", whiteColor);
-						break;
-
-					default:
-						break;
-					}
+					WarningMessage(action, renderer, &messageSurface, &messageTexture, boardFont, whiteColor);
 				}
 
 				break;

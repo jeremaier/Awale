@@ -1,15 +1,13 @@
-/**
-* Author : Olivier Benard
-* Created on : March 17, 2017
-**/
+/*
+ * ia.h
+ *
+ * Created on: 16 mai 2017
+ *     Author: Olivier
+ */
 
 #ifndef IA_H
 #define IA_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "game.h"
-
-int joue_aleatoire ();
+int PlayIA();
 
 #endif // IA_H

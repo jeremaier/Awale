@@ -18,6 +18,16 @@ Clickable* clickableList;
 short menuNumber, restart;
 
 /**
+ * Afficher un message d'erreur sur le plateau quand une action de jeu n'est pas autorisée
+ */
+void WarningMessage(int, SDL_Renderer**, SDL_Surface**, SDL_Texture**, TTF_Font**, SDL_Color);
+
+/**
+ * Recuperation des graines, changement de joueur, verification d'un gagnant ou non avec son affichage
+ */
+void Next(int, int, SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, TTF_Font**, char*, SDL_Color);
+
+/**
  * Lancement de la fenêtre de jeu et son affichage
  */
 int OpenBoardMenu(SDL_Window**, SDL_Renderer**, SDL_Texture**, TTF_Font**, char*, char*);

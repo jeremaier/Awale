@@ -1,5 +1,5 @@
 /*
- * game.h
+ * game.c
  *
  * Created on: 18 mars 2017
  *     Author: Olivier
@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "ia.h"
 #include "menus.h"
 #include "ask.h"
 #include "time.h"
@@ -139,7 +140,6 @@ void PlayConsole() {
     char answer = ' ';
     short flag = 1; // pour quitter le jeu
 	char isIa = ' ';
-    int temp;
 	
     printf(" ================ COMMANDS ================\n");
     printf(" To launch a new game, press n\n");
@@ -187,7 +187,7 @@ void PlayConsole() {
 
         	case '1': case '2': case '3': case '4': case '5': case '6':
                 if (game.currentPlayer == 1 && isIa == 'i')
-                    nextStep(joue_aleatoire());
+                	NextStep(PlayIA());
 				else if ((game.board_config)[game.currentPlayer][answer - '0' - 1] != 0) // on n'autorise pas a jouer une case vide
 					NextStep(answer - '0');
 				break;

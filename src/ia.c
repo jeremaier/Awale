@@ -1,14 +1,16 @@
-/**
-* Author : Olivier Benard
-* Created on : March 17, 2017
-**/
+/*
+ * ia.c
+ *
+ * Created on: 16 mai 2017
+ *     Author: Olivier
+ */
 
 #include "ia.h"
 #include "movements.h"
 
-short joue_aleatoire () {
+short PlayIA() {
     short hole = 0;
-    while(!(isFeeding(game.board_config[game.currentPlayer][hole], game.currentPlayer, hole))){
-        hole = rand()%6;
-    }
+
+    while(!(isFeeding(game.board_config[game.currentPlayer][hole], game.currentPlayer, hole)))
+        hole = rand() % 6;
 }

@@ -8,4 +8,4 @@
 #ifndef SRC_MAIN_H_
 #define SRC_MAIN_H_
 
-#endif
+#endif // MAIN_H
