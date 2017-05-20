@@ -41,6 +41,9 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
 
 	if(menuNumber == 0) {
 		Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY, 1);
+		Display(*renderer, clickableList[14].texture, clickableList[14].posX, clickableList[14].posY, clickableList[14].sizeX, clickableList[14].sizeY, 1);
+		Display(*renderer, clickableList[13].textTexture, clickableList[13].textRect.x, clickableList[13].textRect.y, clickableList[13].textRect.w, clickableList[13].textRect.h, 0);
+		Display(*renderer, clickableList[14].textTexture, clickableList[14].textRect.x, clickableList[14].textRect.y, clickableList[14].textRect.w, clickableList[14].textRect.h, 0);
 
 	    for(i = 0; i < NB_HOLES * NB_ROW; i++) {
 		    Display(*renderer, clickableList[i + 1].texture, clickableList[i + 1].posX, clickableList[i + 1].posY, clickableList[i + 1].sizeX, clickableList[i + 1].sizeY, 1);
@@ -57,7 +60,7 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
 
 		    SDL_RenderCopy(*renderer, seedTexture, NULL, &seedRect);
 	    }
-	} else Display(*renderer, clickableList[4].texture, clickableList[4].posX, clickableList[4].posY, clickableList[4].sizeX, clickableList[4].sizeY, 1);
+	}
 
     if(!game.currentPlayer)
     	Display(*renderer, *arrowTexture, 15, clickableList[1].posY + clickableList[1].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
@@ -71,10 +74,7 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
 }
 
 void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, SDL_Surface** textSurface, SDL_Texture** textTexture, const char* text, SDL_Color color, short center) {
-	if(textTexture != NULL)
-		SDL_DestroyTexture(*textTexture);
-
-    *textSurface = TTF_RenderText_Blended(*boardFont, text, color);
+	*textSurface = TTF_RenderText_Blended(*boardFont, text, color);
 	*textTexture = SDL_CreateTextureFromSurface(*renderer, *textSurface);
 	SDL_QueryTexture(*textTexture, NULL, NULL, &(rect -> w), &(rect -> h));
 
@@ -114,7 +114,7 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
 void PrintTempMessage(SDL_Renderer** renderer, SDL_Texture** messageTexture, SDL_Surface** messageSurface, TTF_Font** boardFont, char* messageText, SDL_Color color) {
     SDL_Rect messageRect;
 
-    messageRect.y = 200;
+    messageRect.y = 215;
 
 	RefreshText(renderer, boardFont, &messageRect, messageSurface, messageTexture, messageText, color, 1);
     SDL_RenderCopy(*renderer, *messageTexture, NULL, &messageRect);

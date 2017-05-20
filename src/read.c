@@ -77,34 +77,34 @@ void ReadNames(FILE* file, char joueur1[NAME_PLAYER_SIZE], char joueur2[NAME_PLA
     joueur2[strlen(names[1])] = '\0';
 }
 
-void LoadSavedGame(Game *game) {
+void LoadSavedGame() {
+    short i, j;
     char file_saved[NAME_FILE_SIZE] = "saved.txt";
     FILE* file = NULL;
 
     file = fopen(file_saved, "r");
 
     if (file != NULL) {
-        //game -> creationGame = ? on recupere la date de la sauvegarde
+        //game.creationGame = ? on recupere la date de la sauvegarde
         char line[LINE_SIZE] = "";
-        int profits[2] = {0};
+        int gains[2] = {0};
 
         fgets(line, LINE_SIZE, file); // on passe la premiere ligne
 
         // atoi -> string to int
-        game -> gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
+        game.gameNumber = atoi(fgets(line, LINE_SIZE, file)); // on recupere le numero de jeu
 
         // on recupere les noms et on modifie directement la valeur game.joueur1/2
-        ReadNames(file, game -> joueur1, game -> joueur2);
+        ReadNames(file, game.joueur1, game.joueur2);
 
         // on recupere les gains de chaques joueurs
-        fscanf(file, "%d %d", &profits[0], &profits[1]);
+        fscanf(file, "%d %d", &gains[0], &gains[1]);
 
         // et on les stocks dans la structure game
-        game -> gains[0] = profits[0];
-        game -> gains[1] = profits[1];
+        game.gains[0] = gains[0];
+        game.gains[1] = gains[1];
 
         // on recupere le tableau
-        int i, j;
         for (i = 0; i < NB_ROW; i++) {
             for (j = 0; j < NB_HOLES; j++) {
 
@@ -113,7 +113,7 @@ void LoadSavedGame(Game *game) {
                 fscanf(file, "%d", &ceil[0]);
 
                 // on la stocke dans la structure game
-                (game -> board_config)[i][j] = ceil[0];
+                (game.board_config)[i][j] = ceil[0];
             }
         }
 
@@ -122,13 +122,13 @@ void LoadSavedGame(Game *game) {
         fscanf(file, "%d:%d:%d", &times[0], &times[1], &times[2]); // ":" comme delimiteurs
 
         // maj de timeSpent a jouer
-        (game -> timeSpent)[0] = times[0];
-        (game -> timeSpent)[1] = times[1];
-        (game -> timeSpent)[2] = times[2];
+        (game.timeSpent)[0] = times[0];
+        (game.timeSpent)[1] = times[1];
+        (game.timeSpent)[2] = times[2];
 
         // on recupere le current player
         fseek(file, -1, SEEK_END); // on place le curseur 1 caractere avant la fin du fichier
-        game -> currentPlayer = atoi(fgets(line, LINE_SIZE, file)); // str to int
+        game.currentPlayer = atoi(fgets(line, LINE_SIZE, file)); // str to int
 
         fclose(file);
     }

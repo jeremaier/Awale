@@ -9,12 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "SDLwindow.h"
 #include "menus.h"
-#include "const.h"
-#include "button.h"
+#include "game.h"
+#include "board.h"
 
-Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, short (*action)(SDL_Renderer**), short index, ButtonType buttonType, const char* text) {
+Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, short (*action)(SDL_Renderer**), short index, ButtonType buttonType, const char* text, const short center) {
 	Clickable newButton;
 
 	if(buttonType != BUTTON_TYPE_EMPTY) {
@@ -29,8 +28,11 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 	if(buttonType == BUTTON_TYPE_WITH_SURFACE_OVER || buttonType == BUTTON_TYPE_WITH_OVER_AND_TEXT)
 		CreateTexture(pathOver, &(newButton.surfaceOver), &(newButton.textureOver), renderer);
 
+    if(center == 1)
+    	newButton.posX = posX / 2 - newButton.sizeX / 2;
+    else newButton.posX = posX - newButton.sizeX;
+
     newButton.type = buttonType;
-	newButton.posX = posX - newButton.sizeX;
 	newButton.posY = posY;
 	newButton.data = renderer;
 	newButton.Action = action;
@@ -41,14 +43,14 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 }
 
 Clickable IsOverButton(int xMouse, int yMouse, Clickable* clickableList) {
-	short i, first = 0, last;
+	short i, first = 0, last = BUTTON_NUMBER;
 
-	if(menuNumber == 1)
-		last = buttonNumber - 1;
-	else if(menuNumber == 0)
-		last = buttonNumber - 2;
+	if(menuNumber == 0) {
+		last -= 1;
+	} else if(menuNumber == 1)
+		first = 14;
 
-	for(i = first; i < last; i++) {
+	for(i = first; i < last - 1; i++) {
 		const Clickable button = clickableList[i + 1];
 		const int isInButtonZone = xMouse >= button.posX && xMouse <= button.posX + button.sizeX && yMouse >= button.posY && yMouse <= button.posY + button.sizeY;
 
@@ -59,16 +61,28 @@ Clickable IsOverButton(int xMouse, int yMouse, Clickable* clickableList) {
 	return clickableList[0];
 }
 
-void AllocationClickableList() {
-	if (clickableList != 0)
-		clickableList = (Clickable*) realloc(clickableList, buttonNumber * sizeof(Clickable));
-	else clickableList = (Clickable*) malloc(buttonNumber * sizeof(Clickable));
+Clickable CreateBoardButtons(SDL_Renderer** renderer, TTF_Font** buttonFont, SDL_Color* color) {
+	clickableList = (Clickable*) malloc(BUTTON_NUMBER * sizeof(Clickable));
+	CreateClickableBoard(clickableList, renderer, buttonFont, color);
+
+	return CreateNewButton(0, 0, "", "", clickableList, renderer, NULL, 0, BUTTON_TYPE_EMPTY, "", 0);
+}
+
+void DisplayButtons(SDL_Renderer** renderer, Clickable* clickableList, short len) {
+	short i;
+
+	for(i = 0; i < len; i++) {
+		const Clickable button = clickableList[i + 1];
+
+		if(button.type != BUTTON_TYPE_EMPTY)
+			Display(*renderer, button.texture, button.posX, button.posY, button.sizeX, button.sizeY, 1);
+	}
 }
 
 void FreeUpMemoryButton(Clickable* clickableList) {
 	short i;
 
-	for(i = 0; i < BUTTON_NUMBER_BOARD; i++) {
+	for(i = 0; i < BUTTON_NUMBER; i++) {
 		if(clickableList[i].type != BUTTON_TYPE_EMPTY) {
 			SDL_DestroyTexture(clickableList[i].texture);
 			SDL_FreeSurface(clickableList[i].surface);
@@ -79,7 +93,7 @@ void FreeUpMemoryButton(Clickable* clickableList) {
 			SDL_FreeSurface(clickableList[i].surfaceOver);
 		}
 
-		if(clickableList[i].type == BUTTON_TYPE_WITH_OVER_AND_TEXT)
+		if(clickableList[i].type == BUTTON_TYPE_WITH_OVER_AND_TEXT && i != 15)
 			SDL_DestroyTexture(clickableList[i].textTexture);
 	}
 }

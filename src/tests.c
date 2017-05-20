@@ -7,13 +7,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> // pour utiliser la fonction _sleep(temps en ms)
 #include <time.h>
 #include <string.h>
 #include <windows.h>
 
 #include "write.h"
 #include "read.h"
+#include "board.h"
 #include "tests.h"
 
 void TestBoardInit(short matrice[][NB_HOLES]) {
@@ -38,13 +38,23 @@ void TestSave(char* path) {
     creationGame = *localtime(&secondes);
 
     // on cree un nouveau jeu (configurations)
-    Game game = {1, "Olive", "Tom", {5, 3}, {{4, 4, 4, 4, 4, 4}, {4, 4, 4, 4, 4, 4}}, &creationGame, 0, {0, 1, 0}};
+    game.gameNumber = 1;
+    game.joueur1[0] = 'O';
+    game.joueur2[0] = 'T';
+    game.gains[0] = 5;
+    game.gains[1] = 3;
+    BoardInit(game.board_config);
+    game.creationGame = &creationGame;
+    game.currentPlayer = 0; //game.currentPlayer = askCurrent(); // renvoie 0 ou 1 pour savoir a qui de jouer
+    (game.timeSpent)[0] = 0;
+    (game.timeSpent)[1] = 0;
+    (game.timeSpent)[2] = 0;
 
     // on fait une pause de 3s
     Sleep(3000);
 
     // on sauvegarde les configurations de la partie dans le chemin specifie
-    Save(path, &game, &creationGame);
+    Save(path, &creationGame);
 }
 
 void GameToString(Game* game, struct tm* creation) {
@@ -87,7 +97,7 @@ void PlayNewGame() {
 
     /**test2, sauvegarde dans saved.txt*/
     char file_save[NAME_FILE_SIZE] = "saved.txt";
-    Save(file_save, &game, &creationGame);
+    Save(file_save, &creationGame);
 
     /**test3, ecriture dans listGames.txt*/
     SaveInList(file_list, &creationGame);

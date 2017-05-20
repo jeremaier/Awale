@@ -20,7 +20,7 @@ void BoardInit(short[][NB_HOLES]);
 /**
  * Creation des zones cliquable du plateau de jeu
  */
-void CreateClickableBoard(Clickable*, SDL_Renderer**);
+void CreateClickableBoard(Clickable*, SDL_Renderer**, TTF_Font**, SDL_Color*);
 
 /**
  * Boutons du plateau de jeu

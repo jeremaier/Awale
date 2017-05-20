@@ -35,7 +35,7 @@ void ReadNames(FILE*, char[NAME_PLAYER_SIZE], char[NAME_PLAYER_SIZE]);
  * Charge la struct game avec les donnees de la partie stockee dans saved.txt
  * Le temps passe a jouer sera celui deja passse (enregistre dans saved.txt) + le temps passe a jouer jusqu'a une nouvelle action
  */
-void LoadSavedGame(Game*);
+void LoadSavedGame();
 
 /**
  * Pour connaitre le numero de la partie a creer on regarde le nombre de partie creee

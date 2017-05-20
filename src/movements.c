@@ -13,7 +13,7 @@
 #include "movements.h"
 
 short isFeeding(const short seedsNbr, const short row, const short init) {
-	if(row == 0 && (init > seedsNbr))
+	if(row == 0 && (init >= seedsNbr))
 		return 1;
 	else if (row == 1 && (NB_HOLES - init > seedsNbr))
 		return 1;

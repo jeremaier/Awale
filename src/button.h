@@ -9,6 +9,7 @@
 #define SRC_BUTTON_H_
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 typedef enum ButtonType {
 	BUTTON_TYPE_EMPTY,
@@ -38,7 +39,7 @@ typedef struct Clickable {
 /**
  * Creer un nouveau bouton et l'ajoute dans la liste des boutons
  */
-Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, short (*)(SDL_Renderer**), short, ButtonType, const char*);
+Clickable CreateNewButton(int, int, const char*, const char*, Clickable*, SDL_Renderer**, short (*)(SDL_Renderer**), short, ButtonType, const char*, const short);
 
 /**
  * Action de chaque cliquable
@@ -51,9 +52,19 @@ void Action(void*);
 Clickable IsOverButton(int, int, Clickable*);
 
 /**
- * Change la liste des boutons qui sont clickable dans le menu courant
+ * Creation de l'ensemble des boutons necessaires
  */
-void AllocationClickableList();
+Clickable CreateBoardButtons(SDL_Renderer** renderer, TTF_Font**, SDL_Color*);
+
+/**
+ * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
+ */
+void CreatePauseButtons(const char*[BUTTON_NUMBER], const char*[BUTTON_NUMBER], short (*[BUTTON_NUMBER])(SDL_Renderer**), Clickable*, SDL_Renderer**, int, ButtonType, const char*[BUTTON_NUMBER]);
+
+/**
+ * Affiche une liste de boutons en fonction des espaces entre eux
+ */
+void DisplayButtons(SDL_Renderer**, Clickable*, short);
 
 /**
  * Liberation de l'espace memoire utilise par les images SDL

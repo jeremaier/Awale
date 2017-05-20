@@ -15,22 +15,7 @@
 #include "button.h"
 
 Clickable* clickableList;
-short menuNumber, buttonNumber, restart;
-
-/**
- * Cree tous les boutons du menu en fonction de leur image, de la position du premier bouton, de leur espacement entre eux et de leur fonction
- */
-void CreateButtons(const char*[buttonNumber], const char*[buttonNumber], short (*[buttonNumber])(SDL_Renderer**), Clickable*, SDL_Renderer**, int, int, int, int, ButtonType, const char*[buttonNumber]);
-
-/**
- * Affiche une liste de boutons en fonction des espaces entre eux
- */
-void DisplayButtons(SDL_Renderer**, Clickable*, short);
-
-/**
- * Creation de l'ensemble des boutons necessaires
- */
-Clickable CreateBoardButtons(SDL_Renderer** renderer);
+short menuNumber, restart;
 
 /**
  * Lancement de la fenêtre de jeu et son affichage
@@ -41,11 +26,6 @@ int OpenBoardMenu(SDL_Window**, SDL_Renderer**, SDL_Texture**, TTF_Font**, char*
  * Affiche le gagnant s'il y en a un
  */
 void OpenGameOverMenu(SDL_Renderer**, SDL_Texture**, SDL_Surface**, TTF_Font**, TTF_Font**, char*, SDL_Color, Clickable*);
-
-/**
- * Affichage et interractions avec le menu pause
- */
-short OpenOptionsMenu(SDL_Renderer**);
 
 /**
  * Affichage et interractions avec le menu de sauvegarde

@@ -57,7 +57,7 @@ void TimeElapsedToString(struct tm *tpsReference) { // remplace difftime(time_t 
 	printf(" time elapsed: %d:%d:%d\n", instant.tm_hour, instant.tm_min, instant.tm_sec);
 }
 
-void Save(const char* directory, Game* game, struct tm* tpsReference) {
+void Save(const char* directory, struct tm* tpsReference) {
 	FILE* file = NULL;
 
 	file = fopen(directory, "w");
@@ -76,21 +76,21 @@ void Save(const char* directory, Game* game, struct tm* tpsReference) {
 				instant.tm_sec);
 		fprintf(file,
 				"%d\n",
-				game -> gameNumber); // ecrit un int dans le fichier
+				game.gameNumber); // ecrit un int dans le fichier
 		fprintf(file,
 				"%s %s\n",
-				game -> joueur1,
-				game -> joueur2);
+				game.joueur1,
+				game.joueur2);
 		fprintf(file,
 				"%d %d\n",
-				game -> gains[0], game -> gains[1]);
+				game.gains[0], game.gains[1]);
 
 		for(i = 0; i < NB_ROW; i++)
 			for(j = 0; j < NB_HOLES; j++)
-				fprintf(file, "%d\n", game -> board_config[i][j]);
+				fprintf(file, "%d\n", game.board_config[i][j]);
 
-		TimeElapsed(file, tpsReference, game -> timeSpent); // ecrit le temps ecoule
-		fprintf(file, "%hd\n", game -> currentPlayer);
+		TimeElapsed(file, tpsReference, game.timeSpent); // ecrit le temps ecoule
+		fprintf(file, "%hd\n", game.currentPlayer);
 		fclose(file);
 	}
 	else printf("Impossible d'ecrire dans le fichier\n");

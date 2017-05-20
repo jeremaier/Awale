@@ -12,8 +12,7 @@
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 720
-#define BUTTON_NUMBER_BOARD 15
-#define BUTTON_NUMBER_OPTIONS 5
+#define BUTTON_NUMBER 16
 #define HINIT 210
 #define VINIT 300
 #define HSPACE 130
@@ -25,7 +24,7 @@
 
 #define NB_ROW 2
 #define NB_HOLES 6
-#define NB_SEED_INIT 1
+#define NB_SEED_INIT 4
 #define NAME_PLAYER_SIZE 11
 
 /** CONCERNANT LA GESTION DES FICHIERS : **/
