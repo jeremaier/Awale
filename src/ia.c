@@ -4,7 +4,11 @@
 **/
 
 #include "ia.h"
+#include "movements.h"
 
-int joue_aleatoire () {
-    return rand()%6;
+short joue_aleatoire () {
+    short hole = 0;
+    while(!(isFeeding(game.board_config[game.currentPlayer][hole], game.currentPlayer, hole))){
+        hole = rand()%6;
+    }
 }
