@@ -293,7 +293,7 @@ short OpenNameSelectionMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Te
 	name1Rect.y = gamer1Rect.y;
 	name2Rect.y = gamer2Rect.y;
 
-	CreateTexture("sprites/backName.png", &backNameSurface, &backNameTexture, renderer);
+	CreateTexture("sprites/backgroundName.png", &backNameSurface, &backNameTexture, renderer);
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
 	RefreshText(renderer, boardFont, &gamer1Rect, &gamer1Surface, &gamer1Texture, gamer1Text, whiteColor, 0);
 	RefreshText(renderer, boardFont, &gamer2Rect, &gamer2Surface, &gamer2Texture, gamer2Text, whiteColor, 0);

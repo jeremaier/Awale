@@ -141,7 +141,7 @@ int LaunchSDL() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(renderer == NULL) return SDLError("Can't create renderer : %s\n");
 
-    CreateTexture("sprites/back.png", &fontSurface, &fontTexture, &renderer);
+    CreateTexture("sprites/background.png", &fontSurface, &fontTexture, &renderer);
     if(fontSurface == NULL || fontTexture == NULL) return SDLError("Can't create surface or texture : %s\n");
 
 	boardFont = TTF_OpenFont("calibril.ttf", 30);
