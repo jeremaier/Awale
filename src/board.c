@@ -28,7 +28,7 @@ void CreateClickableBoard(Clickable* clickableList, SDL_Renderer** renderer, TTF
 	short (*buttonFunction[NB_ROW * NB_HOLES])(SDL_Renderer** renderer) = {Button11, Button12, Button13, Button14, Button15, Button16, Button21, Button22, Button23, Button24, Button25, Button26};
 
 	for(i = 0; i < NB_ROW * NB_HOLES; i++)
-		CreateNewButton(HINIT + HSPACE * (i - (i / NB_HOLES) * NB_HOLES), VINIT + (i / NB_HOLES) * VSPACE, "sprites/hole2.png", "", clickableList, renderer, buttonFunction[i], i + 1, BUTTON_TYPE_WITH_SURFACE, "0", 0);
+		CreateNewButton(HINIT + HSPACE * (i - (i / NB_HOLES) * NB_HOLES), VINIT + (i / NB_HOLES) * VSPACE, "sprites/hole.png", "", clickableList, renderer, buttonFunction[i], i + 1, BUTTON_TYPE_WITH_SURFACE, "0", 0);
 
 	CreateNewButton(SCREEN_WIDTH / 2, 68, "sprites/save.png", "sprites/saveOver.png", clickableList, renderer, OpenSaveMenu, 13, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Sauver", 1);
 	CreateNewButton(SCREEN_WIDTH / 2 + SCREEN_WIDTH, 68, "sprites/load.png", "sprites/loadOver.png", clickableList, renderer, OpenLoadMenu, 14, BUTTON_TYPE_WITH_OVER_AND_TEXT, "Charger", 1);
