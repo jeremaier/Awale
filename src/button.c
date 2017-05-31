@@ -16,6 +16,7 @@
 Clickable CreateNewButton(int posX, int posY, const char* path, const char* pathOver, Clickable* clickableList, SDL_Renderer** renderer, short (*action)(SDL_Renderer**), short index, ButtonType buttonType, const char* text, const short center) {
 	Clickable newButton;
 
+	// Creation des surfaces de texture en fonction du type de bouton
 	if(buttonType != BUTTON_TYPE_EMPTY) {
 		CreateTexture(path, &(newButton.surface), &(newButton.texture), renderer);
 		newButton.sizeX = (newButton.surface -> w);
@@ -25,14 +26,16 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 		newButton.sizeY = 0;
 	}
 
+	// Creation de la texture
 	if(buttonType == BUTTON_TYPE_WITH_SURFACE_OVER || buttonType == BUTTON_TYPE_WITH_OVER_AND_TEXT)
 		CreateTexture(pathOver, &(newButton.surfaceOver), &(newButton.textureOver), renderer);
 
-    if(center == 1)
-    	newButton.posX = posX / 2 - newButton.sizeX / 2;
-    else newButton.posX = posX - newButton.sizeX;
+	// On centre ou pas le bouton au milieu d'une certaine position
+	if(center == 1)
+		newButton.posX = posX / 2 - newButton.sizeX / 2;
+	else newButton.posX = posX - newButton.sizeX;
 
-    newButton.type = buttonType;
+	newButton.type = buttonType;
 	newButton.posY = posY;
 	newButton.data = renderer;
 	newButton.Action = action;
@@ -45,11 +48,12 @@ Clickable CreateNewButton(int posX, int posY, const char* path, const char* path
 Clickable IsOverButton(int xMouse, int yMouse, Clickable* clickableList) {
 	short i, first = 0, last = BUTTON_NUMBER;
 
-	if(menuNumber == 0) {
+	if(menuNumber == 0)
 		last -= 1;
-	} else if(menuNumber == 1)
+	else if(menuNumber == 1)
 		first = 14;
 
+	// On parcours les zones de chaque bouton pour savoir si on est au dessus avec sa souris
 	for(i = first; i < last - 1; i++) {
 		const Clickable button = clickableList[i + 1];
 		const int isInButtonZone = xMouse >= button.posX && xMouse <= button.posX + button.sizeX && yMouse >= button.posY && yMouse <= button.posY + button.sizeY;

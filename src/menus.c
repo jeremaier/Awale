@@ -48,11 +48,13 @@ void WarningMessage(int action, SDL_Renderer** renderer, SDL_Surface** messageSu
 
 void Next(short* winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** winSurface, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** winTexture, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, TTF_Font** buttonFont, char* winText, SDL_Color color) {
 	if(action > 0 && action < 100) {
+		// On recupere le gain, change de joueur et verifie s'il y a un gagnant
 		TakeWonSeeds(action);
 		ChangePlayer();
 		*winner = GameOver();
 
 		switch(*winner) {
+		// Affichage du gagnant et demarrage du menu pour recommencer
 		case 1: case 2:
 			if(*winner == 1) {
 				strcat(winText, "Le joueur ");
@@ -71,6 +73,7 @@ void Next(short* winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRe
 			OpenGameOverMenu(renderer, winTexture, winSurface, boardFont, buttonFont, winText, color, &clickableList[15]);
 			break;
 
+		// Il y a égalité et demarrage du menu pour recommencer
 		case 3:
 			RefreshParameters(renderer, playerRect, g1Rect, g2Rect, playerSurface, arrowSurface, g1Surface, g2Surface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
 			OpenGameOverMenu(renderer, winTexture, winSurface, boardFont, buttonFont, "Il y a égalité", color, &clickableList[15]);
@@ -83,6 +86,7 @@ void Next(short* winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRe
 }
 
 int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture, TTF_Font** boardFont, char* gamer1, char* gamer2) {
+	// Initialisation de l'ensmenble des variables, surfaces, textures, police d'ecriture, évènement necessaires
 	short quit = 0, xMouse = 0, yMouse = 0, over = 0, winner = 0;
 	char winText[10 + NAME_PLAYER_SIZE] = "";
 	Clickable currentButton;
@@ -105,6 +109,7 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 	SDL_Rect g1Rect;
 	SDL_Rect g2Rect;
 
+	// Choix des positions des ecritures et creation des boutons du board
 	menuNumber = 0;
 	restart = 0;
 	playerRect.x = HINITTEXT;
@@ -115,12 +120,13 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 	g2Rect.y = playerRect.y;
 	Clickable overButton = CreateBoardButtons(renderer, &buttonFont, &whiteColor);
 
+	// Creation de la fleche, initialisation du jeu et affichage de l'ensemble
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
 	InitializeGame(gamer1, gamer2, &winner);
 	RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
 
 	while(!quit) {
-		SDL_Delay(10);
+		SDL_Delay(20);
 
 		while(SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -160,7 +166,7 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 				yMouse = event.motion.y;
 				currentButton = IsOverButton(xMouse, yMouse, clickableList);
 
-				// Surbrillance de bouton quand on passe la souris au dessus
+				// Surbrillance de bouton quand on passe la souris au dessus en fonction du type de bouton
 				if(overButton.type != currentButton.type) {
 					if(!over) {
 						over = 1;
@@ -186,6 +192,7 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 		}
 	}
 
+	// Free textures et surfaces
 	SDL_DestroyTexture(playerTexture);
 	SDL_DestroyTexture(arrowTexture);
 	SDL_DestroyTexture(g1Texture);
@@ -220,13 +227,16 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 void OpenGameOverMenu(SDL_Renderer** renderer, SDL_Texture** winTexture, SDL_Surface** winSurface, TTF_Font** boardFont, TTF_Font** buttonFont, char* winText, SDL_Color color, Clickable* restartButton) {
 	SDL_Rect winnerRect;
 
+	// Choix des positions du bouton
 	menuNumber = 1;
 	winnerRect.y = 140;
 	restartButton -> textRect.x = restartButton -> posX + 10;
 	restartButton -> textRect.y = restartButton -> posY + 12;
 
-	// Affichage
+	// Affichage du bouton pour recommencer une partie
 	Display(*renderer, restartButton -> texture, restartButton -> posX, restartButton -> posY, restartButton -> sizeX, restartButton -> sizeY, 1);
+
+	// Affichage du joueur ayant gagné
 	RefreshText(renderer, boardFont, &winnerRect, winSurface, winTexture, winText, color, 1);
 	RefreshText(renderer, buttonFont, &(restartButton -> textRect), &(restartButton -> textSurface), &(restartButton -> textTexture), restartButton -> text, color, 0);
 	SDL_RenderCopy(*renderer, *winTexture, NULL, &winnerRect);
@@ -253,12 +263,14 @@ void RefreshNameSelection(char* name, short gamer, SDL_Renderer** renderer, TTF_
 		RefreshText(renderer, boardFont, name1Rect, nameSurface, name1Texture, name, color, 0);
 	else RefreshText(renderer, boardFont, name2Rect, nameSurface, name2Texture, name, color, 0);
 
+	// Affichage de l'ensemble des écritures sur cette écran
 	Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
 	SDL_RenderCopy(*renderer, *gamer1Texture, NULL, gamer1Rect);
 	SDL_RenderCopy(*renderer, *gamer2Texture, NULL, gamer2Rect);
 	SDL_RenderCopy(*renderer, *name1Texture, NULL, name1Rect);
 	SDL_RenderCopy(*renderer, *name2Texture, NULL, name2Rect);
 
+	// Affichage de la flèche en face du joueur qui doit complété son pseudo
 	if(gamer == 1)
 		Display(*renderer, *arrowTexture, 200, gamer1Rect -> y + gamer1Rect -> h / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
 	else Display(*renderer, *arrowTexture, 200, gamer2Rect -> y + gamer2Rect -> h / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
@@ -267,6 +279,7 @@ void RefreshNameSelection(char* name, short gamer, SDL_Renderer** renderer, TTF_
 }
 
 short OpenNameSelectionMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture, TTF_Font** boardFont) {
+	// Initialisation de l'ensemble des surfaces, texures, rect pour le menu de choix des pseudos
 	SDL_Surface* backNameSurface = NULL;
 	SDL_Surface* gamer1Surface = NULL;
 	SDL_Surface* gamer2Surface = NULL;
@@ -288,6 +301,7 @@ short OpenNameSelectionMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Te
 	char* gamer2;
 	short SDLQuit = 0;
 
+	// Choix des positions des textures
 	gamer1Rect.x = 300;
 	gamer2Rect.x = 300;
 	name1Rect.x = gamer1Rect.x + 130;
@@ -297,16 +311,19 @@ short OpenNameSelectionMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Te
 	name1Rect.y = gamer1Rect.y;
 	name2Rect.y = gamer2Rect.y;
 
+	// Choix des textures et rafraichissement écriture
 	CreateTexture("sprites/backgroundName.png", &backNameSurface, &backNameTexture, renderer);
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
 	RefreshText(renderer, boardFont, &gamer1Rect, &gamer1Surface, &gamer1Texture, gamer1Text, whiteColor, 0);
 	RefreshText(renderer, boardFont, &gamer2Rect, &gamer2Surface, &gamer2Texture, gamer2Text, whiteColor, 0);
 
+	// On lit les entrées clavier pour chacun des deux joueurs
 	gamer1 = ReadStringSDL(1, renderer, boardFont, &name1Rect, &name2Rect, &gamer1Rect, &gamer2Rect, &arrowTexture, &name1Texture, &name2Texture, &gamer1Texture, &gamer2Texture, &backNameTexture, &arrowSurface, whiteColor, &SDLQuit);
 
 	if(!SDLQuit)
 		gamer2 = ReadStringSDL(2, renderer, boardFont, &name1Rect, &name2Rect, &gamer1Rect, &gamer2Rect, &arrowTexture, &name1Texture, &name2Texture, &gamer1Texture, &gamer2Texture, &backNameTexture, &arrowSurface, whiteColor, &SDLQuit);
 
+	// Free texture et surface
 	SDL_DestroyTexture(backNameTexture);
 	SDL_DestroyTexture(gamer1Texture);
 	SDL_DestroyTexture(gamer2Texture);
@@ -333,6 +350,7 @@ char* ReadStringSDL(short gamer, SDL_Renderer** renderer, TTF_Font** boardFont, 
 
 	RefreshNameSelection(name, gamer, renderer, boardFont, name1Rect, name2Rect, gamer1Rect, gamer2Rect, arrowTexture, name1Texture, name2Texture, gamer1Texture, gamer2Texture, fontTexture, arrowSurface, &nameSurface, color, SDLQuit);
 
+	// Rafrachissement du texte en fonction de joueur entrant son pseudo
 	if(gamer == 1)
 		RefreshText(renderer, boardFont, name1Rect, &nameSurface, name1Texture, name, color, 0);
 	else RefreshText(renderer, boardFont, name2Rect, &nameSurface, name2Texture, name, color, 0);
@@ -350,14 +368,17 @@ char* ReadStringSDL(short gamer, SDL_Renderer** renderer, TTF_Font** boardFont, 
 			case SDL_KEYDOWN:
 				letter = event.key.keysym.sym;
 
+				// On écrit une lettre
 				if(letter >= 32 && letter <= 127 && index < NAME_PLAYER_SIZE) {
 					name[index] = (char)letter;
 					name[index + 1] = '\0';
 					index++;
+				// On efface une lettre
 				} else if(letter == SDLK_BACKSPACE && index) {
 					printf("%d", index);
 					name[index - 1] = '\0';
 					index--;
+				// On confirme son pseudo
 				} else if(letter == SDLK_RETURN && index != 0) {
 					name[index] = '\0';
 					quit = 1;

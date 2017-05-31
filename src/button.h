@@ -67,7 +67,7 @@ void CreatePauseButtons(const char*[BUTTON_NUMBER], const char*[BUTTON_NUMBER], 
 void DisplayButtons(SDL_Renderer**, Clickable*, short);
 
 /**
- * Liberation de l'espace memoire utilise par les images SDL
+ * Liberation de l'espace memoire utilise par les images SDL des boutons en fonction de leur type
  */
 void FreeUpMemoryButton(Clickable*);
 

@@ -21,6 +21,7 @@ int SDLError(char* message) {
 }
 
 void CreateTexture(const char* path, SDL_Surface** surface, SDL_Texture** texture, SDL_Renderer** renderer) {
+	// Créé une image
     *surface = IMG_Load(path);
     *texture = SDL_CreateTextureFromSurface(*renderer, *surface);
 }
@@ -29,6 +30,7 @@ void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, 
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderCopy(renderer, texture, NULL, &rect);
 
+    // Fais le rendu si ce n'est pas la dernière à afficher sur le même panel
     if(!firstInit)
     	SDL_RenderPresent(renderer);
 }
@@ -36,15 +38,18 @@ void Display(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, int w, 
 void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** arrowSurface, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, SDL_Color color) {
 	short i = 0;
 
+	// Affiche le fond
 	if(menuNumber != 2)
 	    Display(*renderer, *fontTexture, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
 
 	if(menuNumber == 0) {
+		// Affiche les boutons annexes
 		Display(*renderer, clickableList[13].texture, clickableList[13].posX, clickableList[13].posY, clickableList[13].sizeX, clickableList[13].sizeY, 1);
 		Display(*renderer, clickableList[14].texture, clickableList[14].posX, clickableList[14].posY, clickableList[14].sizeX, clickableList[14].sizeY, 1);
 		Display(*renderer, clickableList[13].textTexture, clickableList[13].textRect.x, clickableList[13].textRect.y, clickableList[13].textRect.w, clickableList[13].textRect.h, 0);
 		Display(*renderer, clickableList[14].textTexture, clickableList[14].textRect.x, clickableList[14].textRect.y, clickableList[14].textRect.w, clickableList[14].textRect.h, 0);
 
+		// Affiche les trous avec le nombre des graines qui correspond
 	    for(i = 0; i < NB_HOLES * NB_ROW; i++) {
 		    Display(*renderer, clickableList[i + 1].texture, clickableList[i + 1].posX, clickableList[i + 1].posY, clickableList[i + 1].sizeX, clickableList[i + 1].sizeY, 1);
 
@@ -53,6 +58,7 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
 		    SDL_Texture* seedTexture = NULL;
 		    SDL_Rect seedRect;
 
+		    // Rafraichissement du nombre de graines affiché sur un trou
 		    sprintf(seedNumber, "%d", game.board_config[i / NB_HOLES][(i - (i / NB_HOLES) * NB_HOLES)]);
 		    RefreshText(renderer, boardFont, &seedRect, &seedSurface, &seedTexture, seedNumber, color, 0);
 		    seedRect.x = clickableList[i + 1].posX + clickableList[i + 1].sizeX / 2 - seedRect.w / 2;
@@ -62,6 +68,7 @@ void BoardDiplayed(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Re
 	    }
 	}
 
+	// Affiche la flèche pour savoir à qui c'est de jouer
     if(!game.currentPlayer)
     	Display(*renderer, *arrowTexture, 15, clickableList[1].posY + clickableList[1].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
     else Display(*renderer, *arrowTexture, 15, clickableList[7].posY + clickableList[7].sizeY / 2 - (*arrowSurface) -> h / 2, (*arrowSurface) -> w, (*arrowSurface) -> h, 1);
@@ -78,6 +85,7 @@ void RefreshText(SDL_Renderer** renderer, TTF_Font** boardFont, SDL_Rect* rect, 
 	*textTexture = SDL_CreateTextureFromSurface(*renderer, *textSurface);
 	SDL_QueryTexture(*textTexture, NULL, NULL, &(rect -> w), &(rect -> h));
 
+	// Centre le texte
 	if(center)
 		rect -> x = SCREEN_WIDTH / 2 - rect -> w / 2;
 }
@@ -89,6 +97,7 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
     char g1[3];
     char g2[3];
 
+    // Enregistrement des gains par joueur et le joueur courant dans des variables
 	sprintf(g1, "%hd", game.gains[0]);
 	sprintf(g2, "%hd", game.gains[1]);
 	strcpy(playerText , "Joueur : ");
@@ -105,6 +114,7 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
 		strcat(playerText, game.joueur1);
 	else strcat(playerText, game.joueur2);
 
+	// Rafraichissement des gains et du joueur courant
 	RefreshText(renderer, boardFont, playerRect, playerSurface, playerTexture, playerText, color, 0);
 	RefreshText(renderer, boardFont, g1Rect, g1Surface, g1Texture, g1Text, color, 0);
 	RefreshText(renderer, boardFont, g2Rect, g2Surface, g2Texture, g2Text, color, 0);
@@ -114,6 +124,7 @@ void RefreshParameters(SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* 
 void PrintTempMessage(SDL_Renderer** renderer, SDL_Texture** messageTexture, SDL_Surface** messageSurface, TTF_Font** boardFont, char* messageText, SDL_Color color) {
     SDL_Rect messageRect;
 
+    // Choix de la position d'un texte d'erreur de jeu
     messageRect.y = 215;
 
 	RefreshText(renderer, boardFont, &messageRect, messageSurface, messageTexture, messageText, color, 1);
@@ -147,8 +158,9 @@ int LaunchSDL() {
 	boardFont = TTF_OpenFont("calibril.ttf", 30);
 	if(boardFont == NULL) return SDLError("Can't create police : %s\n");
 
-    OpenNameSelectionMenu(&window, &renderer, &fontTexture, &boardFont);
+    OpenNameSelectionMenu(&window, &renderer, &fontTexture, &boardFont); // Lancement du menu de selection de pseudo
 
+    // Fermeture du jeu et free des surfaces, textures, police d'ecriture
     SDL_DestroyTexture(fontTexture);
     SDL_FreeSurface(fontSurface);
     SDL_DestroyRenderer(renderer);

@@ -13,9 +13,9 @@
 #include "movements.h"
 
 short isFeeding(const short seedsNbr, const short row, const short init) {
-	if(row == 0 && (init >= seedsNbr))
+	if(row == 0 && (init >= seedsNbr)) // Pour le joueur du haut
 		return 1;
-	else if (row == 1 && (NB_HOLES - init > seedsNbr))
+	else if(row == 1 && (NB_HOLES - init > seedsNbr)) // Pour le joueur du bas
 		return 1;
 	else return 0;
 }
@@ -23,6 +23,7 @@ short isFeeding(const short seedsNbr, const short row, const short init) {
 short RemoveSeeds(const short row, const short hole) {
 	const short seedsNbr = game.board_config[row][hole];
 
+	// Verifie les differentes conditions (clique sur sa propre rangée, trou non vide, que ca feed l'adversaire)
 	if(game.currentPlayer != row)
 		return -3;
 	else if(seedsNbr == 0)
@@ -30,7 +31,7 @@ short RemoveSeeds(const short row, const short hole) {
 	else if(isFeeding(seedsNbr, row, hole))
 		return -1;
 
-	game.board_config[row][hole] = 0;
+	game.board_config[row][hole] = 0; // On reinitialise la case a 0
 	return seedsNbr;
 }
 
@@ -40,6 +41,7 @@ short DistributeSeeds(const short row, const short init) {
 	short i = init;
 	short cpt;
 
+	// Parcours l'ensemble de trous et distribue les graines
 	for(cpt = 0; cpt < seedsNbr; cpt++) {
 		short endLine = NB_HOLES - i;
 
@@ -60,6 +62,7 @@ short DistributeSeeds(const short row, const short init) {
 
 	endHole = i;
 
+	// Enregistre la dernière rangée pour l'utiliser dans TakeWonSeeds
 	if(game.currentPlayer != tmpRow)
 		inOpponentRow = 1;
 	else inOpponentRow = 0;
