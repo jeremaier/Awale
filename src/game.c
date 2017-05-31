@@ -42,10 +42,11 @@ int GameOver() {
 
     // on verifie que le joueur peut "nourrir" son adversaire (si il n'a plus de graine il ne pourra pas : inutile de verifier)
 	for(i = 0; i < 6; i++) {
-		if(game.currentPlayer == 0 && game.board_config[0][i] > i + 1)
+
+		if(game.currentPlayer == 0 && isFeeding(game.board_config[0][i], 0, i) == 0)
 			return 0; // Le joueur peut jouer : la partie n'est pas finie
-		else if(game.board_config[1][i] > 5 - i)
-			return 0; // Le joueur peut jouer : la partie n'est pas finie
+		else if(game.currentPlayer == 1 && isFeeding(game.board_config[1][i], 1, i) == 0)
+		    return 0; // Le joueur peut jouer : la partie n'est pas finie
 	}
 
     const short a = game.gains[0] - game.gains[1]; // La partie est terminee : il faut trouver le vainqueur
@@ -110,7 +111,7 @@ int Quit(char* file_save, char* file_list, struct tm *dateCreation) {
 }
 
 void ChangePlayer() {
-    game.currentPlayer ++;
+    game.currentPlayer++;
     game.currentPlayer %= 2;
 }
 

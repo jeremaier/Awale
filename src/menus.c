@@ -120,7 +120,7 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 	RefreshParameters(renderer, &playerRect, &g1Rect, &g2Rect, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, whiteColor);
 
 	while(!quit) {
-		SDL_Delay(5);
+		SDL_Delay(10);
 
 		while(SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -131,12 +131,14 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 				if(currentButton.type != BUTTON_TYPE_EMPTY) {
 					short action = currentButton.Action(currentButton.data);
 
+					// On clique sur le bouton recommencer
 					if(action == 0 && menuNumber == 1) {
 						InitializeGame(gamer1, gamer2, &winner);
 						restart = 1;
 						quit = 1;
 					}
 
+					// On joue la case choisie par le joueur et l'ia s'il y en a une
 					if(!winner) {
 						Next(&winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
 
@@ -158,6 +160,7 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 				yMouse = event.motion.y;
 				currentButton = IsOverButton(xMouse, yMouse, clickableList);
 
+				// Surbrillance de bouton quand on passe la souris au dessus
 				if(overButton.type != currentButton.type) {
 					if(!over) {
 						over = 1;
@@ -222,6 +225,7 @@ void OpenGameOverMenu(SDL_Renderer** renderer, SDL_Texture** winTexture, SDL_Sur
 	restartButton -> textRect.x = restartButton -> posX + 10;
 	restartButton -> textRect.y = restartButton -> posY + 12;
 
+	// Affichage
 	Display(*renderer, restartButton -> texture, restartButton -> posX, restartButton -> posY, restartButton -> sizeX, restartButton -> sizeY, 1);
 	RefreshText(renderer, boardFont, &winnerRect, winSurface, winTexture, winText, color, 1);
 	RefreshText(renderer, buttonFont, &(restartButton -> textRect), &(restartButton -> textSurface), &(restartButton -> textTexture), restartButton -> text, color, 0);
