@@ -46,17 +46,25 @@ void WarningMessage(int action, SDL_Renderer** renderer, SDL_Surface** messageSu
 	}
 }
 
-void Next(int winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** winSurface, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** winTexture, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, TTF_Font** buttonFont, char* winText, SDL_Color color) {
-	if(!winner && action > 0 && action < 100) {
+void Next(short* winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRect, SDL_Rect* g1Rect, SDL_Rect* g2Rect, SDL_Surface** winSurface, SDL_Surface** playerSurface, SDL_Surface** arrowSurface, SDL_Surface** g1Surface, SDL_Surface** g2Surface, SDL_Texture** winTexture, SDL_Texture** fontTexture, SDL_Texture** playerTexture, SDL_Texture** arrowTexture, SDL_Texture** g1Texture, SDL_Texture** g2Texture, TTF_Font** boardFont, TTF_Font** buttonFont, char* winText, SDL_Color color) {
+	if(action > 0 && action < 100) {
 		TakeWonSeeds(action);
 		ChangePlayer();
-		winner = GameOver();
+		*winner = GameOver();
 
-		switch(winner) {
+		switch(*winner) {
 		case 1: case 2:
-			if(winner == 1)
+			if(*winner == 1) {
+				strcat(winText, "Le joueur ");
 				strcat(winText, game.joueur1);
-			else strcat(winText, game.joueur2);
+			} else {
+				if(strcmp(game.joueur2, "ia") == 0)
+					strcat(winText, "L'IA");
+				else {
+					strcat(winText, "Le joueur ");
+					strcat(winText, game.joueur2);
+				}
+			}
 
 			strcat(winText, " a gagné");
 			RefreshParameters(renderer, playerRect, g1Rect, g2Rect, playerSurface, arrowSurface, g1Surface, g2Surface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
@@ -67,6 +75,7 @@ void Next(int winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRect,
 			RefreshParameters(renderer, playerRect, g1Rect, g2Rect, playerSurface, arrowSurface, g1Surface, g2Surface, fontTexture, playerTexture, arrowTexture, g1Texture, g2Texture, boardFont, color);
 			OpenGameOverMenu(renderer, winTexture, winSurface, boardFont, buttonFont, "Il y a égalité", color, &clickableList[15]);
 			break;
+
 		default:
 			break;
 		}
@@ -75,7 +84,7 @@ void Next(int winner, int action, SDL_Renderer** renderer, SDL_Rect* playerRect,
 
 int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fontTexture, TTF_Font** boardFont, char* gamer1, char* gamer2) {
 	short quit = 0, xMouse = 0, yMouse = 0, over = 0, winner = 0;
-	char winText[10 + NAME_PLAYER_SIZE] = {"Le joueur "};
+	char winText[10 + NAME_PLAYER_SIZE] = "";
 	Clickable currentButton;
 	SDL_Event event;
 	SDL_Color whiteColor = {255, 255, 255};
@@ -128,11 +137,13 @@ int OpenBoardMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** fo
 						quit = 1;
 					}
 
-					Next(winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
+					if(!winner) {
+						Next(&winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
 
-					if(strcmp(game.joueur2, "ia") == 0 && game.currentPlayer == 1) {
-						action = DistributeSeeds(game.currentPlayer, PlayIA() - 1);
-						Next(winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
+						if(strcmp(game.joueur2, "ia") == 0 && game.currentPlayer == 1) {
+							action = DistributeSeeds(game.currentPlayer, PlayIA());
+							Next(&winner, action, renderer, &playerRect, &g1Rect, &g2Rect, &winSurface, &playerSurface, &arrowSurface, &g1Surface, &g2Surface, &winTexture, fontTexture, &playerTexture, &arrowTexture, &g1Texture, &g2Texture, boardFont, &buttonFont, winText, whiteColor);
+						}
 					}
 
 					if(menuNumber != 1)
@@ -282,7 +293,7 @@ short OpenNameSelectionMenu(SDL_Window** window, SDL_Renderer** renderer, SDL_Te
 	name1Rect.y = gamer1Rect.y;
 	name2Rect.y = gamer2Rect.y;
 
-    CreateTexture("sprites/backName.png", &backNameSurface, &backNameTexture, renderer);
+	CreateTexture("sprites/backName.png", &backNameSurface, &backNameTexture, renderer);
 	CreateTexture("sprites/arrow.png", &arrowSurface, &arrowTexture, renderer);
 	RefreshText(renderer, boardFont, &gamer1Rect, &gamer1Surface, &gamer1Texture, gamer1Text, whiteColor, 0);
 	RefreshText(renderer, boardFont, &gamer2Rect, &gamer2Surface, &gamer2Texture, gamer2Text, whiteColor, 0);

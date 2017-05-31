@@ -25,7 +25,7 @@ void WarningMessage(int, SDL_Renderer**, SDL_Surface**, SDL_Texture**, TTF_Font*
 /**
  * Recuperation des graines, changement de joueur, verification d'un gagnant ou non avec son affichage
  */
-void Next(int, int, SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, TTF_Font**, char*, SDL_Color);
+void Next(short*, int, SDL_Renderer**, SDL_Rect*, SDL_Rect*, SDL_Rect*, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Surface**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, SDL_Texture**, TTF_Font**, TTF_Font**, char*, SDL_Color);
 
 /**
  * Lancement de la fenêtre de jeu et son affichage

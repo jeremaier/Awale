@@ -5,12 +5,18 @@
  *     Author: Olivier
  */
 
-#include "ia.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "game.h"
 #include "movements.h"
+#include "ia.h"
 
 short PlayIA() {
-    short hole = 0;
+    short hole;
 
-    while(!(isFeeding(game.board_config[game.currentPlayer][hole], game.currentPlayer, hole)))
-        hole = rand() % 6;
+    do hole = rand() % 6;
+    while(isFeeding(game.board_config[1][hole], 1, hole));
+
+    return hole;
 }

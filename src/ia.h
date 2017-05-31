@@ -8,6 +8,6 @@
 #ifndef IA_H
 #define IA_H
 
-int PlayIA();
+short PlayIA();
 
 #endif // IA_H
