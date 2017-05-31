@@ -76,14 +76,14 @@ void TakeWonSeeds(const short initSeedsNbr) {
 
 	if(inOpponentRow) {
 		if (opponentRow) {
-			// Joueur du bas : on regarde les cases a droite de celle ou la derniere graine a ete posee
+			// Joueur du haut : on regarde les cases a gauche de celle ou la derniere graine a ete posee
 			while(j >= 0 && (game.board_config[opponentRow][j] == 2 || game.board_config[opponentRow][j] == 3)) {
 				game.gains[game.currentPlayer] += game.board_config[opponentRow][j];
 				game.board_config[opponentRow][j] = 0;
 				j--;
 			}
 		} else {
-			// Joueur du haut : on regarde les cases a gauche de celle ou la derniere graine a ete posee
+			// Joueur du bas : on regarde les cases a droite de celle ou la derniere graine a ete posee
 			while(j < NB_HOLES && (game.board_config[opponentRow][j] == 2 || game.board_config[opponentRow][j] == 3)) {
 				game.gains[game.currentPlayer] += game.board_config[opponentRow][j];
 				game.board_config[opponentRow][j] = 0;
